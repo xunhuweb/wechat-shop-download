@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechat shop\n"
 "POT-Creation-Date: 2017-08-21 10:15+0800\n"
-"PO-Revision-Date: 2017-08-21 10:15+0800\n"
+"PO-Revision-Date: 2017-08-21 16:16+0800\n"
 "Last-Translator: ranj <ranj@evget.com>\n"
 "Language-Team: 重庆迅虎网络有限公司 <jeff@xunhuweb.com>\n"
 "Language: zh_CN\n"
@@ -1823,11 +1823,11 @@ msgstr "签名错误！"
 
 #: add-ons/wpopen-alipay/init.php:44
 msgid "Alipay(WP OPEN)"
-msgstr "支付宝(开放平台)"
+msgstr "支付宝(WP开放平台)"
 
 #: add-ons/wpopen-wechat/init.php:44
 msgid "Wechat Pay(WP OPEN)"
-msgstr "微信支付(开放平台)"
+msgstr "微信支付(WP开放平台)"
 
 #: includes/abstracts/abstract-wshop-order.php:246
 #: includes/admin/menus/class-wshop-menu-order-default.php:538
