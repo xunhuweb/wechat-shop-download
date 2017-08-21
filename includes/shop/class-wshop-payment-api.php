@@ -45,7 +45,9 @@ class WShop_Payment_Api{
         global $wpdb;
         $status_sql ="'".join("','", Abstract_WShop_Order::get_paid_order_status())."'";
         $user_id = get_current_user_id();
-    
+        if($user_id<=0){
+            return false;
+        }
         if(WShop::instance()->payment->is_user_roles_allowed($roles)){
             return true;
         }
