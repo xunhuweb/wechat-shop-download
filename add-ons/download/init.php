@@ -100,7 +100,7 @@ class WShop_Add_On_Download extends Abstract_WShop_Add_Ons{
      */
     public function on_load(){
         $o = $this;
-        
+        add_filter('wshop_enable_guest', array($o,'wshop_enable_guest'),10,2);
         add_filter('wshop_order_received_url', array($o,'wshop_order_received_url'),10,2);
         add_filter('wshop_admin_menu_menu_default_modal', function ($menus) {
             $menus[] = WShop_Add_On_Download::instance();
@@ -115,6 +115,25 @@ class WShop_Add_On_Download extends Abstract_WShop_Add_Ons{
                 WShop_Download_Field::instance();
             },10);
         }
+    }
+    
+    public function wshop_enable_guest($enable_guest,$atts){
+        if(!$enable_guest){
+            return $enable_guest;
+        }
+    
+        $post_id = isset($atts['post_id'])?$atts['post_id']:null;
+        $post = get_post($post_id);
+        if(!$post){
+            return $enable_guest;
+        }
+    
+        $types = $this->get_option('post_types');
+        if(in_array($post->post_type, $types)){
+            return false;
+        }
+    
+        return $enable_guest;
     }
     
     /**
