@@ -218,10 +218,12 @@ abstract class WShop_Object{
         $obj = $this->get_obj_by($field_name, $field_val);
        
         if($obj){
-            foreach (shortcode_atts(array_merge($this->get_propertys(),$this->ext_propertys()), get_object_vars($obj)) as $key=>$val){
+            foreach (shortcode_atts(array_merge($this->get_propertys(),$this->ext_propertys()), get_object_vars($obj)) as $key=>$val){               
                 $this->{$key} = maybe_unserialize($val);
             }
         }
+        
+       
     }
     
     /**

@@ -41,8 +41,6 @@ class WShop_WP_Api
     private function __construct()
     {}
 
-
-    
     /**
      * 是否允许游客支付
      * @param array $request
@@ -75,7 +73,7 @@ class WShop_WP_Api
         $page_id =  WShop_Settings_Checkout_Options::instance()->get_option('page_checkout');
         $permalink = get_page_link($page_id);
         
-        $endpoint = WShop_Settings_Checkout_Options::instance()->get_option($endpoint);
+        $endpoint = WShop_Settings_Checkout_Options::instance()->get_option("endpoint_$endpoint");
         $url ='';
         if ( get_option( 'permalink_structure' ) ) {
             if ( strstr( $permalink, '?' ) ) {

@@ -15,7 +15,7 @@ if(!$product instanceof Abstract_WShop_Product){
 <div class="block20"></div>
 
 <dl class="xh-prolist clearfix">
-    <!-- <dt><a target="_blank" href="<?php echo $product->get_link()?>"><img src="<?php echo $product->get_img()?>" alt="<?php echo esc_attr($product->get_title())?>"></a></dt> -->
+    <dt><a target="_blank" href="<?php echo $product->get_link()?>"><img src="<?php echo $product->get_img()?>" alt="<?php echo esc_attr($product->get_title())?>"></a></dt> 
     <dd>
         <div class="ptitle"><?php echo $product->get_title()?></div>
         <p class="price"><?php echo $product->get_single_price(true)?></p>

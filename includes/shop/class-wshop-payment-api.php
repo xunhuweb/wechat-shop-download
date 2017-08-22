@@ -192,7 +192,7 @@ class WShop_Payment_Api{
      *  @since 1.0.0
      */
     public function get_order_checkout_url(){
-        $url = WShop::instance()->WP->get_checkout_uri('endpoint_order_pay');
+        $url = WShop::instance()->WP->get_checkout_uri('order-pay');
     	return apply_filters( 'wshop_checkout_pay_uri', $url, $this );
     }
     

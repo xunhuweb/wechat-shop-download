@@ -84,7 +84,7 @@ class WShop_Download_Field extends Abstract_XH_WShop_Fields{
                 'downloads'=>array(
                     'title'=>__('Downloads details',WSHOP),
                     'type'=>'custom',
-                    'func'=>function($key,$api){
+                    'func'=>function($key,$api,$data){
                         $field = $api ->get_field_key($key);
                         global $post;
                         $download = new WShop_Download($post->ID);
@@ -106,7 +106,7 @@ class WShop_Download_Field extends Abstract_XH_WShop_Fields{
                             			<textarea rows="6" cols="20" class="input-text wide-input " name="<?php echo $field;?>" style="min-width:600px;"><?php echo esc_textarea($downloads)?></textarea>
                             			<br/>
                     					<p class="description" style="float:right;">            
-                    						<a href="" target="_blank"><code>[wshop_downloads]</code></a><a class="wshop-btn-insert" href="javascript:void(0);" onclick="window.wshop_post_editor.on_purchase_before_insert();"><?php echo __('Insert into post content',WSHOP)?></a>
+                    						默认情况下“管理员”可见 隐藏内容 。  <a href="" target="_blank"><code>[wshop_downloads]</code></a><a class="wshop-btn-insert" href="javascript:void(0);" onclick="window.wshop_post_editor.on_purchase_before_insert();"><?php echo __('Insert into post content',WSHOP)?></a>
                                             <script type="text/javascript">
                                             jQuery(function($){
                                             	if(!window.wshop_post_editor){window.wshop_post_editor={};}

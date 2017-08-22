@@ -69,7 +69,7 @@ abstract class Abstract_WShop_Shopping_Cart extends WShop_Object{
      */
     public function get_items(){
         $results = array();
-        if($this->items){
+        if($this->items&&is_array($this->items)){
             foreach ($this->items as $post_id=>$atts){
                 $qty = intval(isset($atts['qty'])?$atts['qty']:0);
                 if($qty<=0){

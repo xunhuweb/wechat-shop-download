@@ -72,7 +72,7 @@ class WShop_Settings_Add_Ons_Install_Installed extends Abstract_WShop_Settings {
             
 			<p><?php echo sprintf(__('Upload your plugins into <code>%s</code> and redirect to <a href="%s">installed page</a>,activate the plugin.',WSHOP)
 			    ,str_replace('\\', '/', WP_CONTENT_DIR.'/wechat-shop/add-ons/'), 
-			     admin_url("admin.php?page=shop_page_add_ons&section=menu_add_ons_install&sub=settings_add_ons_install_installed"))?></p>
+			     admin_url("admin.php?page=wshop_page_add_ons"))?></p>
         		<br class="clear">	
         		<script type="text/javascript">
         			(function($){
@@ -376,7 +376,7 @@ class WShop_Settings_Add_Ons_Install_Find extends Abstract_WShop_Settings {
 			<br class="clear">	
 			<p><?php echo sprintf(__('Upload your plugins into <code>%s</code> and redirect to <a href="%s">installed page</a>,activate the plugin.',WSHOP)
 			    ,str_replace('\\', '/', WP_CONTENT_DIR.'/wechat-shop/add-ons/'),
-			     admin_url("admin.php?page=shop_page_add_ons&section=menu_add_ons_install&sub=settings_add_ons_install_installed"))?></p>
+			     admin_url("admin.php?page=wshop_page_add_ons"))?></p>
 		
 		
     		<div class="wp-list-table widefat plugin-install">

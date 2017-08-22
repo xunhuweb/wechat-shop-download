@@ -381,8 +381,9 @@ final class WShop {
         $email_db->init();
         
         WShop_Hooks::check_add_ons_update();
-        
+       
         ini_set('memory_limit','128M');
+        
         do_action('wshop_flush_rewrite_rules');
         flush_rewrite_rules();
         
@@ -538,7 +539,7 @@ final class WShop {
             //初始化 管理页面
             WShop_Admin::instance();
         }
-       
+    
         // Init action.
         do_action( 'wshop_init' );
     }

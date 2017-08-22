@@ -78,7 +78,7 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
         $thumbnail_id = get_post_thumbnail_id($this->post->ID);
         $thumb= $thumbnail_id?wp_get_attachment_image_src($thumbnail_id, 'thumbnail'):null;
          
-        return apply_filters('wshop_product_img', $thumb&&count($thumb)>0?$thumb[0]:"");
+        return apply_filters('wshop_product_img', $thumb&&count($thumb)>0?$thumb[0]:WSHOP_URL.'/assets/image/default.png');
     }
     
     /**
@@ -287,7 +287,41 @@ class WShop_Product_Fields extends Abstract_XH_WShop_Fields{
         $this->form_fields = apply_filters('wshop_product_fields', array(
             'sale_price'=>array(
                 'title'=>__('Sale price',WSHOP),
-                'type'=>'decimal'
+                'type'=>'custom',
+                'func'=>function($key,$api,$data){
+                $field = $api->get_field_key ( $key );
+                $defaults = array (
+                    'title' => '',
+                    'disabled' => false,
+                    'class' => '',
+                    'css' => '',
+                    'placeholder' => '',
+                    'type' => 'text',
+                    'desc_tip' => false,
+                    'description' => '',
+                    'custom_attributes' => array ()
+                );
+                
+                $data = wp_parse_args ( $data, $defaults );
+                ?>
+                    <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
+                    	<th scope="row" class="titledesc">
+                    		<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+                    		<?php echo $api->get_tooltip_html( $data ); ?>
+                    	</th>
+                    	<td class="forminp">
+                    		<fieldset>
+                    			<legend class="screen-reader-text">
+                    				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
+                    			</legend>
+                    			<?php $symbol =WShop_Currency::get_currency_symbol(WShop::instance()->payment->get_currency());?>
+                    			<?php echo $symbol?> <input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( ( $api->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $api->get_custom_attribute_html( $data ); ?> />
+                    			<?php echo $api->get_description_html( $data ); ?>
+                    		</fieldset>
+                    	</td>
+                    </tr>
+                    <?php
+                }
             )
         ),$post,$this);
     }

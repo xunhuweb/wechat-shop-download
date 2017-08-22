@@ -15,7 +15,7 @@ if(!$order_items){
     	<?php foreach ($order_items as $order_item){
     	    ?>
     	    <tr>
-        	   <!--  <td><img src="<?php echo $order_item->get_img();?>" style="width:25px;height:25px;"/></td> -->
+        	   <td><img src="<?php echo $order_item->get_img();?>" style="width:25px;height:25px;"/></td>
         	    <td><?php echo $order_item->get_title();?></td>
         	    <td>x<?php echo $order_item->qty?></td>
         	</tr>

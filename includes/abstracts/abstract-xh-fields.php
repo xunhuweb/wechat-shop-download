@@ -51,18 +51,14 @@ abstract class Abstract_XH_WShop_Fields extends Abstract_WShop_Settings{
         //如果post属性，则添加post_ID属性
         $this->sanitized_fields[$product->get_primary_key()]=$post->ID;
         
-        $fields = array();
-        foreach ($this->sanitized_fields as $key=>$val){
-            $fields[$key] = maybe_serialize($val);
-        }
-       
         if(!$product->is_load()){
-            foreach ($fields as $key=>$val){
+            foreach ($this->sanitized_fields as $key=>$val){
                 $product->{$key} = $val;
             }
+            
             return $product->insert();
         }else{
-            return $product->update($fields);
+            return $product->update($this->sanitized_fields);
         }
     }
     /**

@@ -22,7 +22,7 @@ $order_items = $order->get_order_items();
 			<?php foreach ($order_items as $order_item){
 			    ?>
 			    <tr>
-    				<td><!-- <img src="<?php echo $order_item->get_img();?>" style="width:25px;height:25px;"/> --><span style="margin-left:10px;"><?php echo $order_item->get_title()?></span>x <?php echo $order_item->qty?></td>
+    				<td><img src="<?php echo $order_item->get_img();?>" style="width:25px;height:25px;"/> <span style="margin-left:10px;"><?php echo $order_item->get_title()?></span>x <?php echo $order_item->qty?></td>
     				<td><?php echo $order_item->get_subtotal(true)?></td>
     			</tr>
 			    <?php 

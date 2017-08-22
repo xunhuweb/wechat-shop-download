@@ -26,8 +26,8 @@ $order_items = $order->get_order_items();
 			         foreach ($order_items as $order_item){
 			        ?>
  			    	<tr class="item">
-                        	<!-- <td class="thumb"><img alt="" src="<?php echo $order_item->get_img()?>" style="width:42px;height:42px;"> </td>-->
-                             <td class="name" colspan="2">
+                        	<td class="thumb"><img alt="" src="<?php echo $order_item->get_img()?>" style="width:42px;height:42px;"> </td>
+                             <td class="name">
                           <a href="<?php echo $order_item->get_link()?>" class="wshop-order-item-name"><?php echo esc_html($order_item->get_title())?></a>
                              <div class="view"></div>
              			</td>

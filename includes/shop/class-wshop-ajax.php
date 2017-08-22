@@ -406,7 +406,7 @@ class WShop_Ajax {
 	                    $cart->items[$product_id]['qty']=$new_qty;
 	                   
 	                    echo $cart->update(array(
-	                        'items'=>maybe_serialize($cart->items)
+	                        'items'=>$cart->items
 	                    ))->to_json();
 	                    exit;
 	                    

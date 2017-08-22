@@ -1291,13 +1291,12 @@ abstract class Abstract_WShop_Settings {
 	        'func' => null
 	    );
 	
-	    $data = wp_parse_args ( $data, $defaults );
-	
 	    ob_start ();
 	    if(isset($data['func'])&&$data['func']){
 	        call_user_func_array($data['func'],array(
 	            $key,
-	            $this
+	            $this,
+	            $data
 	        ));
 	    }
 		

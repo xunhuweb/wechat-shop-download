@@ -10,6 +10,7 @@ class WShop_Query{
      */
     private static $_instance;
     
+    public $endpoint_settings=array();
     /**
      * Instance
      * @since  1.0.0
@@ -20,23 +21,57 @@ class WShop_Query{
             return self::$_instance;
     }
     
+   
     /**
      * Constructor for the query class. Hooks in methods.
      *
      * @access public
      */
     private function __construct() {
-        add_action( 'wshop_flush_rewrite_rules', array( $this, 'init_query_vars' ));
-        add_action( 'wshop_flush_rewrite_rules', array( $this, 'add_endpoints' ));
+        add_action( 'wshop_flush_rewrite_rules', array( $this, 'init_query_vars' ) ,11);
+        add_action( 'wshop_flush_rewrite_rules', array( $this, 'add_endpoints' ) ,11);
         
-        add_action( 'init', array( $this, 'init_query_vars' ) );
-        add_action( 'init', array( $this, 'add_endpoints' ) );
-        add_filter('the_title', array( $this, 'the_title' ) ,10,2);
+        add_action( 'init', array( $this, 'init_query_vars' ) ,11);
+        add_action( 'init', array( $this, 'add_endpoints' ) ,11);
+        add_filter('the_title', array( $this, 'the_title' ) ,11,2);
         if ( ! is_admin() ) {
-            add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
-            add_action( 'parse_request', array( $this, 'parse_request' ), 0 );
+            add_filter( 'query_vars', array( $this, 'add_query_vars' ), 11 );
+            add_action( 'parse_request', array( $this, 'parse_request' ), 11 );
+        }
+        
+        $this->register_endpoint('checkout','order-pay', array(
+            'title'=>__('Checkout',WSHOP),
+            'page_title'=>__('Checkout',WSHOP),
+            'description'=>__('Endpoint for the "Checkout &rarr; Pay" page.',WSHOP)
+        ),array('WShop_Hooks','account_order_pay'));
+        
+        $this->register_endpoint('checkout','order-received', array(
+            'title'=>__('Order received',WSHOP),
+            'page_title'=>__('Order details',WSHOP),
+            'description'=>__('Endpoint for the "Checkout &rarr; Order received" page.',WSHOP)
+        ),array('WShop_Hooks','account_order_received'));
+    }
+    
+    public function get_registered_endpoints($page){
+        return isset($this->endpoint_settings[$page])?$this->endpoint_settings[$page]:array();
+    }
+    
+    public function register_endpoint($page,$endpoint,$settings,$callback=null){
+        $settings = shortcode_atts(array(
+            'title'=>$endpoint,
+            'page_title'=>$endpoint,
+            'description'=>null,
+            'type'=>'text',
+            'default'=>$endpoint
+        ), $settings);
+        
+        $this->endpoint_settings[$page][$endpoint]=$settings;
+        
+        if($callback){
+            add_action("wshop_account_{$endpoint}_endpoint",$callback,10,2);
         }
     }
+  
     public function get_current_endpoint() {
         global $wp;
         foreach ( $this->get_query_vars() as $key => $value ) {
@@ -50,24 +85,16 @@ class WShop_Query{
     public function the_title($title,$post_ID){
         global $wp_query;
        
+        $endpoint=null;
         if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && is_page()) {
             $endpoint = $this->get_current_endpoint();
         
-            if(empty($endpoint)){
-                return $title;
-            }
-        
-            switch ($endpoint){
-                case 'order-pay':
-                    return get_option('blogname')." - ".__('Checkout',WSHOP);
-                case 'order-received':
-                    return get_option('blogname')." - ".__('Order details',WSHOP);
-                default:
-                    return apply_filters('wshop_checkout_endpoint_title', $title,$endpoint,$post_ID);
+            if(!empty($endpoint)&&isset($this->endpoint_settings[$endpoint]['page_title'])){
+                $title =  $this->endpoint_settings[$endpoint]['page_title'] ." - ".get_option('blogname');
             }
         }
         
-        return $title;
+        return apply_filters('wshop_endpoint_title', $title,$endpoint);
     }
     
     /**
@@ -75,12 +102,12 @@ class WShop_Query{
      */
     public function init_query_vars() {
         $options =WShop_Settings_Checkout_Options::instance();
-        // Query vars to add to WP.
-        $this->query_vars =apply_filters( 'wshop_get_query_vars', array(
-            // Checkout actions.
-            'order-pay'          => $options->get_option('endpoint_order_pay','order-pay'),
-            'order-received'     => $options->get_option('endpoint_order_received','order-received'),
-        ));
+        
+        foreach ($this->endpoint_settings as $group=>$endpoints){
+            foreach ($endpoints as $endpoint=>$setting){
+                $this->query_vars[$endpoint] = $options->get_option("endpoint_$endpoint",$endpoint);
+            }
+        }
     }
     
     /**

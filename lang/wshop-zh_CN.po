@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wechat shop\n"
-"POT-Creation-Date: 2017-08-21 10:15+0800\n"
-"PO-Revision-Date: 2017-08-21 16:16+0800\n"
+"POT-Creation-Date: 2017-08-22 18:11+0800\n"
+"PO-Revision-Date: 2017-08-22 18:12+0800\n"
 "Last-Translator: ranj <ranj@evget.com>\n"
 "Language-Team: 重庆迅虎网络有限公司 <jeff@xunhuweb.com>\n"
 "Language: zh_CN\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: add-ons/alipay/class-wshop-payment-gateway-alipay.php:31
-#: add-ons/alipay/init.php:44
+#: add-ons/alipay/init.php:45
 #: add-ons/alipay/templates/checkout/alipay/in-wechat-warning.php:9
 #: add-ons/alipay/templates/checkout/alipay/in-wechat-warning.php:14
 #: add-ons/alipay/templates/checkout/alipay/in-wechat-warning.php:18
@@ -32,12 +32,11 @@ msgstr "支付宝"
 #: add-ons/alipay/class-wshop-payment-gateway-alipay.php:47
 #: add-ons/citic-alipay/class-wshop-payment-gateway-citic-alipay.php:47
 #: add-ons/citic-wechat/class-wshop-payment-gateway-citic-wechat.php:47
-#: add-ons/download/init.php:61 add-ons/fast-shopping/init.php:50
-#: add-ons/membership-downloads/init.php:67 add-ons/pay-per-view/init.php:131
+#: add-ons/download/init.php:61 add-ons/fast-shopping/init.php:55
+#: add-ons/membership-downloads/init.php:118 add-ons/pay-per-view/init.php:135
 #: add-ons/wechat/class-wshop-payment-gateway-wechat.php:47
 #: add-ons/wpopen-alipay/class-wshop-payment-gateway-alipay.php:50
 #: add-ons/wpopen-wechat/class-wshop-payment-gateway-wechat.php:50
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:50
 msgid "Enable/Disable"
 msgstr "启用/禁用"
 
@@ -51,47 +50,63 @@ msgstr "启用支付宝"
 msgid "PID"
 msgstr "PID"
 
-#: add-ons/alipay/class-wshop-payment-gateway-alipay.php:55
-msgid "View detail"
-msgstr "查看详情"
-
 #: add-ons/alipay/class-wshop-payment-gateway-alipay.php:60
 msgid "MD5 KEY"
 msgstr "MD5 KEY"
 
-#: add-ons/alipay/init.php:45
-msgid "Alipay payment"
-msgstr "支付宝"
+#: add-ons/alipay/eeeeeeeeeeeeeeeeeeeeeeee.php:46 add-ons/alipay/init.php:55
+#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:63 add-ons/cdkey/init.php:57
+#: add-ons/citic-alipay/init.php:54 add-ons/citic-wechat/init.php:54
+#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:67
+#: add-ons/download/init.php:150 add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:78
+#: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:58
+#: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:64
+#: add-ons/membership/init.php:57
+#: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:62
+#: add-ons/wechat/eeeeeeeeeeeeeeeeeeeeeeee.php:46 add-ons/wechat/init.php:55
+#: add-ons/wpopen-alipay/init.php:54 add-ons/wpopen-wechat/init.php:54
+#: includes/abstracts/abstract-xh-settings.php:104
+#: includes/abstracts/abstract-xh-settings.php:121
+#: includes/admin/menus/class-wshop-page-default.php:35 init.php:412
+#: install/class-xh-install.php:532
+msgid "Settings"
+msgstr "设置"
 
-#: add-ons/alipay/init.php:48 add-ons/cdkey/init.php:50
+#: add-ons/alipay/eeeeeeeeeeeeeeeeeeeeeeee.php:50
+#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:67
+#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:71
+#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:82
+#: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:62
+#: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:68
+#: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:66
+#: add-ons/wechat/eeeeeeeeeeeeeeeeeeeeeeee.php:50
+msgid "Change license"
+msgstr "修改授权"
+
+#: add-ons/alipay/eeeeeeeeeeeeeeeeeeeeeeee.php:58
+#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:75
+#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:78
+#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:90
+#: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:69
+#: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:77
+#: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:73
+#: add-ons/wechat/eeeeeeeeeeeeeeeeeeeeeeee.php:58
+#: install/class-xh-install.php:64
+msgid "License"
+msgstr "授权"
+
+#: add-ons/alipay/init.php:49 add-ons/cdkey/init.php:50
 #: add-ons/citic-alipay/init.php:48 add-ons/citic-wechat/init.php:48
 #: add-ons/coupon/init.php:51 add-ons/download/init.php:49
-#: add-ons/forms/init.php:61 add-ons/membership-downloads/init.php:51
-#: add-ons/membership/init.php:50 add-ons/ultimate-member/init.php:46
-#: add-ons/wechat/init.php:48 add-ons/wpopen-alipay/init.php:48
+#: add-ons/fast-shopping/init.php:39 add-ons/forms/init.php:61
+#: add-ons/membership-downloads/init.php:51 add-ons/membership/init.php:50
+#: add-ons/pay-per-view/init.php:49 add-ons/ultimate-member/init.php:46
+#: add-ons/wechat/init.php:49 add-ons/wpopen-alipay/init.php:48
 #: add-ons/wpopen-wechat/init.php:48
 msgid "xunhuweb"
 msgstr "迅虎网络"
 
-#: add-ons/alipay/init.php:54 add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:60
-#: add-ons/cdkey/init.php:56 add-ons/citic-alipay/init.php:54
-#: add-ons/citic-wechat/init.php:54
-#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:67
-#: add-ons/download/init.php:131 add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:78
-#: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:58
-#: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:64
-#: add-ons/membership/init.php:56
-#: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:62
-#: add-ons/wechat/init.php:54 add-ons/wpopen-alipay/init.php:54
-#: add-ons/wpopen-wechat/init.php:54
-#: includes/abstracts/abstract-xh-settings.php:104
-#: includes/abstracts/abstract-xh-settings.php:121
-#: includes/admin/menus/class-wshop-page-default.php:35 init.php:404
-#: install/class-xh-install.php:530
-msgid "Settings"
-msgstr "设置"
-
-#: add-ons/alipay/init.php:221
+#: add-ons/alipay/init.php:214
 #: add-ons/citic-alipay/templates/checkout/citic-alipay/jsapi.php:13
 #: add-ons/citic-alipay/templates/checkout/citic-alipay/qrcode.php:13
 #: add-ons/citic-wechat/templates/checkout/citic-wechat/jsapi.php:13
@@ -158,12 +173,11 @@ msgstr "代码"
 
 #: add-ons/cdkey/admin/menus/class-wshop-menu-cdkey-code-list.php:278
 #: add-ons/cdkey/includes/class-wshop-cdkey.php:73
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:311
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:325
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:330
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:372 add-ons/cdkey/init.php:46
-#: add-ons/cdkey/init.php:47 add-ons/cdkey/init.php:151
-#: add-ons/cdkey/init.php:152
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:300
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:314
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:319
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:361 add-ons/cdkey/init.php:46
+#: add-ons/cdkey/init.php:170 add-ons/cdkey/init.php:171
 #: add-ons/cdkey/templates/cdkey/shopping-cart-item.php:48
 msgid "Cdkey"
 msgstr "卡密"
@@ -218,186 +232,177 @@ msgstr "取消"
 msgid "Confirm"
 msgstr "确认"
 
-#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:64
-#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:71
-#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:82
-#: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:62
-#: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:68
-#: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:66
-msgid "Change license"
-msgstr "修改授权"
-
-#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:72
-#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:78
-#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:90
-#: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:69
-#: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:77
-#: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:73
-#: install/class-xh-install.php:64
-msgid "License"
-msgstr "授权"
-
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:120
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:345
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:102
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:334
 msgid "Min number purchase"
 msgstr "最少购买"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:121
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:351
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:103
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:340
 msgid "Max number purchase"
 msgstr "最多购买"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:122
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:357
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:104
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:346
 msgid "Purchase start"
 msgstr "购物开始时间"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:123
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:362
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:105
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:351
 msgid "Purchase end"
 msgstr "购物结束时间"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:124
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:106
 msgid "Codes"
 msgstr "代码"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:161
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:325
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:107
+#: add-ons/forms/includes/class-wshop-forms.php:259
+#: add-ons/membership/includes/class-wshop-membership.php:344
+msgid "Short code"
+msgstr "短代码"
+
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:144
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:314
 msgid "All:"
 msgstr "所有："
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:161
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:325
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:144
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:314
 msgid "Sold:"
 msgstr "已售出："
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:234
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:223
 msgid "upload file error:invalid file type!"
 msgstr "文件上传失败：错误的文件类型！"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:241
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:294
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:230
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:283
 msgid "upload file error:file name is invalid!"
 msgstr "文件上传失败：错误的文件名！"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:267
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:256
 msgid ""
 "upload file error:php class 'SplFileObject' not found(connect developer)!"
 msgstr "文件上传失败：PHP class 'SplFileObject'  未能找到(练习开发者)！"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:334
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:323
 #: add-ons/membership/includes/class-wshop-membership.php:448
 msgid "or"
 msgstr "或"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:432
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:420
 #, php-format
 msgid "Cdkey code is too long(128):%s"
 msgstr "卡密代码过长(128):%s"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:443
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:431
 #, php-format
 msgid "Cdkey code is already exists:%s"
 msgstr "卡密代码已存在:%s"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:696
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:684
 msgid "CDKey item is not found!"
 msgstr "未找到CDKey 代码！"
 
-#: add-ons/cdkey/init.php:88
-msgid "CDKEY search"
-msgstr "卡密查询"
-
-#: add-ons/cdkey/init.php:100
+#: add-ons/cdkey/init.php:89
 msgid "Cdkey list"
 msgstr "卡密列表"
 
-#: add-ons/cdkey/init.php:103
+#: add-ons/cdkey/init.php:90
+msgid "CDKEY search"
+msgstr "卡密查询"
+
+#: add-ons/cdkey/init.php:91
 msgid "Endpoint for the \"Checkout &rarr; Cdkey list\" page."
 msgstr ""
 
-#: add-ons/cdkey/init.php:153 add-ons/forms/init.php:271
-#: add-ons/forms/init.php:302 add-ons/membership/init.php:333
+#: add-ons/cdkey/init.php:108 add-ons/membership/init.php:313
+msgid "Pay now"
+msgstr "立即支付"
+
+#: add-ons/cdkey/init.php:172 add-ons/forms/init.php:315
+#: add-ons/forms/init.php:346 add-ons/membership/init.php:367
 msgid "Add New"
 msgstr "添加"
 
-#: add-ons/cdkey/init.php:154
+#: add-ons/cdkey/init.php:173
 msgid "Add New Cdkey"
 msgstr "添加新的卡密"
 
-#: add-ons/cdkey/init.php:155
+#: add-ons/cdkey/init.php:174
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:370
-#: add-ons/forms/init.php:273 add-ons/forms/init.php:304
+#: add-ons/forms/init.php:317 add-ons/forms/init.php:348
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:312
-#: add-ons/membership/init.php:335
+#: add-ons/membership/init.php:369
 #: includes/admin/menus/class-wshop-menu-order-default.php:841
 #: includes/admin/menus/user/class-wshop-user-menu-order-default.php:575
 msgid "Edit"
 msgstr "编辑"
 
-#: add-ons/cdkey/init.php:156
+#: add-ons/cdkey/init.php:175
 msgid "Edit Cdkey"
 msgstr "编辑卡密"
 
-#: add-ons/cdkey/init.php:157
+#: add-ons/cdkey/init.php:176
 msgid "New Cdkey"
 msgstr "新的卡密"
 
-#: add-ons/cdkey/init.php:158 add-ons/forms/init.php:276
-#: add-ons/forms/init.php:307 add-ons/membership/init.php:338
+#: add-ons/cdkey/init.php:177 add-ons/forms/init.php:320
+#: add-ons/forms/init.php:351 add-ons/membership/init.php:372
 #: add-ons/ultimate-member/templates/ultimate-member/account-my-orders.php:74
 #: templates/page/account-my-orders.php:69
 msgid "View"
 msgstr "查看"
 
-#: add-ons/cdkey/init.php:159
+#: add-ons/cdkey/init.php:178
 msgid "View Cdkey"
 msgstr "查看卡密"
 
-#: add-ons/cdkey/init.php:160
+#: add-ons/cdkey/init.php:179
 msgid "Search Cdkey"
 msgstr "查询卡密"
 
-#: add-ons/cdkey/init.php:161
+#: add-ons/cdkey/init.php:180
 msgid "No Cdkey found"
 msgstr "未找到卡密"
 
-#: add-ons/cdkey/init.php:162
+#: add-ons/cdkey/init.php:181
 msgid "No Cdkey found in trash"
 msgstr "回收站中没有找到卡密"
 
-#: add-ons/cdkey/init.php:163
+#: add-ons/cdkey/init.php:182
 msgid "Parent Cdkey"
 msgstr "父级卡密"
 
-#: add-ons/cdkey/init.php:239
+#: add-ons/cdkey/init.php:258
 #, php-format
 msgid "Send cdkey failed!detail error:%s"
 msgstr "卡密发送失败！错误详情：%s"
 
-#: add-ons/cdkey/init.php:244
+#: add-ons/cdkey/init.php:263
 #, php-format
 msgid ""
 "Send cdkey failed!detail error:cdkey is soldout,purchased %s,but send %s "
 "actually."
 msgstr "卡密发送失败！错误详情：卡密代码库存不足，订购%s，但仅发送了%s。"
 
-#: add-ons/cdkey/init.php:325
+#: add-ons/cdkey/init.php:344
 #, php-format
 msgid "Sorry!\"%s\" is sold out."
 msgstr "对不起！“%s” 已售完"
 
-#: add-ons/cdkey/init.php:330
+#: add-ons/cdkey/init.php:349
 #, php-format
 msgid "Sorry!Minimum quantity purchased is %s (\"%s\")."
 msgstr "对不起！最少购买数量%s(“%s”)。"
 
-#: add-ons/cdkey/init.php:336
+#: add-ons/cdkey/init.php:355
 #, php-format
 msgid "Sorry!Maxmum quantity purchased is %s (\"%s\")."
 msgstr "对不起！最多购买数量%s(“%s”)。"
 
-#: add-ons/cdkey/init.php:342 add-ons/cdkey/init.php:348
+#: add-ons/cdkey/init.php:361 add-ons/cdkey/init.php:367
 #, php-format
 msgid "Sorry!Cdkey is unsold(\"%s\")."
 msgstr "对不起！卡密还未开始出售(“%s”)。"
@@ -416,15 +421,11 @@ msgstr "输入订单交易号"
 msgid "Search"
 msgstr "查询"
 
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:40
-msgid "Order notes"
-msgstr "订单记录"
-
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:50
+#: add-ons/cdkey/templates/cdkey/cdkey-list.php:34
 msgid "Cdkeys"
 msgstr "卡密"
 
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:56
+#: add-ons/cdkey/templates/cdkey/cdkey-list.php:40
 msgid "You don't have any cdkey!"
 msgstr "你还没有卡密！"
 
@@ -444,7 +445,7 @@ msgstr "已售完"
 
 #: add-ons/citic-alipay/class-wshop-payment-gateway-citic-alipay.php:53
 #: add-ons/citic-wechat/class-wshop-payment-gateway-citic-wechat.php:53
-#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:63
+#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:64
 msgid "Merchant ID"
 msgstr "商户号"
 
@@ -457,13 +458,9 @@ msgstr "Secret(KEY)"
 msgid "Alipay(CITIC)"
 msgstr "支付宝(中信银行)"
 
-#: add-ons/citic-alipay/init.php:45
-msgid "Alipay citic payment gateway"
-msgstr "支付宝中信银行支付网关"
-
 #: add-ons/citic-wechat/class-wshop-payment-gateway-citic-wechat.php:31
 #: add-ons/wechat/class-wshop-payment-gateway-wechat.php:31
-#: add-ons/wechat/init.php:44
+#: add-ons/wechat/init.php:45
 #: add-ons/wpopen-wechat/class-wshop-payment-gateway-wechat.php:31
 msgid "Wechat Pay"
 msgstr "微信支付"
@@ -493,10 +490,6 @@ msgstr "子商户APP Secrept"
 #: add-ons/citic-wechat/init.php:44
 msgid "Wechat Pay(CITIC)"
 msgstr "微信支付(中信银行)"
-
-#: add-ons/citic-wechat/init.php:45
-msgid "Wechat citic payment gateway"
-msgstr "微信支付中信银行支付网关"
 
 #: add-ons/citic-wechat/templates/checkout/citic-wechat/jsapi.php:44
 #: add-ons/wechat/templates/checkout/wechat/jsapi.php:104
@@ -666,8 +659,8 @@ msgstr "添加优惠券时发生异常"
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit.php:29
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit.php:70
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit.php:100
-#: add-ons/coupon/init.php:47 add-ons/coupon/init.php:48
-#: add-ons/coupon/init.php:105 add-ons/coupon/templates/coupon/checkout.php:15
+#: add-ons/coupon/init.php:47 add-ons/coupon/init.php:106
+#: add-ons/coupon/templates/coupon/checkout.php:15
 #: add-ons/coupon/templates/coupon/checkout.php:18
 #: add-ons/coupon/templates/coupon/checkout.php:151
 msgid "Coupon"
@@ -689,7 +682,7 @@ msgstr "使用限制"
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-detail.php:126
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-history-list.php:185
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:251
-#: add-ons/membership/init.php:144
+#: add-ons/membership/init.php:141
 msgid "Expire date"
 msgstr "过期时间"
 
@@ -732,61 +725,61 @@ msgstr "百分比"
 
 #: add-ons/coupon/includes/class-wshop-coupon.php:272
 #: add-ons/coupon/includes/class-wshop-coupon.php:286
-#: add-ons/coupon/init.php:529
+#: add-ons/coupon/init.php:530
 msgid "Coupon is not found!"
 msgstr "未找到优惠码！"
 
-#: add-ons/coupon/init.php:218 add-ons/coupon/init.php:426
+#: add-ons/coupon/init.php:219 add-ons/coupon/init.php:427
 #, php-format
 msgid "Coupon is used or not found!(%s)"
 msgstr "优惠券已使用或未找到！(%s)"
 
-#: add-ons/coupon/init.php:267
+#: add-ons/coupon/init.php:268
 #, php-format
 msgid "Sorry!The coupon is expired!(%s)"
 msgstr "对不起！优惠券已过期！(%s)"
 
-#: add-ons/coupon/init.php:275
+#: add-ons/coupon/init.php:276
 #, php-format
 msgid "Sorry!The order amount is too small when use coupon!(%s)"
 msgstr "对不起！当前订单无法使用优惠券！(%s)"
 
-#: add-ons/coupon/init.php:282
+#: add-ons/coupon/init.php:283
 #, php-format
 msgid "Sorry!The order amount is too large when use coupon!(%s)"
 msgstr "对不起！当前订单无法使用优惠券！(%s)"
 
-#: add-ons/coupon/init.php:299
+#: add-ons/coupon/init.php:300
 #, php-format
 msgid "Sorry!The coupon cannot be used in conjunction with other coupons!(%s)"
 msgstr "对不起！优惠券无法与其他优惠券混合使用！(%s)"
 
-#: add-ons/coupon/init.php:317 add-ons/coupon/init.php:333
+#: add-ons/coupon/init.php:318 add-ons/coupon/init.php:334
 #, php-format
 msgid "Sorry!The coupon is already invalid!(%s)"
 msgstr "对不起！优惠券已经无效!(%s)"
 
-#: add-ons/coupon/init.php:371 add-ons/coupon/init.php:413
+#: add-ons/coupon/init.php:372 add-ons/coupon/init.php:414
 msgid "Shopping cart is not found!"
 msgstr "未找到购物车页面！"
 
-#: add-ons/coupon/init.php:419
+#: add-ons/coupon/init.php:420
 msgid "Coupon is invalid!"
 msgstr "优惠券无效！"
 
-#: add-ons/coupon/init.php:437
+#: add-ons/coupon/init.php:438
 msgid "Sorry!The coupon can not be used twice in one order!"
 msgstr "对不起！优惠券无法在同一个订单上使用两次"
 
-#: add-ons/coupon/init.php:494
+#: add-ons/coupon/init.php:495
 msgid "Coupon code is required!"
 msgstr "请输入优惠券代码！"
 
-#: add-ons/coupon/init.php:500
+#: add-ons/coupon/init.php:501
 msgid "Coupon amount is invalid!"
 msgstr "请输入优惠券金额！"
 
-#: add-ons/coupon/init.php:520 add-ons/coupon/init.php:539
+#: add-ons/coupon/init.php:521 add-ons/coupon/init.php:540
 msgid "Coupon code has been used!"
 msgstr "优惠券已被使用！"
 
@@ -822,7 +815,7 @@ msgid "Ajax error while apply coupon"
 msgstr "应用优惠券时发生异常"
 
 #: add-ons/download/includes/class-wshop-download.php:73
-#: add-ons/download/init.php:45 add-ons/download/init.php:46
+#: add-ons/download/init.php:45
 msgid "Pay per download"
 msgstr "付费下载"
 
@@ -839,41 +832,33 @@ msgid "Downloads details"
 msgstr "下载详情"
 
 #: add-ons/download/includes/class-wshop-download.php:109
-#: add-ons/fast-shopping/init.php:131
+#: add-ons/fast-shopping/init.php:136
 #: add-ons/membership-downloads/includes/class-wshop-member-download.php:109
 #: add-ons/membership-downloads/includes/class-wshop-membership-download.php:109
 #: add-ons/pay-per-view/includes/class-wshop-pay-per-view.php:123
 #: add-ons/pay-per-view/includes/class-wshop-pay-per-view.php:153
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:131
 msgid "Insert into post content"
 msgstr "插入文章"
 
-#: add-ons/download/init.php:66 add-ons/fast-shopping/init.php:55
-#: add-ons/membership-downloads/init.php:72 add-ons/pay-per-view/init.php:136
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:55
+#: add-ons/download/init.php:66 add-ons/fast-shopping/init.php:60
+#: add-ons/membership-downloads/init.php:123 add-ons/pay-per-view/init.php:140
 msgid "Bind post types"
 msgstr "绑定内容类型"
 
-#: add-ons/download/init.php:176 add-ons/membership-downloads/init.php:218
+#: add-ons/download/init.php:195 add-ons/membership-downloads/init.php:196
 msgid "Download now"
 msgstr "立即下载"
 
 #: add-ons/fast-shopping/init.php:35 add-ons/pay-per-view/init.php:45
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:35
 msgid "Fast Shopping"
 msgstr "快速购物"
 
-#: add-ons/fast-shopping/init.php:117 add-ons/fast-shopping/init.php:124
-#: add-ons/fast-shopping/init.php:129
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:117
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:124
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:129
+#: add-ons/fast-shopping/init.php:122 add-ons/fast-shopping/init.php:129
+#: add-ons/fast-shopping/init.php:134
 msgid "Purchase button"
 msgstr "购物按钮"
 
-#: add-ons/fast-shopping/init.php:162
-#: includes/shop/modal/fast-shopping/class-wshop-fast-shopping.php:162
-#: templates/page/checkout-order-pay.php:57
+#: add-ons/fast-shopping/init.php:167 templates/page/checkout-order-pay.php:57
 msgid "Pay Now"
 msgstr "立即支付"
 
@@ -895,14 +880,14 @@ msgstr "请输入%s!"
 
 #: add-ons/forms/includes/class-wshop-forms-entry.php:111
 #: add-ons/forms/includes/class-wshop-forms-entry.php:202
-#: add-ons/forms/init.php:300 add-ons/forms/init.php:301
+#: add-ons/forms/init.php:344 add-ons/forms/init.php:345
 msgid "Form entry"
 msgstr "表单条目"
 
 #: add-ons/forms/includes/class-wshop-forms-entry.php:127
 #: add-ons/forms/includes/class-wshop-forms.php:244
-#: add-ons/forms/includes/class-wshop-forms.php:778 add-ons/forms/init.php:269
-#: add-ons/forms/init.php:270
+#: add-ons/forms/includes/class-wshop-forms.php:778 add-ons/forms/init.php:313
+#: add-ons/forms/init.php:314
 msgid "Form"
 msgstr "表单"
 
@@ -920,11 +905,6 @@ msgstr "标准字段"
 #: add-ons/forms/includes/class-wshop-forms.php:116
 msgid "Advanced Fields"
 msgstr "高级字段"
-
-#: add-ons/forms/includes/class-wshop-forms.php:259
-#: add-ons/membership/includes/class-wshop-membership.php:344
-msgid "Short code"
-msgstr "短代码"
 
 #: add-ons/forms/includes/class-wshop-forms.php:446
 msgid ""
@@ -971,16 +951,22 @@ msgstr "多行文本框(textarea)"
 msgid "Forms"
 msgstr "表单"
 
-#: add-ons/forms/init.php:58
-msgid "forms"
-msgstr "表单"
+#: add-ons/forms/init.php:135 add-ons/forms/init.php:136
+#: add-ons/forms/templates/form/form-received.php:27
+#: add-ons/forms/templates/form/form-received.php:37
+msgid "Form received"
+msgstr "收到表单"
 
-#: add-ons/forms/init.php:177
+#: add-ons/forms/init.php:137
+msgid "Endpoint for the \"Checkout &rarr; Form received\" page."
+msgstr ""
+
+#: add-ons/forms/init.php:221
 #: includes/admin/menus/user/class-wshop-user-menu-order-default.php:548
 msgid "Select form"
 msgstr "选择表单"
 
-#: add-ons/forms/init.php:224
+#: add-ons/forms/init.php:268
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-history-list.php:164
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:224
 #: includes/abstracts/abstract-xh-settings.php:175
@@ -988,97 +974,84 @@ msgstr "选择表单"
 msgid "Select..."
 msgstr "选择..."
 
-#: add-ons/forms/init.php:254 add-ons/forms/templates/form/form-content.php:8
+#: add-ons/forms/init.php:298 add-ons/forms/templates/form/form-content.php:8
 #: includes/admin/menus/class-wshop-menu-order-default.php:243
 msgid "Submit"
 msgstr "提交"
 
-#: add-ons/forms/init.php:272
+#: add-ons/forms/init.php:316
 msgid "Add New Form"
 msgstr "新增表单"
 
-#: add-ons/forms/init.php:274
+#: add-ons/forms/init.php:318
 msgid "Edit Form"
 msgstr "编辑表单"
 
-#: add-ons/forms/init.php:275
+#: add-ons/forms/init.php:319
 msgid "New Form"
 msgstr "新表单"
 
-#: add-ons/forms/init.php:277
+#: add-ons/forms/init.php:321
 msgid "View Form"
 msgstr "查看表单"
 
-#: add-ons/forms/init.php:278
+#: add-ons/forms/init.php:322
 msgid "Search Form"
 msgstr "查询表单"
 
-#: add-ons/forms/init.php:279
+#: add-ons/forms/init.php:323
 msgid "No Form found"
 msgstr "未找到表单信息"
 
-#: add-ons/forms/init.php:280
+#: add-ons/forms/init.php:324
 msgid "No Form found in trash"
 msgstr "回收站中无表单"
 
-#: add-ons/forms/init.php:281
+#: add-ons/forms/init.php:325
 msgid "Parent Form"
 msgstr "父级表单"
 
-#: add-ons/forms/init.php:303
+#: add-ons/forms/init.php:347
 msgid "Add New Form entry"
 msgstr "新增表单条目"
 
-#: add-ons/forms/init.php:305
+#: add-ons/forms/init.php:349
 msgid "Edit Form entry"
 msgstr "编辑表单条目"
 
-#: add-ons/forms/init.php:306
+#: add-ons/forms/init.php:350
 msgid "New Form entry"
 msgstr "新表单条目"
 
-#: add-ons/forms/init.php:308
+#: add-ons/forms/init.php:352
 msgid "View Form entry"
 msgstr "查看表单条目"
 
-#: add-ons/forms/init.php:309
+#: add-ons/forms/init.php:353
 msgid "Search Form entry"
 msgstr "查询表单条目"
 
-#: add-ons/forms/init.php:310
+#: add-ons/forms/init.php:354
 msgid "No Form entry found"
 msgstr "未找到表单条目信息"
 
-#: add-ons/forms/init.php:311
+#: add-ons/forms/init.php:355
 msgid "No Form entry found in trash"
 msgstr "回收站中无表单条目"
 
-#: add-ons/forms/init.php:312
+#: add-ons/forms/init.php:356
 msgid "Parent Form entry"
 msgstr "父级表单条目"
 
-#: add-ons/forms/init.php:346
-msgid "form received"
-msgstr "收到表单"
-
-#: add-ons/forms/init.php:359 add-ons/forms/templates/form/form-received.php:27
-#: add-ons/forms/templates/form/form-received.php:37
-msgid "Form received"
-msgstr "收到表单"
-
-#: add-ons/forms/init.php:362
-msgid "Endpoint for the \"Checkout &rarr; Form received\" page."
-msgstr ""
-
-#: add-ons/forms/init.php:424
+#: add-ons/forms/init.php:437
 msgid "Form is not found!"
 msgstr "未找到表单信息！"
 
-#: add-ons/forms/init.php:650
+#: add-ons/forms/init.php:663
 msgid "Checkout form"
 msgstr "结算表单"
 
-#: add-ons/forms/init.php:653
+#: add-ons/forms/init.php:666
 msgid "Checkout with extension info."
 msgstr "支付时新增扩展信息"
 
@@ -1359,46 +1332,39 @@ msgstr "返回首页"
 
 #: add-ons/membership-downloads/includes/class-wshop-member-download.php:73
 #: add-ons/membership-downloads/includes/class-wshop-membership-download.php:73
-#: add-ons/membership-downloads/init.php:160
+#: add-ons/membership-downloads/init.php:79
 msgid "Membership downloads"
 msgstr "会员下载"
 
 #: add-ons/membership-downloads/init.php:47
-#: add-ons/membership-downloads/init.php:48
 msgid "Membership Download"
 msgstr "会员下载"
 
-#: add-ons/membership-downloads/init.php:57
-#: add-ons/membership-downloads/templates/membership-downloads/membership.php:22
-msgid "Membership upgrade"
-msgstr "会员升级"
-
-#: add-ons/membership-downloads/init.php:79
-msgid "New download page"
-msgstr "新的下载页面"
-
-#: add-ons/membership-downloads/init.php:81
-msgid "Enable a new download page."
-msgstr "启用新的下载页面"
-
-#: add-ons/membership-downloads/init.php:105
-#: add-ons/membership-downloads/init.php:107
-msgid "Dwonload page"
-msgstr "下载页面"
-
-#: add-ons/membership-downloads/init.php:109
-#: add-ons/membership-downloads/init.php:167 add-ons/membership/init.php:46
-#: add-ons/membership/init.php:47
+#: add-ons/membership-downloads/init.php:58
+#: add-ons/membership-downloads/init.php:85
+#: add-ons/membership-downloads/init.php:86 add-ons/membership/init.php:46
 msgid "Membership purchase"
 msgstr "会员购买"
 
-#: add-ons/membership-downloads/init.php:163
-msgid "Endpoint for the \"Checkout &rarr; Membership downloads\" page."
+#: add-ons/membership-downloads/init.php:80
+msgid "Dwonload page"
+msgstr "下载页面"
+
+#: add-ons/membership-downloads/init.php:81
+msgid "Endpoint for the \"Checkout &rarr; Membership downloads page."
 msgstr ""
 
-#: add-ons/membership-downloads/init.php:170
-msgid "Endpoint for the \"Checkout &rarr; Membership\" page."
+#: add-ons/membership-downloads/init.php:87
+msgid "Endpoint for the \"Checkout &rarr; Membership purchase\" page."
 msgstr ""
+
+#: add-ons/membership-downloads/init.php:130
+msgid "New download page"
+msgstr "新的下载页面"
+
+#: add-ons/membership-downloads/init.php:132
+msgid "Enable a new download page."
+msgstr "启用新的下载页面"
 
 #: add-ons/membership-downloads/templates/membership-downloads/membership-downloads.php:42
 msgid "Download page"
@@ -1422,6 +1388,10 @@ msgstr "返回"
 #: add-ons/membership-downloads/templates/membership-downloads/membership.php:55
 msgid "Back to home"
 msgstr "返回首页"
+
+#: add-ons/membership-downloads/templates/membership-downloads/membership.php:22
+msgid "Membership upgrade"
+msgstr "会员升级"
 
 #: add-ons/membership-downloads/templates/membership-downloads/membership.php:25
 msgid "Membership purchase:"
@@ -1511,7 +1481,7 @@ msgstr "未找到会员升级信息！"
 
 #: add-ons/membership/includes/class-wshop-membership.php:315
 #: add-ons/membership/includes/class-wshop-membership.php:573
-#: add-ons/membership/init.php:331 add-ons/membership/init.php:332
+#: add-ons/membership/init.php:365 add-ons/membership/init.php:366
 msgid "Membership"
 msgstr "会员等级"
 
@@ -1554,115 +1524,115 @@ msgstr "请输入标题！"
 msgid "one year=12 month, one month=30 day"
 msgstr "1年=12个月，1月=30天"
 
-#: add-ons/membership/init.php:71
+#: add-ons/membership/init.php:72
 #: add-ons/membership/templates/emails/membership-upgraded.php:32
 #: add-ons/membership/templates/emails/your-membership-have-upgraded.php:32
 msgid "Membership upgraded"
 msgstr "会员等级已升级"
 
-#: add-ons/membership/init.php:71
+#: add-ons/membership/init.php:72
 msgid "[{site_title}] Membership upgrade - {date}"
 msgstr "[{site_title}] 会员等级已升级 - {date}"
 
-#: add-ons/membership/init.php:74 add-ons/membership/init.php:79
+#: add-ons/membership/init.php:75 add-ons/membership/init.php:80
 msgid "New emails are sent to chosen recipient(s) when membership upgraded."
 msgstr "当会员升级时，邮件将会发送给接受者列表中的人。"
 
-#: add-ons/membership/init.php:76
+#: add-ons/membership/init.php:77
 msgid "Your membership have upgraded"
 msgstr "您的会员等级已升级"
 
-#: add-ons/membership/init.php:76
+#: add-ons/membership/init.php:77
 msgid "[{site_title}] Your membership have upgraded - {date}"
 msgstr "[{site_title}] 您的会员等级已升级 - {date}"
 
-#: add-ons/membership/init.php:82
+#: add-ons/membership/init.php:83
 #: add-ons/membership/templates/emails/membership-willbe-expired.php:32
 #: add-ons/membership/templates/emails/your-membership-willbe-expired.php:32
 msgid "Membership will be expired"
 msgstr "会员等级即将过期"
 
-#: add-ons/membership/init.php:82 add-ons/membership/init.php:92
+#: add-ons/membership/init.php:83 add-ons/membership/init.php:93
 msgid "[{site_title}] Membership will be expired - {date}"
 msgstr "[{site_title}] 会员等级即将过期 - {date}"
 
-#: add-ons/membership/init.php:85 add-ons/membership/init.php:90
+#: add-ons/membership/init.php:86 add-ons/membership/init.php:91
 msgid ""
 "New emails are sent to chosen recipient(s) when membership will be expired."
 msgstr "当会员等级即将过期时，邮件将会发送给接受者列表中的人。"
 
-#: add-ons/membership/init.php:87
+#: add-ons/membership/init.php:88
 msgid "Your membership will be expired"
 msgstr "您的会员等级即将过期"
 
-#: add-ons/membership/init.php:87 add-ons/membership/init.php:97
+#: add-ons/membership/init.php:88 add-ons/membership/init.php:98
 msgid "[{site_title}] Your membership will be expired - {date}"
 msgstr "[{site_title}] 您的会员等级即将过期 - {date}"
 
-#: add-ons/membership/init.php:92
+#: add-ons/membership/init.php:93
 #: add-ons/membership/templates/emails/membership-have-expired.php:32
 #: add-ons/membership/templates/emails/your-membership-have-expired.php:32
 msgid "Membership have expired"
 msgstr "会员等级已过期"
 
-#: add-ons/membership/init.php:95 add-ons/membership/init.php:100
+#: add-ons/membership/init.php:96 add-ons/membership/init.php:101
 msgid ""
 "New emails are sent to chosen recipient(s) when membership have expired."
 msgstr "当会员等级已过期时，邮件将会发送给接受者列表中的人。"
 
-#: add-ons/membership/init.php:97
+#: add-ons/membership/init.php:98
 msgid "Your membership have expired"
 msgstr "您的会员等级已过期"
 
-#: add-ons/membership/init.php:308
+#: add-ons/membership/init.php:342
 msgid "Pay per view visit limit"
 msgstr "付费查看限制"
 
-#: add-ons/membership/init.php:312
+#: add-ons/membership/init.php:346
 msgid "Roles visit limit"
 msgstr "角色访问限制"
 
-#: add-ons/membership/init.php:334
+#: add-ons/membership/init.php:368
 msgid "Add New Membership"
 msgstr "新增会员等级"
 
-#: add-ons/membership/init.php:336
+#: add-ons/membership/init.php:370
 msgid "Edit Membership"
 msgstr "编辑会员等级"
 
-#: add-ons/membership/init.php:337
+#: add-ons/membership/init.php:371
 msgid "New Membership"
 msgstr "新会员等级"
 
-#: add-ons/membership/init.php:339
+#: add-ons/membership/init.php:373
 msgid "View Membership"
 msgstr "查看会员等级"
 
-#: add-ons/membership/init.php:340
+#: add-ons/membership/init.php:374
 msgid "Search Membership"
 msgstr "查询会员等级"
 
-#: add-ons/membership/init.php:341
+#: add-ons/membership/init.php:375
 msgid "No Membership found"
 msgstr "未找到会员等级"
 
-#: add-ons/membership/init.php:342
+#: add-ons/membership/init.php:376
 msgid "No Membership found in trash"
 msgstr "回收站中没有找到会员等级"
 
-#: add-ons/membership/init.php:343
+#: add-ons/membership/init.php:377
 msgid "Parent Membership"
 msgstr "父级会员等级"
 
-#: add-ons/membership/init.php:572 add-ons/membership/init.php:639
+#: add-ons/membership/init.php:606 add-ons/membership/init.php:673
 msgid "Administrator can not do upgrade!"
 msgstr "管理员无法升级！"
 
-#: add-ons/membership/init.php:617
+#: add-ons/membership/init.php:651
 msgid "Can not be remove administrator!"
 msgstr "无法删除administrator!"
 
-#: add-ons/membership/init.php:633
+#: add-ons/membership/init.php:667
 msgid "User info is not found!"
 msgstr "未找到用户信息！"
 
@@ -1697,7 +1667,6 @@ msgid "Your membership(%s) will be expired at %s!"
 msgstr "您的会员等级(%s)即将于%s过期！"
 
 #: add-ons/pay-per-view/includes/class-wshop-pay-per-view.php:95
-#: add-ons/pay-per-view/init.php:42
 msgid "Pay per view"
 msgstr "付费查看"
 
@@ -1719,7 +1688,7 @@ msgstr "购物后显示"
 msgid "Pay Per View"
 msgstr "付费查看"
 
-#: add-ons/ultimate-member/init.php:42 add-ons/ultimate-member/init.php:43
+#: add-ons/ultimate-member/init.php:42
 msgid "Ultimate_Member"
 msgstr "Ultimate Member"
 
@@ -1780,7 +1749,6 @@ msgid "You don't have any orders!"
 msgstr "你还没有任何订单！"
 
 #: add-ons/ultimate-member/templates/ultimate-member/account-my-orders.php:76
-#: includes/shop/class-wshop-settings-checkout-options.php:80
 #: templates/page/account-my-orders.php:71
 #: templates/page/checkout-order-received.php:32
 msgid "Pay"
@@ -1790,21 +1758,17 @@ msgstr "支付"
 msgid "AppID"
 msgstr "App ID"
 
-#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:58
+#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:59
 msgid "AppSecret"
 msgstr "APP Secret"
 
-#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:68
+#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:69
 msgid "Wechat Pay Sign Key"
 msgstr "微信支付密钥"
 
-#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:73
+#: add-ons/wechat/class-wshop-payment-gateway-wechat.php:74
 msgid "Cross domain url"
 msgstr "跨域授权URL"
-
-#: add-ons/wechat/init.php:45
-msgid "Wechat payment"
-msgstr "微信支付"
 
 #: add-ons/wpopen-alipay/class-wshop-payment-gateway-alipay.php:56
 #: add-ons/wpopen-wechat/class-wshop-payment-gateway-wechat.php:56
@@ -1880,7 +1844,7 @@ msgstr "价格设置"
 msgid "Sale price"
 msgstr "销售价格"
 
-#: includes/abstracts/abstract-xh-fields.php:163
+#: includes/abstracts/abstract-xh-fields.php:159
 msgid "Update failed,detail error:"
 msgstr "信息更新失败，错误详情："
 
@@ -2106,7 +2070,8 @@ msgid "Application"
 msgstr "应用"
 
 #: includes/admin/menus/class-wshop-menu-default-payment-gateway.php:33
-#: includes/shop/class-wshop-query.php:62
+#: includes/shop/class-wshop-query.php:43
+#: includes/shop/class-wshop-query.php:44
 msgid "Checkout"
 msgstr "结算"
 
@@ -3019,7 +2984,7 @@ msgid ""
 msgstr "当收到新订单时，新订单邮件将会发送给接受者列表中的人。"
 
 #: includes/shop/class-wshop-email.php:135
-#: includes/shop/class-wshop-settings-checkout-options.php:86
+#: includes/shop/class-wshop-query.php:49
 #: templates/page/checkout-order-received.php:16
 #: templates/page/checkout-order-received.php:26
 msgid "Order received"
@@ -3041,14 +3006,22 @@ msgstr "向客户备注"
 msgid "WShop - Checkout"
 msgstr "WShop - 结算"
 
-#: includes/shop/class-wshop-payment-api.php:113
+#: includes/shop/class-wshop-payment-api.php:115
 msgid "Product info is invalid!"
 msgstr "商品信息异常！"
 
-#: includes/shop/class-wshop-query.php:64
+#: includes/shop/class-wshop-query.php:45
+msgid "Endpoint for the \"Checkout &rarr; Pay\" page."
+msgstr ""
+
+#: includes/shop/class-wshop-query.php:50
 #: templates/order/order-items-view-order-received.php:12
 msgid "Order details"
 msgstr "订单详情"
+
+#: includes/shop/class-wshop-query.php:51
+msgid "Endpoint for the \"Checkout &rarr; Order received\" page."
+msgstr ""
 
 #: includes/shop/class-wshop-settings-basic-default.php:39
 msgid "Currency"
@@ -3133,79 +3106,71 @@ msgstr ""
 "特征值”会被添加到页面URL中用来处理在结账过程中的具体操作类型。每个“特征值”都"
 "是独一无二的，不可以重复。"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:83
-msgid "Endpoint for the \"Checkout &rarr; Pay\" page."
-msgstr ""
-
-#: includes/shop/class-wshop-settings-checkout-options.php:89
-msgid "Endpoint for the \"Checkout &rarr; Order received\" page."
-msgstr ""
-
-#: includes/shop/class-wshop-wp-api.php:297
+#: includes/shop/class-wshop-wp-api.php:287
 msgid "image captcha"
 msgstr "图形验证码"
 
-#: includes/shop/class-wshop-wp-api.php:338
+#: includes/shop/class-wshop-wp-api.php:328
 msgid "image captcha is required!"
 msgstr "请输入图片验证码！"
 
-#: includes/shop/class-wshop-wp-api.php:343
+#: includes/shop/class-wshop-wp-api.php:333
 msgid "Please refresh the image captcha!"
 msgstr "请刷新图片验证码！"
 
-#: includes/shop/class-wshop-wp-api.php:347
+#: includes/shop/class-wshop-wp-api.php:337
 msgid "image captcha is invalid!"
 msgstr "图片验证码错误！"
 
-#: init.php:103 init.php:112
+#: init.php:110 init.php:119
 msgid "Cheatin&#8217; huh?"
 msgstr "Cheatin&#8217; huh?"
 
-#: init.php:405
+#: init.php:413
 msgid "Rebuild"
 msgstr "重新安装"
 
-#: init.php:409
+#: init.php:417
 msgid "Setup"
 msgstr "安装"
 
-#: init.php:559
+#: init.php:567
 msgid "No matches found"
 msgstr "未找到匹配项"
 
-#: init.php:560
+#: init.php:568
 msgid "Loading failed"
 msgstr "加载失败"
 
-#: init.php:561
+#: init.php:569
 msgid "Please enter 1 or more characters"
 msgstr "请至少输入一个字符"
 
-#: init.php:562
+#: init.php:570
 msgid "Please enter %qty% or more characters"
 msgstr "请输入大于等于%qty%个字符"
 
-#: init.php:563
+#: init.php:571
 msgid "Please delete 1 character"
 msgstr "请删除一个字符"
 
-#: init.php:564
+#: init.php:572
 msgid "Please delete %qty% characters"
 msgstr "请删除%qty%个字符"
 
-#: init.php:565
+#: init.php:573
 msgid "You can only select 1 item"
 msgstr "仅允许选择一条"
 
-#: init.php:566
+#: init.php:574
 msgid "You can only select %qty% items"
 msgstr "仅允许查询%qty%条数据"
 
-#: init.php:567
+#: init.php:575
 msgid "Loading more results&hellip;"
 msgstr "加载更多&帮助；"
 
-#: init.php:568
+#: init.php:576
 msgid "Loading..."
 msgstr "加载中..."
 
@@ -3222,119 +3187,119 @@ msgstr "准备好了！"
 msgid "%s &rsaquo; Setup Wizard"
 msgstr "%s &rsaquo; 安装向导"
 
-#: install/class-xh-install.php:142
+#: install/class-xh-install.php:145
 msgid "WordPress environment:"
 msgstr "Wordpress环境："
 
-#: install/class-xh-install.php:147
+#: install/class-xh-install.php:150
 msgid "WP version:"
 msgstr "WP 版本："
 
-#: install/class-xh-install.php:154
+#: install/class-xh-install.php:157
 #, php-format
 msgid "%s - We recommend a minimum wordpress version of %s ,See: %s"
 msgstr "%s - 我们推荐最低的wordpress版本为%s, 查看： %s"
 
-#: install/class-xh-install.php:154
+#: install/class-xh-install.php:157
 msgid "Update your wordpress"
 msgstr "更新你的wordpress"
 
-#: install/class-xh-install.php:163
+#: install/class-xh-install.php:166
 msgid "Directory:"
 msgstr "目录："
 
-#: install/class-xh-install.php:169
+#: install/class-xh-install.php:172
 msgid "Add-ons:"
 msgstr "Add-ons:"
 
-#: install/class-xh-install.php:177 install/class-xh-install.php:189
-#: install/class-xh-install.php:201
+#: install/class-xh-install.php:180 install/class-xh-install.php:192
+#: install/class-xh-install.php:204
 msgid ""
 "Unable to create directory or cannot read, please create the directory "
 "manually and set the permissions on the (0777) :"
 msgstr "无法创建或读取目录，请收入创建并设置权限(0777)："
 
-#: install/class-xh-install.php:182
+#: install/class-xh-install.php:185
 msgid "Bin:"
 msgstr "Bin:"
 
-#: install/class-xh-install.php:194
+#: install/class-xh-install.php:197
 msgid "Logs:"
 msgstr "Logs:"
 
-#: install/class-xh-install.php:210
+#: install/class-xh-install.php:213
 msgid "Server environment"
 msgstr "服务器环境："
 
-#: install/class-xh-install.php:215
+#: install/class-xh-install.php:218
 msgid "PHP version:"
 msgstr "PHP版本："
 
-#: install/class-xh-install.php:222
+#: install/class-xh-install.php:225
 #, php-format
 msgid "%s - We recommend a minimum php version of %s ,See: %s"
 msgstr "%s - 我们推荐最小php版本为%s，查看： %s"
 
-#: install/class-xh-install.php:222
+#: install/class-xh-install.php:225
 msgid "How to update your PHP version"
 msgstr "怎样更新你的PHP版本"
 
-#: install/class-xh-install.php:228
+#: install/class-xh-install.php:231
 msgid "PHP curl:"
 msgstr "PHP curl:"
 
-#: install/class-xh-install.php:235
+#: install/class-xh-install.php:238
 #, php-format
 msgid "php curl extension is missing ,See: %s"
 msgstr "PHP curl扩展缺失，查看：%s"
 
-#: install/class-xh-install.php:235
+#: install/class-xh-install.php:238
 msgid "How to install php curl extension"
 msgstr "如何安装PHP curl扩展"
 
-#: install/class-xh-install.php:241
+#: install/class-xh-install.php:244
 msgid "PHP mbstring:"
 msgstr "PHP mbstring："
 
-#: install/class-xh-install.php:248
+#: install/class-xh-install.php:251
 #, php-format
 msgid "PHP mbstring extension is missing ,See: %s"
 msgstr "PHP mbstring扩展缺失，查看：%s"
 
-#: install/class-xh-install.php:248
+#: install/class-xh-install.php:251
 msgid "How to install php mbstring extension"
 msgstr "如何安装php mbstring扩展"
 
-#: install/class-xh-install.php:259 install/class-xh-install.php:261
-#: install/class-xh-install.php:309
+#: install/class-xh-install.php:262 install/class-xh-install.php:264
+#: install/class-xh-install.php:311
 msgid "Continue"
 msgstr "继续"
 
-#: install/class-xh-install.php:265
+#: install/class-xh-install.php:268
 msgid "Skip this step"
 msgstr "跳过此步"
 
-#: install/class-xh-install.php:279
+#: install/class-xh-install.php:281
 #, php-format
 msgid "\"%s\" setup"
 msgstr "“%s”安装"
 
-#: install/class-xh-install.php:283
+#: install/class-xh-install.php:285
 msgid "Let's Go!"
 msgstr "开始！"
 
-#: install/class-xh-install.php:284
+#: install/class-xh-install.php:286
 msgid "Not right now"
 msgstr "现在不"
 
-#: install/class-xh-install.php:302 install/class-xh-install.php:340
-#: install/class-xh-install.php:522
+#: install/class-xh-install.php:304 install/class-xh-install.php:342
+#: install/class-xh-install.php:524
 #, php-format
 msgid "\"%s\" license key"
 msgstr "“%s”许可密钥"
 
-#: install/class-xh-install.php:303 install/class-xh-install.php:341
-#: install/class-xh-install.php:523
+#: install/class-xh-install.php:305 install/class-xh-install.php:343
+#: install/class-xh-install.php:525
 #, php-format
 msgid ""
 "Thank you for using \"%s\", Please enter your license key below! Have any "
@@ -3342,49 +3307,49 @@ msgid ""
 msgstr ""
 "感谢使用“%s”，请在下面输入许可密钥！有任何疑问?请访问我们的网站%s或联系%s"
 
-#: install/class-xh-install.php:303 install/class-xh-install.php:341
-#: install/class-xh-install.php:491 install/class-xh-install.php:523
+#: install/class-xh-install.php:305 install/class-xh-install.php:343
+#: install/class-xh-install.php:493 install/class-xh-install.php:525
 msgid "XunhuWeb"
 msgstr "迅虎网络"
 
-#: install/class-xh-install.php:303 install/class-xh-install.php:341
-#: install/class-xh-install.php:491 install/class-xh-install.php:523
+#: install/class-xh-install.php:305 install/class-xh-install.php:343
+#: install/class-xh-install.php:493 install/class-xh-install.php:525
 msgid "Customer Service(via QQ)"
 msgstr "客服(通过QQ)"
 
-#: install/class-xh-install.php:305 install/class-xh-install.php:343
-#: install/class-xh-install.php:525
+#: install/class-xh-install.php:307 install/class-xh-install.php:345
+#: install/class-xh-install.php:527
 msgid "license key"
 msgstr "授权编号"
 
-#: install/class-xh-install.php:306
+#: install/class-xh-install.php:308
 msgid "Don't have any license key? Just click the \"continue\" button."
 msgstr "没有许可密钥？直接点击“继续”按钮。"
 
-#: install/class-xh-install.php:346 install/class-xh-install.php:529
+#: install/class-xh-install.php:348 install/class-xh-install.php:531
 msgid "Change"
 msgstr "修改"
 
-#: install/class-xh-install.php:347
+#: install/class-xh-install.php:349
 msgid "Back"
 msgstr "返回"
 
-#: install/class-xh-install.php:490
+#: install/class-xh-install.php:492
 msgid "Your plugin is ready!"
 msgstr "您的插件已准备好了！"
 
-#: install/class-xh-install.php:491
+#: install/class-xh-install.php:493
 #, php-format
 msgid ""
 "Thank you for using \"%s\", Have any questions? visit our website %s or "
 "contact with %s"
 msgstr "感谢使用“%s”，有任何疑问?请访问我们的网站%s或联系%s"
 
-#: install/class-xh-install.php:494
+#: install/class-xh-install.php:496
 msgid "Go to settings"
 msgstr "去设置"
 
-#: install/class-xh-install.php:532
+#: install/class-xh-install.php:534
 msgid "Validate"
 msgstr "验证"
 
@@ -3524,3 +3489,27 @@ msgstr "总额："
 #: templates/product/shopping-cart-item.php:14
 msgid "Product Info"
 msgstr "商品信息"
+
+#~ msgid "View detail"
+#~ msgstr "查看详情"
+
+#~ msgid "Alipay payment"
+#~ msgstr "支付宝"
+
+#~ msgid "Order notes"
+#~ msgstr "订单记录"
+
+#~ msgid "Alipay citic payment gateway"
+#~ msgstr "支付宝中信银行支付网关"
+
+#~ msgid "Wechat citic payment gateway"
+#~ msgstr "微信支付中信银行支付网关"
+
+#~ msgid "forms"
+#~ msgstr "表单"
+
+#~ msgid "form received"
+#~ msgstr "收到表单"
+
+#~ msgid "Wechat payment"
+#~ msgstr "微信支付"

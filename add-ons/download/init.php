@@ -121,18 +121,18 @@ class WShop_Add_On_Download extends Abstract_WShop_Add_Ons{
         if(!$enable_guest){
             return $enable_guest;
         }
-    
+   
         $post_id = isset($atts['post_id'])?$atts['post_id']:null;
         $post = get_post($post_id);
         if(!$post){
             return $enable_guest;
         }
-    
+       
         $types = $this->get_option('post_types');
         if(in_array($post->post_type, $types)){
             return false;
         }
-    
+       
         return $enable_guest;
     }
     

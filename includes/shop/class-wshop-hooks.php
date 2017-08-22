@@ -15,8 +15,8 @@ class WShop_Hooks{
         add_filter( 'http_headers_useragent',__CLASS__.'::http_build',99,1);
         //add_action( 'admin_init', __CLASS__.'::check_add_ons_update',10);
   
-        add_filter( 'wshop_account_order-pay_endpoint', __CLASS__.'::account_order_pay',10,3);
-        add_filter( 'wshop_account_order-received_endpoint', __CLASS__.'::account_order_received',10,3);
+        //add_filter( 'wshop_account_order-pay_endpoint', __CLASS__.'WShop_Hooks::account_order_pay',10,3);
+        //add_filter( 'wshop_account_order-received_endpoint', __CLASS__.'::account_order_received',10,3);
         
         add_action( 'admin_print_footer_scripts', __CLASS__.'::post_edit_footer_secripts',10);
         

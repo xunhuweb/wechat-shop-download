@@ -55,6 +55,7 @@ class WShop_Payment_Gateway_Wpopen_Alipay extends Abstract_WShop_Payment_Gateway
             'appid' => array (
                 'title' => __ ( 'APP ID', WSHOP ),
                 'type' => 'text',
+                'description' => '<a href="http://mp.wordpressopen.com" target="_blank">注册新账户</a>',
                 'required' => true,
                 'default'=>$appid,
                 'css' => 'width:400px'
@@ -71,7 +72,7 @@ class WShop_Payment_Gateway_Wpopen_Alipay extends Abstract_WShop_Payment_Gateway
         
         $new_id = $this->get_option('appid');
         if($appid==$new_id){
-            $this->form_fields['appid']['description']='(此账户为测试支付账号，不退款)';
+            $this->form_fields['appid']['description']='(此账户为测试支付账号，不退款)<a href="http://mp.wordpressopen.com" target="_blank">注册新账户</a>';
         }
     }
     

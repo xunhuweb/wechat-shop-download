@@ -506,7 +506,7 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
      * @since 1.0.0
      */
     public function get_review_url(){
-        $url = WShop::instance()->WP->get_checkout_uri('endpoint_order_received');
+        $url = WShop::instance()->WP->get_checkout_uri('order-received');
         
         $request= array(
             'order_id'=>$this->id
