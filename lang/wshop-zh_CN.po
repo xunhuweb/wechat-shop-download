@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wechat shop\n"
 "POT-Creation-Date: 2017-08-22 18:11+0800\n"
-"PO-Revision-Date: 2017-08-22 18:12+0800\n"
+"PO-Revision-Date: 2017-08-23 09:41+0800\n"
 "Last-Translator: ranj <ranj@evget.com>\n"
 "Language-Team: 重庆迅虎网络有限公司 <jeff@xunhuweb.com>\n"
 "Language: zh_CN\n"
@@ -579,7 +579,7 @@ msgstr "使用限制"
 
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-detail.php:115
 msgid "Usage limits"
-msgstr "使用限制"
+msgstr "使用范围"
 
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-detail.php:121
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:288
