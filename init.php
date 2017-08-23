@@ -38,7 +38,10 @@ final class WShop {
      */
     public static $license_id=array(
         'wechat_shop',
-        'wechat_shop_download'
+        'wechat_shop_download',
+        'wechat_shop_from',
+        'wechat_shop_cdkey',
+        'wechat_shop_memberdownload'
     );
     
     /**
