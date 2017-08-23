@@ -21,6 +21,7 @@ class WShop_Query{
             return self::$_instance;
     }
     
+    public $pages = array();
    
     /**
      * Constructor for the query class. Hooks in methods.
@@ -31,6 +32,8 @@ class WShop_Query{
         add_action( 'wshop_flush_rewrite_rules', array( $this, 'init_query_vars' ) ,11);
         add_action( 'wshop_flush_rewrite_rules', array( $this, 'add_endpoints' ) ,11);
         
+        add_filter('wshop_checkout_options_2', array($this,'wshop_checkout_options_2'),10,1);
+        
         add_action( 'init', array( $this, 'init_query_vars' ) ,11);
         add_action( 'init', array( $this, 'add_endpoints' ) ,11);
         add_filter('the_title', array( $this, 'the_title' ) ,11,2);
@@ -38,6 +41,11 @@ class WShop_Query{
             add_filter( 'query_vars', array( $this, 'add_query_vars' ), 11 );
             add_action( 'parse_request', array( $this, 'parse_request' ), 11 );
         }
+        
+        $this->register_page('checkout', array(
+            'title'=>__('Checkout page',WSHOP),
+            'description'=>__('Checkout pages contains shipping address or other custom fields.',WSHOP)
+        ));
         
         $this->register_endpoint('checkout','order-pay', array(
             'title'=>__('Checkout',WSHOP),
@@ -50,6 +58,57 @@ class WShop_Query{
             'page_title'=>__('Order details',WSHOP),
             'description'=>__('Endpoint for the "Checkout &rarr; Order received" page.',WSHOP)
         ),array('WShop_Hooks','account_order_received'));
+    }
+    
+    public function wshop_checkout_options_2($settings){
+        foreach ($this->pages as $page=>$page_setting){
+            $page_setting =  shortcode_atts(array(
+                'title'=>$page,
+                'description'=>null,
+                'type'=>'select',
+                'func'=>true,
+                'options'=>array($this,'get_page_options')
+            ), $page_setting);
+            
+            $settings["title_{$page}"] =array(
+                'title'=>$page_setting['title'].' - '.__('Endpoints',WSHOP),
+                'type'=>'subtitle',
+                'description'=>__('Endpoints are appended to your page URLs to handle specific actions during the checkout process. They should be unique.',WSHOP)
+            );
+            
+            $settings["page_{$page}"]=$page_setting;
+            
+            if(isset($this->endpoint_settings[$page])){
+                foreach ($this->endpoint_settings[$page] as $endpoint=>$endpoint_setting){
+                    $settings["endpoint_{$endpoint}"]=$endpoint_setting;
+                }
+            }
+        }
+        
+        return $settings;
+    }
+    
+    public function get_page_options(){
+        global $wpdb;
+        $pages =$wpdb->get_results(
+            "select ID,post_title
+            from {$wpdb->prefix}posts
+            where post_type='page'
+            and post_status='publish';");
+        $options = array(
+            '0'=>__('Select...',WSHOP)
+        );
+        if($pages){
+            foreach ($pages as $page){
+                $options[$page->ID]=$page->post_title;
+            }
+        }
+    
+        return $options;
+    }
+    
+    public function register_page($page,$setting){
+        $this->pages[$page] = $setting;
     }
     
     public function get_registered_endpoints($page){
@@ -68,7 +127,7 @@ class WShop_Query{
         $this->endpoint_settings[$page][$endpoint]=$settings;
         
         if($callback){
-            add_action("wshop_account_{$endpoint}_endpoint",$callback,10,2);
+            add_action("wshop_endpoint_{$page}_{$endpoint}",$callback,10,2);
         }
     }
   
@@ -89,8 +148,11 @@ class WShop_Query{
         if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && is_page()) {
             $endpoint = $this->get_current_endpoint();
         
-            if(!empty($endpoint)&&isset($this->endpoint_settings[$endpoint]['page_title'])){
-                $title =  $this->endpoint_settings[$endpoint]['page_title'] ." - ".get_option('blogname');
+            foreach ($this->endpoint_settings as $page=>$endpoints){
+                if(!empty($endpoint)&&isset($endpoints[$endpoint]['page_title'])){
+                    $title = $endpoints[$endpoint]['page_title'] ." - ".get_option('blogname');
+                    break;
+                }
             }
         }
         
@@ -102,12 +164,14 @@ class WShop_Query{
      */
     public function init_query_vars() {
         $options =WShop_Settings_Checkout_Options::instance();
-        
+    
         foreach ($this->endpoint_settings as $group=>$endpoints){
             foreach ($endpoints as $endpoint=>$setting){
                 $this->query_vars[$endpoint] = $options->get_option("endpoint_$endpoint",$endpoint);
+                
             }
         }
+        
     }
     
     /**

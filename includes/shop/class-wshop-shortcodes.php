@@ -52,7 +52,7 @@ class WShop_Shortcodes {
 	        $current_key = $key;
 	    }
 	    
-	    return apply_filters( "wshop_account_{$current_key}_endpoint", null,$atts,$content);
+	    return apply_filters( "wshop_endpoint_checkout_{$current_key}", null,$atts,$content);
 	}
 	
 	/**

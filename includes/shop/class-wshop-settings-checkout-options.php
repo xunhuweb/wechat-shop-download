@@ -55,51 +55,10 @@ class WShop_Settings_Checkout_Options extends Abstract_WShop_Settings{
               
           ));
         
-           $form_fields1 =apply_filters('wshop_checkout_options_2', 
-              array(
-               'title_1'=>array(
-                    'title'=>__('Checkout pages',WSHOP),
-                    'type'=>'subtitle',
-                   'description'=>__('Checkout pages contains shipping address or other custom fields.',WSHOP)
-               ),
-               'page_checkout'=>array(
-                   'title'=>__('Checkout page',WSHOP),
-                   'type'=>'select',
-                   'func'=>true,
-                   'options'=>array($this,'get_page_options')
-               )));
-               
-           $form_fields2 =  apply_filters('wshop_checkout_options_3', 
-              array(
-                'title2'=>array(
-                    'title'=>__('Checkout endpoints',WSHOP),
-                    'type'=>'subtitle',
-                   'description'=>__('Endpoints are appended to your page URLs to handle specific actions during the checkout process. They should be unique.',WSHOP)
-               )
-//                ,
-//                'endpoint_order_pay'=> array(
-//                    'title'=>__('Pay',WSHOP),
-//                    'type'=>'text',
-//                    'default'=>'order-pay',
-//                    'description'=>__('Endpoint for the "Checkout &rarr; Pay" page.',WSHOP)
-//                ),
-//                'endpoint_order_received'=> array(
-//                    'title'=>__('Order received',WSHOP),
-//                    'type'=>'text',
-//                    'default'=>'order-received',
-//                    'description'=>__('Endpoint for the "Checkout &rarr; Order received" page.',WSHOP)
-//                )
-             )
-        );
+           $form_fields1 =apply_filters('wshop_checkout_options_2', array());
            
-           $endpoints = WShop_Query::instance()->get_registered_endpoints('checkout');
-           if($endpoints){
-               foreach ($endpoints as $endpoint=>$setting){
-                   $form_fields2["endpoint_$endpoint"] =$setting;
-               }
-           }
-        
-        $this->form_fields = array_merge($form_fields,$form_fields1,$form_fields2);
+       
+        $this->form_fields = array_merge($form_fields,$form_fields1);
     }
 }
 ?>
