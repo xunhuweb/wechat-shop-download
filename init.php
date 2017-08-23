@@ -349,12 +349,21 @@ final class WShop {
         if(!is_array($plugins_installed)||count($plugins_installed)==0){
             wp_cache_delete('wshop_plugins_installed','options');
             update_option('wshop_plugins_installed', array(
-                WSHOP_DIR.'/add-ons/alipay/init.php',
-                WSHOP_DIR.'/add-ons/wechat/init.php'
+                WSHOP_DIR.'/add-ons/wpopen-alipay/init.php',
+                WSHOP_DIR.'/add-ons/wpopen-wechat/init.php'
             ),true);
            
             $this->include_plugins();
             unset($plugins_installed);
+            
+            //默认启用alipay wechat
+            if(class_exists('WShop_Payment_Gateway_Wpopen_Alipay')){
+                WShop_Payment_Gateway_Wpopen_Alipay::instance()->update_option('enabled', 'yes');
+            }
+            
+            if(class_exists('WShop_Payment_Gateway_Wpopen_Wechat')){
+                WShop_Payment_Gateway_Wpopen_Wechat::instance()->update_option('enabled', 'yes');
+            }
         }
         
         //插件初始化

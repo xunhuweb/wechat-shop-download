@@ -70,28 +70,7 @@ class WShop_WP_Api
      * @since 1.0.1
      */
     public function get_checkout_uri($endpoint,$params = array()){
-        $page_id =  WShop_Settings_Checkout_Options::instance()->get_option('page_checkout');
-        $permalink = get_page_link($page_id);
-        
-        $endpoint = WShop_Settings_Checkout_Options::instance()->get_option("endpoint_$endpoint");
-        $url ='';
-        if ( get_option( 'permalink_structure' ) ) {
-            if ( strstr( $permalink, '?' ) ) {
-                $query_string = '?' . parse_url( $permalink, PHP_URL_QUERY );
-                $permalink    = current( explode( '?', $permalink ) );
-            } else {
-                $query_string = '';
-            }
-            $url =  trailingslashit( $permalink ) . $endpoint  . $query_string;
-        } else {
-            $url = add_query_arg( $endpoint, $permalink );
-        }
-        
-        if(count($params)>0){
-            $url.=(strpos($url, '?')===false?'?':'&').http_build_query($params);
-        }
-        
-        return $url;
+        return WShop_Query::instance()->get_endpoint_url('checkout', $endpoint,$params);
     }
     
     /**

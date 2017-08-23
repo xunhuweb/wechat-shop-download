@@ -57,9 +57,9 @@ class WShop_Payment_Api{
             from {$wpdb->prefix}wshop_order_item oi
             inner join {$wpdb->prefix}wshop_order o on o.id = oi.order_id
             where oi.post_ID={$post_id}
-            and o.status in ($status_sql)
-            and o.removed=0
-            and o.customer_id=$user_id
+                    and o.status in ($status_sql)
+                    and o.removed=0
+                    and o.customer_id=$user_id
             order by o.order_date desc
             limit 1;");
     

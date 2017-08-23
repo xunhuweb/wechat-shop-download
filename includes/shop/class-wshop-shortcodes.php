@@ -34,25 +34,16 @@ class WShop_Shortcodes {
 	public static function wshop_page_checkout($atts = array(),$content=null){
 	    global $wp;
 	    
-	    $query_vars =WShop_Query::instance()->get_query_vars();
-	    if(count($query_vars)==0){
-	        ob_start();
-	        WShop::instance()->WP-> wp_die(WShop_Error::error_unknow(),false,false);
-	        return ob_get_clean();
-	    }
-	    
-	    $keys =array_keys($query_vars);
-	    $current_key =$keys[0];
+	    $query_vars =WShop_Query::instance()->get_query_vars();	  
 	    foreach ( $wp->query_vars as $key => $value ) {
-	        // Ignore pagename param.
-	        if ( 'pagename' === $key ||!in_array($key, $query_vars)) {
-	            continue;
+	        if(isset($query_vars[$key])){
+	            return apply_filters( "wshop_endpoint_checkout_{$key}", null,$atts,$content);
 	        }
-	    
-	        $current_key = $key;
 	    }
-	    
-	    return apply_filters( "wshop_endpoint_checkout_{$current_key}", null,$atts,$content);
+	   
+	    ob_start();
+	    WShop::instance()->WP->wp_die(WShop_Error::err_code(404),false,false);
+	    return ob_get_clean();
 	}
 	
 	/**

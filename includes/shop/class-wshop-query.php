@@ -36,6 +36,8 @@ class WShop_Query{
         
         add_action( 'init', array( $this, 'init_query_vars' ) ,11);
         add_action( 'init', array( $this, 'add_endpoints' ) ,11);
+        
+        
         add_filter('the_title', array( $this, 'the_title' ) ,11,2);
         if ( ! is_admin() ) {
             add_filter( 'query_vars', array( $this, 'add_query_vars' ), 11 );
@@ -80,7 +82,7 @@ class WShop_Query{
             
             if(isset($this->endpoint_settings[$page])){
                 foreach ($this->endpoint_settings[$page] as $endpoint=>$endpoint_setting){
-                    $settings["endpoint_{$endpoint}"]=$endpoint_setting;
+                    $settings["endpoint_{$page}_{$endpoint}"]=$endpoint_setting;
                 }
             }
         }
@@ -116,6 +118,10 @@ class WShop_Query{
     }
     
     public function register_endpoint($page,$endpoint,$settings,$callback=null){
+        if(!isset($this->pages[$page])){
+            throw new Exception('unknow page');    
+        }
+        
         $settings = shortcode_atts(array(
             'title'=>$endpoint,
             'page_title'=>$endpoint,
@@ -146,14 +152,18 @@ class WShop_Query{
        
         $endpoint=null;
         if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && is_page()) {
+            $post = $wp_query->post;
             $endpoint = $this->get_current_endpoint();
-        
-            foreach ($this->endpoint_settings as $page=>$endpoints){
-                if(!empty($endpoint)&&isset($endpoints[$endpoint]['page_title'])){
-                    $title = $endpoints[$endpoint]['page_title'] ." - ".get_option('blogname');
-                    break;
+            if($post&&$post->post_type=='page'&&!empty($endpoint)){
+                foreach ($this->pages as $page=>$setting){
+                    if($setting['default']==$post->ID){
+                        if(isset($this->endpoint_settings[$page][$endpoint]['page_title'])){
+                           $title = $this->endpoint_settings[$page][$endpoint]['page_title'] ." - ".get_option('blogname');
+                        }
+                        break;
+                    }
                 }
-            }
+            } 
         }
         
         return apply_filters('wshop_endpoint_title', $title,$endpoint);
@@ -165,13 +175,42 @@ class WShop_Query{
     public function init_query_vars() {
         $options =WShop_Settings_Checkout_Options::instance();
     
-        foreach ($this->endpoint_settings as $group=>$endpoints){
+        foreach ($this->endpoint_settings as $page=>$endpoints){
+            $this->pages[$page]['default'] = $options->get_option("page_$page",null);
+            
             foreach ($endpoints as $endpoint=>$setting){
-                $this->query_vars[$endpoint] = $options->get_option("endpoint_$endpoint",$endpoint);
-                
+                $this->query_vars[$endpoint] = $options->get_option("endpoint_{$page}_$endpoint",$endpoint); 
             }
         }
+    }
+    
+    public function get_endpoint_url($page,$endpoint=null,$params = array()){
+        $api =WShop_Settings_Checkout_Options::instance();
+        $page_id =  $api->get_option("page_{$page}");
+        $permalink = get_page_link($page_id);
         
+        if(!empty($endpoint)){
+            $endpoint = $api->get_option("endpoint_{$page}_$endpoint");
+
+            if ( get_option( 'permalink_structure' ) ) {
+                if ( strstr( $permalink, '?' ) ) {
+                    $query_string = '?' . parse_url( $permalink, PHP_URL_QUERY );
+                    $permalink    = current( explode( '?', $permalink ) );
+                } else {
+                    $query_string = '';
+                }
+                $permalink =  trailingslashit( $permalink ) . $endpoint  . $query_string;
+            } else {
+                $permalink = add_query_arg( $endpoint, $permalink );
+            }
+        }
+       
+    
+        if(count($params)>0){
+            $permalink.=(strpos($permalink, '?')===false?'?':'&').http_build_query($params);
+        }
+    
+        return $permalink;
     }
     
     /**
@@ -186,8 +225,13 @@ class WShop_Query{
                 $wp->query_vars[ $key ] = $_GET[ $var ];
             } elseif ( isset( $wp->query_vars[ $var ] ) ) {
                 $wp->query_vars[ $key ] = $wp->query_vars[ $var ];
+                
+                if($var!=$key){
+                    unset($wp->query_vars[ $var ]);
+                }
             }
         }
+        
     }
     
     /**
@@ -196,7 +240,7 @@ class WShop_Query{
      * @return array
      */
     public function get_query_vars() {
-        return  $this->query_vars ;
+        return $this->query_vars ;
     }
     
     /**
@@ -208,7 +252,9 @@ class WShop_Query{
      */
     public function add_query_vars( $vars ) {
         foreach ( $this->get_query_vars() as $key => $var ) {
-            $vars[] = $key;
+            if(!empty($var)){
+                $vars[] = $var;
+            }
         }
         return $vars;
     }

@@ -34,6 +34,7 @@ if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase($atts)
 $context = $atts['context'];
 $payment_gateways =WShop::instance()->payment->get_payment_gateways();
 if(count($payment_gateways)<=0){
+    ?><span style="color:red;">没有可以使用的支付网关！</span><?php 
     return;
 }
 

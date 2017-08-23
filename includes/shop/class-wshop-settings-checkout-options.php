@@ -32,6 +32,13 @@ class WShop_Settings_Checkout_Options extends Abstract_WShop_Settings{
         $this->init_form_fields();
     }
 
+    public function process_admin_options(){
+        parent::process_admin_options();
+        
+        do_action('wshop_flush_rewrite_rules');
+        flush_rewrite_rules();
+    }
+    
     public function init_form_fields(){
         $form_fields = apply_filters('wshop_checkout_options_1', 
           array(
