@@ -171,7 +171,8 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
         $order_item->metas =array(
             'title'=>$this->get_title(),
             'img'=>$this->get_img(),
-            'link'=>$this->get_link()
+            'link'=>$this->get_link(),
+            'post_type'=>$this->post->post_type
         );
         
         return $order_item;

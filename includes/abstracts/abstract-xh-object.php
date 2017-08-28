@@ -3,6 +3,7 @@ if (! defined ( 'ABSPATH' ))
     exit (); // Exit if accessed directly
 
 abstract class WShop_Object{
+    const cached_time = 60;
     /**
      * 判断主键是否是递增
      * @return boolean
@@ -157,14 +158,14 @@ abstract class WShop_Object{
     * @since 1.0.0
     * @return WShop_Error
     */
-    public function update($properties=array()){
+    public function update($properties=array(),&$result =null){
         global $wpdb;
         $table_name ="{$wpdb->prefix}".$this->get_table_name();
         $primary_key = $this->get_primary_key();
     
         $data =$this->get_property_datas($properties);
     
-        $wpdb->update($table_name,$data,array(
+        $result = $wpdb->update($table_name,$data,array(
             $primary_key=>$this->{$primary_key}
         ));
        
@@ -253,7 +254,8 @@ abstract class WShop_Object{
             where c.{$field_name}=%s
             limit 1;", $field_val));
        
-        wp_cache_set($this->get_cache_key($field_val), $entity,'wshop_entity',30*60);
+        //缓存1分钟，避免部分实体过度缓存
+        wp_cache_set($this->get_cache_key($field_val), $entity,'wshop_entity',self::cached_time);
         
         return $entity;
     }

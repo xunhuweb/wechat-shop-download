@@ -551,11 +551,16 @@ final class WShop {
             //初始化 管理页面
             WShop_Admin::instance();
         }
-    
+           
         // Init action.
         do_action( 'wshop_init' );
     }
     
+    public function on_update($version){
+        do_action('wshop_on_update',$version);
+    
+        WShop_Hooks::check_add_ons_update();
+    }
     /**
      * admin secripts
      *

@@ -163,18 +163,18 @@ class WShop_WP_Api
      */
     public function ajax_validate(array $request, $hash, $validate_notice = true)
     {
-        if (WShop_Helper::generate_hash($request, WShop::instance()->get_hash_key()) != $hash) {
+        if (is_null($hash)||empty($hash)||WShop_Helper::generate_hash($request, WShop::instance()->get_hash_key()) != $hash) {
             return false;
         }
-        
+
         if ($validate_notice && 'yes' === WShop_Settings_Default_Basic_Default::instance()->get_option('defense_CSRF', 'no')) {
-            if (isset($request['action']) && isset($request[$request['action']])) {
+            if (isset($request['action']) && isset($request[$request['action']])) {  
                 return check_ajax_referer($request['action'], $request['action'], false);
-            } else {
+            } else {   
                 return false;
             }
         }
-        
+     
         return true;
     }
 

@@ -59,6 +59,8 @@ class WShop_Email extends WShop_Object{
         );
     }
   
+    public $subject;
+    public $recipients=array();
   
     /**
      * 
@@ -82,7 +84,7 @@ class WShop_Email extends WShop_Object{
             $subject = str_replace($key, $val,$subject);
             if($recipients){
                 foreach ($recipients as $k=>$recipient){
-                    $recipients[$k] =str_replace($key, $val,$recipient);
+                    $recipients[$k] = str_replace($key, $val,$recipient);
                 }
             }
         }

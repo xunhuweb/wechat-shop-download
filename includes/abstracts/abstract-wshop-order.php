@@ -384,7 +384,7 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
         foreach ($this->extra_amount as $label=>$atts){
             $discount+=$atts['amount'];
         }
-        
+      
         $this->total_amount +=$discount;      
         foreach ($extra_amount_pre as $label=>$atts){
             $this->extra_amount[$label] = $atts;
@@ -394,7 +394,7 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
         if(!WShop_Error::is_valid($error)){
             return $error;
         }
-        
+       
         $error = apply_filters('wshop_validate_order', WShop_Error::success(),$this,$request);
         if(!WShop_Error::is_valid($error)){
             return $error;
@@ -402,18 +402,18 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
         
         foreach ($this->order_items as $order_item){
             $error = apply_filters('wshop_validate_order_item', WShop_Error::success(),$order_item, $this,$request);
-            if(!WShop_Error::is_valid($error)){
+            if(!WShop_Error::is_valid($error)){ 
                 return $error;
             } 
         }
-        
+       
         if($on_pre_order_instert){
             $error = call_user_func_array($on_pre_order_instert,array($this,$request));
             if(!WShop_Error::is_valid($error)){
                 return $error;
             }
         }
-        
+       
         $error = $this->on_pre_order_instert($request);
         if(!WShop_Error::is_valid($error)){
             return $error;
@@ -438,7 +438,7 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
                 return $error;
             }
         }
-        
+       
         $error = $this->on_after_order_instert($request);
         if(!WShop_Error::is_valid($error)){
             return $error;
@@ -479,14 +479,14 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
                 return $error;
             }
         }
-    
+        
         if($on_order_created){
             $error = call_user_func_array($on_order_created,array($this,$request));
             if(!WShop_Error::is_valid($error)){
                 return $error;
             }
         }
-        
+       
         return $this->on_order_created($request);
     }
 
@@ -740,36 +740,65 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
             if(!WShop_Error::is_valid($error)){
                 return $error;
             }
+            
             $status_waitting_payment =self::Pending;
-            $status_complete_payment = apply_filters('wshop_order_complete_payment_status', self::Processing);
+            $status_complete_payment = apply_filters('wshop_order_complete_payment_status', self::Processing,$this,$transaction_id);
             global $wpdb;
             
-            $sql = apply_filters('wshop_order_complete_payment_sql_1', " update `{$wpdb->prefix}wshop_order` o ",$this);
+            $args = apply_filters('wshop_order_complete_payment_args', array(
+                'join'=>array(),
+                'set'=>array(),
+                'where'=>array(),
+                'prepare'=>array(),
+                'executed'=>array()
+            ),$this,$transaction_id);
+         
+            $sql = "update `{$wpdb->prefix}wshop_order` ";
+            foreach ($args['join'] as $key=>$join){
+                $sql.=" $join ";
+            }
             
-            $request = apply_filters('wshop_order_complete_payment_request', array(
+            $default = apply_filters('wshop_order_complete_payment_args_default', array(
                 'status'=>$status_complete_payment,
                 'transaction_id'=>$transaction_id,
                 'paid_date'=>current_time('timestamp'),
                 'sn'=>$this->sn
-            ),$this);
+            ),$this,$transaction_id);
             
             $sql.=" set ";
             $index=0;
-            foreach ($request as $key=>$val){
+            foreach ($default as $key=>$val){
                 $this->{$key} = $val;
                 if($index++!=0){
                     $sql.=",";
                 }
-                $sql.=" o.{$key}='{$val}' ";
+                $sql.=" `{$wpdb->prefix}wshop_order`.{$key}='{$val}' ";
             }
             
-            $sql .=apply_filters('wshop_order_complete_payment_sql_2', null,$this)
-                 .apply_filters('wshop_order_complete_payment_sql_3', " where o.id='{$this->id}' and o.status='$status_waitting_payment' ",$this);
-            
+            foreach ($args['set'] as $key=>$set){
+                $sql.=" $set ";
+            }
+           
+            $sql .=" where (`{$wpdb->prefix}wshop_order`.id='{$this->id}' and `{$wpdb->prefix}wshop_order`.status='$status_waitting_payment') ";
+            foreach ($args['where'] as $key=>$where){
+                $sql.=" $where ";
+            }
+          
+            foreach ($args['prepare'] as $key=>$func){
+                call_user_func_array($func, array($this,$sql));
+            }
+         
             $result = $wpdb->query($sql);
             if(!empty($wpdb->last_error)){
                 WShop_Log::debug($wpdb->last_error);
                 return WShop_Error::err_code(500);
+            }
+            
+            //刷新当前订单缓存
+            $this->refresh_cache();
+            
+            foreach ($args['executed'] as $key=>$func){
+                call_user_func_array($func, array($this,$result));
             }
             
             //出现连续更新sql的执行，直接退出去，不执行后边的操作了
@@ -832,6 +861,22 @@ abstract  class Abstract_WShop_Order extends WShop_Mixed_Object
         ));
     }
    
+    /**
+     * 获取邮件接收者
+     * @since 1.0.2
+     */
+    public function get_email_receiver(){
+        $email = null;
+        $user=null;
+        if($this->customer_id){
+            $user = get_userdata($this->customer_id);
+            if($user&&!empty($user->user_email)){
+                $email=$user->user_email;
+            }
+        }
+        
+        return apply_filters('wshop_order_email_receiver', $email,$this);
+    }
 }
 
 

@@ -9,12 +9,12 @@ $content = $data['content'];
 
 $product = new WShop_Product($atts['post_id']);
 if(!$product->is_load()){
+    ?><span style="color:red;">[商品未设置价格或未启用在线支付！]</span><?php
     return;
 }
 
 $request_url =null;
 if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase($atts)){
-   
     $request_url=wp_login_url($atts['location']);
     ?><a href="<?php echo $request_url;?>" class="<?php echo isset($atts['class'])?esc_attr($atts['class']):""?>" style="<?php echo isset($atts['style'])?esc_attr($atts['style']):""?>"><?php echo do_shortcode($content);?></a><?php
     return;
@@ -34,7 +34,7 @@ if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase($atts)
 $context = $atts['context'];
 $payment_gateways =WShop::instance()->payment->get_payment_gateways();
 if(count($payment_gateways)<=0){
-    ?><span style="color:red;">没有可以使用的支付网关！</span><?php 
+    ?><span style="color:red;">[无支付网关！]</span><?php 
     return;
 }
 

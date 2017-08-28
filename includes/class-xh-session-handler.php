@@ -417,6 +417,7 @@ class XH_Session_Handler extends Abstract_XH_Session {
 		$value = wp_cache_get( $this->get_cache_prefix() . $customer_id, 'xh_session_id' );
 
 		if ( false === $value ) {
+		    
 			$value = $wpdb->get_var( $wpdb->prepare( "SELECT session_value FROM $this->_table WHERE session_key = %s", $customer_id ) );
 
 			if ( is_null( $value ) ) {
@@ -498,7 +499,8 @@ class XH_Session_Handler_Model{
     {
         $collate=$this->get_collate();
         global $wpdb;
-        $wpdb->query("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}xh_sessions` (
+        $wpdb->query(
+                "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}xh_sessions` (
                 	`session_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
                 	`session_key` CHAR(32) NOT NULL,
                 	`session_value` LONGTEXT NOT NULL,

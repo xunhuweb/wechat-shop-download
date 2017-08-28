@@ -84,6 +84,10 @@ abstract  class Abstract_WShop_Order_Item extends WShop_Mixed_Object{
      */
     public $currency;
     
+    /**
+     * 
+     * @var array
+     */
     public $metas = array();
     
    

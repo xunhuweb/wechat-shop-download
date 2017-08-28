@@ -26,6 +26,7 @@ class WShop_Ajax {
 		    'wshop_obj_search'=>__CLASS__. '::obj_search',
 		    'wshop_update_order'=>__CLASS__.'::update_order',
 		    'wshop_order_note'=>__CLASS__.'::order_note',
+		    'wshop_upload_img'=>__CLASS__.'::upload_img',
 		);
 		
 		$add_ons = WShop::instance()->get_available_addons();
@@ -41,6 +42,93 @@ class WShop_Ajax {
 		}
 	}
 
+	public static function upload_img(){
+	    $action ='wshop_upload_img';
+	    $request=shortcode_atts(array(
+	        'notice_str'=>null,
+	        'action'=>$action,
+	        $action=>null,
+	        'w'=>0,
+	        'h'=>0
+	    ), stripslashes_deep($_REQUEST));
+	    
+	    if(!WShop::instance()->WP->ajax_validate($request, isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
+	        echo WShop_Error::err_code(701)->to_json();
+	        exit;
+	    }
+	    
+	    set_time_limit(10);
+	    
+	    if ($_FILES ["file"] ["error"]) {
+	         echo  WShop_Error::error_custom( $_FILES ["file"] ["error"])->to_json();
+	         exit;
+	    }
+	    
+	    if(empty($_FILES["file"]["name"])){
+	        echo WShop_Error::error_custom(__('Invalid upload file name',WSHOP))->to_json();
+	        exit;
+	    }
+	    
+	    $ext_index = strrpos($_FILES["file"]["name"], '.');
+	    if($ext_index===false){
+	        echo WShop_Error::error_custom(__('Invalid upload file name',WSHOP))->to_json();
+	        exit;
+	    }
+	    
+	    $ext = strtolower(substr($_FILES["file"]["name"], $ext_index));
+	    
+	    if(!in_array($ext, array(
+	        '.jpeg',
+	        '.jpg',
+	        '.png',
+	        '.git',
+	        '.bmp'
+	    ))){
+	       echo WShop_Error::error_custom(__('Invalid upload file name',WSHOP))->to_json();
+	       exit;
+	    }
+	    
+	    $dir_name ="/uploads".date_i18n('/Y/m/d/');
+	    $new_file_name = time().$ext;
+	    $new_file = WP_CONTENT_DIR.$dir_name.$new_file_name;
+	    $new_file_url = WP_CONTENT_URL.$dir_name.$new_file_name;
+	  
+	    if (! @file_exists ( WP_CONTENT_DIR .$dir_name)) {
+	        $success =@mkdir ( WP_CONTENT_DIR .$dir_name, 0777, true );
+	        if($success==false){
+	            WShop_Log::error('web服务器，文件目录不可写.'.WP_CONTENT_DIR .$dir_name);
+	            echo WShop_Error::error_custom(__('Something is wrong when save file',WSHOP))->to_json();
+	            exit;
+	        }
+	    }
+	    
+	    if(!@move_uploaded_file($_FILES["file"]["tmp_name"],$new_file)){
+	        echo WShop_Error::error_custom(__('Something is wrong when save file',WSHOP))->to_json();
+	        exit;
+	    }
+	    
+	    $width = isset($request['w'])?absint($request['w']):0;
+	    $height = isset($request['h'])?absint($request['h']):0;
+	    
+	    if($width>0&&$height>0){
+	        require_once WSHOP_DIR.'/includes/class-xh-timthumb.php';
+	        $tool =new WShop_Timthumb( WP_CONTENT_DIR.$dir_name,$new_file_name);
+	         
+	        $error =$tool->make( $width, $height,true);
+	        if($error instanceof WShop_Error){
+	            echo $error->to_json();
+	            exit;
+	        }
+	        
+	        $new_file_name=$error;
+	    }
+	    
+	    echo WShop_Error::success(WShop::instance()->generate_request_params(array(
+	        'url'=> WP_CONTENT_URL.$dir_name.$new_file_name
+	    )))->to_json();
+	    exit;
+	}
+	
 	public static function async_load(){
 	    $action ='wshop_async_load';
 	    $params=shortcode_atts(array(
@@ -90,7 +178,17 @@ class WShop_Ajax {
 	    
 	    //清楚session 数据
 	    WShop::instance()->session->cleanup_sessions();
-	    WShop_Hooks::check_add_ons_update();
+	    $plugin_options = WShop_Install::instance()->get_plugin_options();
+	    $version = $plugin_options&&isset($plugin_options['version'])?$plugin_options['version']:'1.0.0';
+	   
+	    if(version_compare($version, WShop::instance()->version,'<')){
+	        WShop::instance()->on_update($version);
+	        
+	        WShop_Install::instance()->update_plugin_options(array(
+	            'version'=>WShop::instance()->version
+	        ));
+	        
+	    }
 	    
 	    echo 'hello wshop cron';
 	    exit;

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wechat shop\n"
-"POT-Creation-Date: 2017-08-22 18:11+0800\n"
-"PO-Revision-Date: 2017-08-23 09:41+0800\n"
+"POT-Creation-Date: 2017-08-28 14:17+0800\n"
+"PO-Revision-Date: 2017-08-28 14:18+0800\n"
 "Last-Translator: ranj <ranj@evget.com>\n"
 "Language-Team: 重庆迅虎网络有限公司 <jeff@xunhuweb.com>\n"
 "Language: zh_CN\n"
@@ -55,10 +55,10 @@ msgid "MD5 KEY"
 msgstr "MD5 KEY"
 
 #: add-ons/alipay/eeeeeeeeeeeeeeeeeeeeeeee.php:46 add-ons/alipay/init.php:55
-#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:63 add-ons/cdkey/init.php:57
+#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:66 add-ons/cdkey/init.php:57
 #: add-ons/citic-alipay/init.php:54 add-ons/citic-wechat/init.php:54
-#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:67
-#: add-ons/download/init.php:150 add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:78
+#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:65
+#: add-ons/download/init.php:150 add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:76
 #: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:58
 #: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:64
 #: add-ons/membership/init.php:57
@@ -67,15 +67,15 @@ msgstr "MD5 KEY"
 #: add-ons/wpopen-alipay/init.php:54 add-ons/wpopen-wechat/init.php:54
 #: includes/abstracts/abstract-xh-settings.php:104
 #: includes/abstracts/abstract-xh-settings.php:121
-#: includes/admin/menus/class-wshop-page-default.php:35 init.php:412
+#: includes/admin/menus/class-wshop-page-default.php:35 init.php:424
 #: install/class-xh-install.php:532
 msgid "Settings"
 msgstr "设置"
 
 #: add-ons/alipay/eeeeeeeeeeeeeeeeeeeeeeee.php:50
-#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:67
-#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:71
-#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:82
+#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:70
+#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:69
+#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:80
 #: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:62
 #: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:68
 #: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:66
@@ -84,9 +84,9 @@ msgid "Change license"
 msgstr "修改授权"
 
 #: add-ons/alipay/eeeeeeeeeeeeeeeeeeeeeeee.php:58
-#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:75
-#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:78
-#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:90
+#: add-ons/cdkey/eeeeeeeeeeeeeeeeeeeeeeee.php:78
+#: add-ons/coupon/eeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:76
+#: add-ons/forms/eeeeeeeeeeeeeeeeeeeeeee.php:88
 #: add-ons/membership-downloads/eeeeeeeeeeeeeeeeeeeeeeee.php:69
 #: add-ons/membership/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.php:77
 #: add-ons/pay-per-view/eeeeeeeeeeeeeeeeeeeeeee.php:73
@@ -124,6 +124,7 @@ msgstr "卡密代码"
 #: add-ons/cdkey/admin/menus/class-wshop-menu-cdkey-code-preview-list.php:51
 #: add-ons/cdkey/admin/menus/class-wshop-menu-cdkey-code-preview-list.php:111
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:44
+#: add-ons/forms/templates/form/fields/image/editable.php:203
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:40
 #: add-ons/membership/includes/class-wshop-membership.php:457
 #: includes/abstracts/abstract-xh-settings.php:961
@@ -172,12 +173,12 @@ msgid "Code"
 msgstr "代码"
 
 #: add-ons/cdkey/admin/menus/class-wshop-menu-cdkey-code-list.php:278
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:73
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:300
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:314
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:319
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:361 add-ons/cdkey/init.php:46
-#: add-ons/cdkey/init.php:170 add-ons/cdkey/init.php:171
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:70
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:297
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:311
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:316
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:358 add-ons/cdkey/init.php:46
+#: add-ons/cdkey/init.php:205 add-ons/cdkey/init.php:206
 #: add-ons/cdkey/templates/cdkey/shopping-cart-item.php:48
 msgid "Cdkey"
 msgstr "卡密"
@@ -232,76 +233,76 @@ msgstr "取消"
 msgid "Confirm"
 msgstr "确认"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:102
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:334
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:99
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:331
 msgid "Min number purchase"
 msgstr "最少购买"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:103
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:340
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:100
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:337
 msgid "Max number purchase"
 msgstr "最多购买"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:104
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:346
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:101
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:343
 msgid "Purchase start"
 msgstr "购物开始时间"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:105
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:351
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:102
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:348
 msgid "Purchase end"
 msgstr "购物结束时间"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:106
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:103
 msgid "Codes"
 msgstr "代码"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:107
-#: add-ons/forms/includes/class-wshop-forms.php:259
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:104
+#: add-ons/forms/includes/class-wshop-forms.php:264
 #: add-ons/membership/includes/class-wshop-membership.php:344
 msgid "Short code"
 msgstr "短代码"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:144
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:314
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:141
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:311
 msgid "All:"
 msgstr "所有："
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:144
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:314
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:141
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:311
 msgid "Sold:"
 msgstr "已售出："
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:223
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:220
 msgid "upload file error:invalid file type!"
 msgstr "文件上传失败：错误的文件类型！"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:230
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:283
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:227
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:280
 msgid "upload file error:file name is invalid!"
 msgstr "文件上传失败：错误的文件名！"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:256
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:253
 msgid ""
 "upload file error:php class 'SplFileObject' not found(connect developer)!"
 msgstr "文件上传失败：PHP class 'SplFileObject'  未能找到(练习开发者)！"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:323
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:320
 #: add-ons/membership/includes/class-wshop-membership.php:448
 msgid "or"
 msgstr "或"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:420
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:417
 #, php-format
 msgid "Cdkey code is too long(128):%s"
 msgstr "卡密代码过长(128):%s"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:431
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:428
 #, php-format
 msgid "Cdkey code is already exists:%s"
 msgstr "卡密代码已存在:%s"
 
-#: add-ons/cdkey/includes/class-wshop-cdkey.php:684
+#: add-ons/cdkey/includes/class-wshop-cdkey.php:680
 msgid "CDKey item is not found!"
 msgstr "未找到CDKey 代码！"
 
@@ -317,117 +318,118 @@ msgstr "卡密查询"
 msgid "Endpoint for the \"Checkout &rarr; Cdkey list\" page."
 msgstr ""
 
-#: add-ons/cdkey/init.php:108 add-ons/membership/init.php:313
+#: add-ons/cdkey/init.php:143 add-ons/membership/init.php:307
 msgid "Pay now"
 msgstr "立即支付"
 
-#: add-ons/cdkey/init.php:172 add-ons/forms/init.php:315
-#: add-ons/forms/init.php:346 add-ons/membership/init.php:367
+#: add-ons/cdkey/init.php:207 add-ons/forms/init.php:326
+#: add-ons/forms/init.php:357 add-ons/membership/init.php:361
 msgid "Add New"
 msgstr "添加"
 
-#: add-ons/cdkey/init.php:173
+#: add-ons/cdkey/init.php:208
 msgid "Add New Cdkey"
 msgstr "添加新的卡密"
 
-#: add-ons/cdkey/init.php:174
-#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:370
-#: add-ons/forms/init.php:317 add-ons/forms/init.php:348
+#: add-ons/cdkey/init.php:209
+#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:384
+#: add-ons/forms/init.php:328 add-ons/forms/init.php:359
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:312
-#: add-ons/membership/init.php:369
+#: add-ons/membership/init.php:363
 #: includes/admin/menus/class-wshop-menu-order-default.php:841
 #: includes/admin/menus/user/class-wshop-user-menu-order-default.php:575
 msgid "Edit"
 msgstr "编辑"
 
-#: add-ons/cdkey/init.php:175
+#: add-ons/cdkey/init.php:210
 msgid "Edit Cdkey"
 msgstr "编辑卡密"
 
-#: add-ons/cdkey/init.php:176
+#: add-ons/cdkey/init.php:211
 msgid "New Cdkey"
 msgstr "新的卡密"
 
-#: add-ons/cdkey/init.php:177 add-ons/forms/init.php:320
-#: add-ons/forms/init.php:351 add-ons/membership/init.php:372
+#: add-ons/cdkey/init.php:212 add-ons/forms/init.php:331
+#: add-ons/forms/init.php:362 add-ons/membership/init.php:366
 #: add-ons/ultimate-member/templates/ultimate-member/account-my-orders.php:74
 #: templates/page/account-my-orders.php:69
 msgid "View"
 msgstr "查看"
 
-#: add-ons/cdkey/init.php:178
+#: add-ons/cdkey/init.php:213
 msgid "View Cdkey"
 msgstr "查看卡密"
 
-#: add-ons/cdkey/init.php:179
+#: add-ons/cdkey/init.php:214
 msgid "Search Cdkey"
 msgstr "查询卡密"
 
-#: add-ons/cdkey/init.php:180
+#: add-ons/cdkey/init.php:215
 msgid "No Cdkey found"
 msgstr "未找到卡密"
 
-#: add-ons/cdkey/init.php:181
+#: add-ons/cdkey/init.php:216
 msgid "No Cdkey found in trash"
 msgstr "回收站中没有找到卡密"
 
-#: add-ons/cdkey/init.php:182
+#: add-ons/cdkey/init.php:217
 msgid "Parent Cdkey"
 msgstr "父级卡密"
 
-#: add-ons/cdkey/init.php:258
+#: add-ons/cdkey/init.php:299 add-ons/cdkey/init.php:487
+#, php-format
+msgid "Sorry!\"%s\" is sold out."
+msgstr "对不起！“%s” 已售完"
+
+#: add-ons/cdkey/init.php:406
 #, php-format
 msgid "Send cdkey failed!detail error:%s"
 msgstr "卡密发送失败！错误详情：%s"
 
-#: add-ons/cdkey/init.php:263
+#: add-ons/cdkey/init.php:411
 #, php-format
 msgid ""
 "Send cdkey failed!detail error:cdkey is soldout,purchased %s,but send %s "
 "actually."
 msgstr "卡密发送失败！错误详情：卡密代码库存不足，订购%s，但仅发送了%s。"
 
-#: add-ons/cdkey/init.php:344
-#, php-format
-msgid "Sorry!\"%s\" is sold out."
-msgstr "对不起！“%s” 已售完"
-
-#: add-ons/cdkey/init.php:349
+#: add-ons/cdkey/init.php:492
 #, php-format
 msgid "Sorry!Minimum quantity purchased is %s (\"%s\")."
 msgstr "对不起！最少购买数量%s(“%s”)。"
 
-#: add-ons/cdkey/init.php:355
+#: add-ons/cdkey/init.php:498
 #, php-format
 msgid "Sorry!Maxmum quantity purchased is %s (\"%s\")."
 msgstr "对不起！最多购买数量%s(“%s”)。"
 
-#: add-ons/cdkey/init.php:361 add-ons/cdkey/init.php:367
+#: add-ons/cdkey/init.php:504 add-ons/cdkey/init.php:510
 #, php-format
 msgid "Sorry!Cdkey is unsold(\"%s\")."
 msgstr "对不起！卡密还未开始出售(“%s”)。"
 
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:23
-msgid "Cdkey search"
-msgstr "卡密查询"
-
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:26
-msgid "Enter order sn"
-msgstr "输入订单交易号"
-
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:28
-#: includes/admin/menus/class-wshop-menu-add-ons-install.php:372
-#: includes/admin/menus/class-wshop-menu-add-ons-recommend.php:85
-msgid "Search"
-msgstr "查询"
-
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:34
+#: add-ons/cdkey/templates/cdkey/cdkey-list.php:29
 msgid "Cdkeys"
 msgstr "卡密"
 
-#: add-ons/cdkey/templates/cdkey/cdkey-list.php:40
+#: add-ons/cdkey/templates/cdkey/cdkey-list.php:35
 msgid "You don't have any cdkey!"
 msgstr "你还没有卡密！"
+
+#: add-ons/cdkey/templates/cdkey/emails/order-received.php:33
+msgid "Your purchase is succeed!"
+msgstr "您已购买成功！"
+
+#: add-ons/cdkey/templates/cdkey/emails/order-received.php:52
+#: add-ons/forms/templates/form/emails/order-received.php:52
+#: templates/emails/new-order.php:56 templates/emails/order-received.php:52
+#, php-format
+msgid "Order #%s"
+msgstr "订单 #%s"
+
+#: add-ons/cdkey/templates/cdkey/emails/order-received.php:55
+msgid "CDKey"
+msgstr "卡密"
 
 #: add-ons/cdkey/templates/cdkey/shopping-cart-item.php:26
 msgid "Cdkey info is not found!"
@@ -515,12 +517,14 @@ msgstr "优惠券代码"
 
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-detail.php:37
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:290
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:85
-#: add-ons/forms/templates/form/fields/email/editable.php:86
-#: add-ons/forms/templates/form/fields/invoice/editable.php:90
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:75
-#: add-ons/forms/templates/form/fields/text/editable.php:86
-#: add-ons/forms/templates/form/fields/textarea/editable.php:86
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:100
+#: add-ons/forms/templates/form/fields/email/editable.php:102
+#: add-ons/forms/templates/form/fields/image/editable.php:103
+#: add-ons/forms/templates/form/fields/invoice/editable.php:104
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:90
+#: add-ons/forms/templates/form/fields/text/editable.php:101
+#: add-ons/forms/templates/form/fields/textarea/editable.php:100
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:86
 msgid "Description"
 msgstr "描述"
 
@@ -562,12 +566,14 @@ msgstr "优惠券数据"
 
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-detail.php:109
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:51
-#: add-ons/forms/templates/form/fields/email/editable.php:52
+#: add-ons/forms/templates/form/fields/email/editable.php:54
 #: add-ons/forms/templates/form/fields/hidden/editable.php:47
+#: add-ons/forms/templates/form/fields/image/editable.php:54
 #: add-ons/forms/templates/form/fields/invoice/editable.php:56
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:44
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:45
 #: add-ons/forms/templates/form/fields/text/editable.php:52
 #: add-ons/forms/templates/form/fields/textarea/editable.php:52
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:52
 #: includes/admin/menus/class-wshop-menu-default-basic.php:35
 #: includes/shop/class-wshop-settings-basic-default.php:30
 msgid "General"
@@ -659,15 +665,15 @@ msgstr "添加优惠券时发生异常"
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit.php:29
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit.php:70
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit.php:100
-#: add-ons/coupon/init.php:47 add-ons/coupon/init.php:106
-#: add-ons/coupon/templates/coupon/checkout.php:15
-#: add-ons/coupon/templates/coupon/checkout.php:18
-#: add-ons/coupon/templates/coupon/checkout.php:151
+#: add-ons/coupon/init.php:47 add-ons/coupon/init.php:107
+#: add-ons/coupon/templates/coupon/checkout.php:20
+#: add-ons/coupon/templates/coupon/checkout.php:23
+#: add-ons/coupon/templates/coupon/checkout.php:156
 msgid "Coupon"
 msgstr "优惠券"
 
 #: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:182
-#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:371
+#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:385
 #: includes/admin/menus/class-wshop-menu-order-default.php:209
 #: includes/admin/menus/class-wshop-menu-order-default.php:542
 #: includes/admin/menus/class-wshop-menu-order-default.php:842
@@ -690,20 +696,20 @@ msgstr "过期时间"
 msgid "Select coupon"
 msgstr "选择优惠券"
 
-#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:365
+#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:379
 #: includes/admin/menus/class-wshop-menu-order-default.php:231
 #: includes/admin/menus/class-wshop-menu-order-default.php:836
 msgid "Restore"
 msgstr "还原"
 
-#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:366
+#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:380
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:313
 #: includes/admin/menus/class-wshop-menu-order-default.php:232
 #: includes/admin/menus/class-wshop-menu-order-default.php:837
 msgid "Delete permanently"
 msgstr "永久删除"
 
-#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:413
+#: add-ons/coupon/admin/menus/class-wshop-menu-coupon-edit-list.php:421
 msgid "You don't have any coupon!"
 msgstr "你还没有创建任何优惠券！"
 
@@ -715,102 +721,102 @@ msgstr "启用优惠券"
 msgid "Checkout with coupon."
 msgstr "支付启用优惠券"
 
-#: add-ons/coupon/includes/class-wshop-coupon.php:154
+#: add-ons/coupon/includes/class-wshop-coupon.php:152
 msgid "Fixed discount"
 msgstr "固定折扣"
 
-#: add-ons/coupon/includes/class-wshop-coupon.php:155
+#: add-ons/coupon/includes/class-wshop-coupon.php:153
 msgid "Percentage discount"
 msgstr "百分比"
 
-#: add-ons/coupon/includes/class-wshop-coupon.php:272
-#: add-ons/coupon/includes/class-wshop-coupon.php:286
-#: add-ons/coupon/init.php:530
+#: add-ons/coupon/includes/class-wshop-coupon.php:321
+#: add-ons/coupon/includes/class-wshop-coupon.php:335
+#: add-ons/coupon/init.php:523
 msgid "Coupon is not found!"
 msgstr "未找到优惠码！"
 
-#: add-ons/coupon/init.php:219 add-ons/coupon/init.php:427
+#: add-ons/coupon/init.php:212 add-ons/coupon/init.php:420
 #, php-format
 msgid "Coupon is used or not found!(%s)"
 msgstr "优惠券已使用或未找到！(%s)"
 
-#: add-ons/coupon/init.php:268
+#: add-ons/coupon/init.php:261
 #, php-format
 msgid "Sorry!The coupon is expired!(%s)"
 msgstr "对不起！优惠券已过期！(%s)"
 
-#: add-ons/coupon/init.php:276
+#: add-ons/coupon/init.php:269
 #, php-format
 msgid "Sorry!The order amount is too small when use coupon!(%s)"
 msgstr "对不起！当前订单无法使用优惠券！(%s)"
 
-#: add-ons/coupon/init.php:283
+#: add-ons/coupon/init.php:276
 #, php-format
 msgid "Sorry!The order amount is too large when use coupon!(%s)"
 msgstr "对不起！当前订单无法使用优惠券！(%s)"
 
-#: add-ons/coupon/init.php:300
+#: add-ons/coupon/init.php:293
 #, php-format
 msgid "Sorry!The coupon cannot be used in conjunction with other coupons!(%s)"
 msgstr "对不起！优惠券无法与其他优惠券混合使用！(%s)"
 
-#: add-ons/coupon/init.php:318 add-ons/coupon/init.php:334
+#: add-ons/coupon/init.php:311 add-ons/coupon/init.php:327
 #, php-format
 msgid "Sorry!The coupon is already invalid!(%s)"
 msgstr "对不起！优惠券已经无效!(%s)"
 
-#: add-ons/coupon/init.php:372 add-ons/coupon/init.php:414
+#: add-ons/coupon/init.php:365 add-ons/coupon/init.php:407
 msgid "Shopping cart is not found!"
 msgstr "未找到购物车页面！"
 
-#: add-ons/coupon/init.php:420
+#: add-ons/coupon/init.php:413
 msgid "Coupon is invalid!"
 msgstr "优惠券无效！"
 
-#: add-ons/coupon/init.php:438
+#: add-ons/coupon/init.php:431
 msgid "Sorry!The coupon can not be used twice in one order!"
 msgstr "对不起！优惠券无法在同一个订单上使用两次"
 
-#: add-ons/coupon/init.php:495
+#: add-ons/coupon/init.php:488
 msgid "Coupon code is required!"
 msgstr "请输入优惠券代码！"
 
-#: add-ons/coupon/init.php:501
+#: add-ons/coupon/init.php:494
 msgid "Coupon amount is invalid!"
 msgstr "请输入优惠券金额！"
 
-#: add-ons/coupon/init.php:521 add-ons/coupon/init.php:540
+#: add-ons/coupon/init.php:514 add-ons/coupon/init.php:533
 msgid "Coupon code has been used!"
 msgstr "优惠券已被使用！"
 
-#: add-ons/coupon/templates/coupon/checkout.php:23
-#: add-ons/coupon/templates/coupon/checkout.php:64
-#: add-ons/coupon/templates/coupon/checkout.php:127
+#: add-ons/coupon/templates/coupon/checkout.php:28
+#: add-ons/coupon/templates/coupon/checkout.php:69
+#: add-ons/coupon/templates/coupon/checkout.php:132
 #: add-ons/membership/includes/class-wshop-membership.php:449
 msgid "remove"
 msgstr "删除"
 
-#: add-ons/coupon/templates/coupon/checkout.php:30
-#: add-ons/coupon/templates/coupon/checkout.php:116
+#: add-ons/coupon/templates/coupon/checkout.php:35
+#: add-ons/coupon/templates/coupon/checkout.php:121
 msgid "Apply"
 msgstr "应用"
 
-#: add-ons/coupon/templates/coupon/checkout.php:60
+#: add-ons/coupon/templates/coupon/checkout.php:65
 msgid "loading..."
 msgstr "加载中..."
 
-#: add-ons/coupon/templates/coupon/checkout.php:87
+#: add-ons/coupon/templates/coupon/checkout.php:92
 msgid "Ajax error while remove coupon"
 msgstr "删除优惠券时发生异常"
 
-#: add-ons/coupon/templates/coupon/checkout.php:112
-#: templates/button-purchase.php:69
+#: add-ons/coupon/templates/coupon/checkout.php:117
+#: templates/button-purchase.php:70
 #: templates/modal/fast-shopping/fast-shopping-btn.php:70
 #: templates/page/checkout-order-pay-btn.php:92
 msgid "Processing..."
 msgstr "处理中..."
 
-#: add-ons/coupon/templates/coupon/checkout.php:134
+#: add-ons/coupon/templates/coupon/checkout.php:139
 msgid "Ajax error while apply coupon"
 msgstr "应用优惠券时发生异常"
 
@@ -863,59 +869,85 @@ msgid "Pay Now"
 msgstr "立即支付"
 
 #: add-ons/forms/includes/abstract-wshop-form-field.php:61
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:73
-#: add-ons/forms/templates/form/fields/email/editable.php:74
-#: add-ons/forms/templates/form/fields/hidden/editable.php:67
-#: add-ons/forms/templates/form/fields/invoice/editable.php:78
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:63
-#: add-ons/forms/templates/form/fields/text/editable.php:74
-#: add-ons/forms/templates/form/fields/textarea/editable.php:74
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:88
+#: add-ons/forms/templates/form/fields/email/editable.php:90
+#: add-ons/forms/templates/form/fields/hidden/editable.php:81
+#: add-ons/forms/templates/form/fields/image/editable.php:91
+#: add-ons/forms/templates/form/fields/invoice/editable.php:92
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:78
+#: add-ons/forms/templates/form/fields/text/editable.php:89
+#: add-ons/forms/templates/form/fields/textarea/editable.php:88
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:74
 msgid "No Title"
 msgstr "无标题"
 
 #: add-ons/forms/includes/abstract-wshop-form-field.php:146
+#: add-ons/forms/includes/fields/class-wshop-form-field-image.php:25
 #, php-format
 msgid "%s is required!"
 msgstr "请输入%s!"
 
 #: add-ons/forms/includes/class-wshop-forms-entry.php:111
 #: add-ons/forms/includes/class-wshop-forms-entry.php:202
-#: add-ons/forms/init.php:344 add-ons/forms/init.php:345
+#: add-ons/forms/init.php:355 add-ons/forms/init.php:356
 msgid "Form entry"
 msgstr "表单条目"
 
 #: add-ons/forms/includes/class-wshop-forms-entry.php:127
-#: add-ons/forms/includes/class-wshop-forms.php:244
-#: add-ons/forms/includes/class-wshop-forms.php:778 add-ons/forms/init.php:313
-#: add-ons/forms/init.php:314
+#: add-ons/forms/includes/class-wshop-forms.php:249
+#: add-ons/forms/includes/class-wshop-forms.php:814 add-ons/forms/init.php:324
+#: add-ons/forms/init.php:325
 msgid "Form"
 msgstr "表单"
 
 #: add-ons/forms/includes/class-wshop-forms-entry.php:160
 #: add-ons/forms/includes/class-wshop-forms-entry.php:172
 #: add-ons/forms/includes/class-wshop-forms-entry.php:177
-#: add-ons/forms/includes/class-wshop-forms.php:283
+#: add-ons/forms/includes/class-wshop-forms.php:288
 msgid "Fields"
 msgstr "字段"
 
-#: add-ons/forms/includes/class-wshop-forms.php:112
+#: add-ons/forms/includes/class-wshop-forms.php:113
 msgid "Standard Fields"
 msgstr "标准字段"
 
-#: add-ons/forms/includes/class-wshop-forms.php:116
+#: add-ons/forms/includes/class-wshop-forms.php:117
 msgid "Advanced Fields"
 msgstr "高级字段"
 
-#: add-ons/forms/includes/class-wshop-forms.php:446
+#: add-ons/forms/includes/class-wshop-forms.php:151
+msgid "invalid propertys"
+msgstr "数据异常"
+
+#: add-ons/forms/includes/class-wshop-forms.php:154
+#: add-ons/forms/includes/class-wshop-forms.php:165
+msgid "invalid field type"
+msgstr "字段类型异常"
+
+#: add-ons/forms/includes/class-wshop-forms.php:451
 msgid ""
 "Warning! Deleting this field will also delete all entry data associated with "
 "it. 'Cancel' to stop. 'OK' to delete"
 msgstr ""
 "警告！删除该字段也将删除与之相关的所有条目数据。“取消”以停止。“确认”则删除"
 
+#: add-ons/forms/includes/class-wshop-forms.php:780
+msgid "Field's label is required!"
+msgstr "字段的label不能为空！"
+
+#: add-ons/forms/includes/class-wshop-forms.php:786
+#, php-format
+msgid "%s's ID is required!"
+msgstr "字段%s的ID不能为空！"
+
+#: add-ons/forms/includes/class-wshop-forms.php:798
+#, php-format
+msgid "%s's ID is repeat!"
+msgstr "字段%s的ID已重复！"
+
 #: add-ons/forms/includes/fields/class-wshop-form-field-checkbox.php:17
 msgid "Checkbox"
-msgstr "复选框(checkbox)"
+msgstr "复选框"
 
 #: add-ons/forms/includes/fields/class-wshop-form-field-email.php:17
 #: includes/admin/menus/class-wshop-menu-email-edit.php:28
@@ -929,7 +961,15 @@ msgstr "请输入正确的邮箱地址！"
 
 #: add-ons/forms/includes/fields/class-wshop-form-field-hidden.php:17
 msgid "Hidden"
-msgstr "隐藏内容(hidden)"
+msgstr "隐藏内容"
+
+#: add-ons/forms/includes/fields/class-wshop-form-field-image.php:17
+msgid "Image uploader"
+msgstr "图片上传"
+
+#: add-ons/forms/includes/fields/class-wshop-form-field-image.php:30
+msgid "Invalid image data"
+msgstr "图片异常！"
 
 #: add-ons/forms/includes/fields/class-wshop-form-field-invoice.php:25
 msgid "Invoice"
@@ -937,15 +977,15 @@ msgstr "发票"
 
 #: add-ons/forms/includes/fields/class-wshop-form-field-subtitle.php:27
 msgid "Subtitle"
-msgstr "子标题(subtitle)"
+msgstr "子标题"
 
 #: add-ons/forms/includes/fields/class-wshop-form-field-text.php:17
 msgid "Text"
-msgstr "文本框(textbox)"
+msgstr "文本框"
 
 #: add-ons/forms/includes/fields/class-wshop-form-field-textarea.php:17
 msgid "Textarea"
-msgstr "多行文本框(textarea)"
+msgstr "多行文本框"
 
 #: add-ons/forms/init.php:57
 msgid "Forms"
@@ -961,346 +1001,450 @@ msgstr "收到表单"
 msgid "Endpoint for the \"Checkout &rarr; Form received\" page."
 msgstr ""
 
-#: add-ons/forms/init.php:221
+#: add-ons/forms/init.php:232
 #: includes/admin/menus/user/class-wshop-user-menu-order-default.php:548
 msgid "Select form"
 msgstr "选择表单"
 
-#: add-ons/forms/init.php:268
+#: add-ons/forms/init.php:279
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-history-list.php:164
 #: add-ons/membership/admin/menus/class-wshop-menu-membership-upgrade-list.php:224
 #: includes/abstracts/abstract-xh-settings.php:175
 #: includes/admin/menus/class-wshop-menu-order-default.php:227
+#: includes/shop/class-wshop-query.php:101
 msgid "Select..."
 msgstr "选择..."
 
-#: add-ons/forms/init.php:298 add-ons/forms/templates/form/form-content.php:8
+#: add-ons/forms/init.php:309 add-ons/forms/templates/form/form-content.php:8
 #: includes/admin/menus/class-wshop-menu-order-default.php:243
 msgid "Submit"
 msgstr "提交"
 
-#: add-ons/forms/init.php:316
+#: add-ons/forms/init.php:327
 msgid "Add New Form"
 msgstr "新增表单"
 
-#: add-ons/forms/init.php:318
+#: add-ons/forms/init.php:329
 msgid "Edit Form"
 msgstr "编辑表单"
 
-#: add-ons/forms/init.php:319
+#: add-ons/forms/init.php:330
 msgid "New Form"
 msgstr "新表单"
 
-#: add-ons/forms/init.php:321
+#: add-ons/forms/init.php:332
 msgid "View Form"
 msgstr "查看表单"
 
-#: add-ons/forms/init.php:322
+#: add-ons/forms/init.php:333
 msgid "Search Form"
 msgstr "查询表单"
 
-#: add-ons/forms/init.php:323
+#: add-ons/forms/init.php:334
 msgid "No Form found"
 msgstr "未找到表单信息"
 
-#: add-ons/forms/init.php:324
+#: add-ons/forms/init.php:335
 msgid "No Form found in trash"
 msgstr "回收站中无表单"
 
-#: add-ons/forms/init.php:325
+#: add-ons/forms/init.php:336
 msgid "Parent Form"
 msgstr "父级表单"
 
-#: add-ons/forms/init.php:347
+#: add-ons/forms/init.php:358
 msgid "Add New Form entry"
 msgstr "新增表单条目"
 
-#: add-ons/forms/init.php:349
+#: add-ons/forms/init.php:360
 msgid "Edit Form entry"
 msgstr "编辑表单条目"
 
-#: add-ons/forms/init.php:350
+#: add-ons/forms/init.php:361
 msgid "New Form entry"
 msgstr "新表单条目"
 
-#: add-ons/forms/init.php:352
+#: add-ons/forms/init.php:363
 msgid "View Form entry"
 msgstr "查看表单条目"
 
-#: add-ons/forms/init.php:353
+#: add-ons/forms/init.php:364
 msgid "Search Form entry"
 msgstr "查询表单条目"
 
-#: add-ons/forms/init.php:354
+#: add-ons/forms/init.php:365
 msgid "No Form entry found"
 msgstr "未找到表单条目信息"
 
-#: add-ons/forms/init.php:355
+#: add-ons/forms/init.php:366
 msgid "No Form entry found in trash"
 msgstr "回收站中无表单条目"
 
-#: add-ons/forms/init.php:356
+#: add-ons/forms/init.php:367
 msgid "Parent Form entry"
 msgstr "父级表单条目"
 
-#: add-ons/forms/init.php:437
+#: add-ons/forms/init.php:448
 msgid "Form is not found!"
 msgstr "未找到表单信息！"
 
-#: add-ons/forms/init.php:663
+#: add-ons/forms/init.php:653
 msgid "Checkout form"
 msgstr "结算表单"
 
-#: add-ons/forms/init.php:666
+#: add-ons/forms/init.php:656
 msgid "Checkout with extension info."
 msgstr "支付时新增扩展信息"
 
+#: add-ons/forms/templates/form/emails/order-received.php:33
+msgid "We have received your form entry!"
+msgstr "感谢，我们已收到您的表单提交！"
+
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:27
-#: add-ons/forms/templates/form/fields/email/editable.php:27
+#: add-ons/forms/templates/form/fields/email/editable.php:29
 #: add-ons/forms/templates/form/fields/hidden/editable.php:23
+#: add-ons/forms/templates/form/fields/image/editable.php:29
 #: add-ons/forms/templates/form/fields/invoice/editable.php:31
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:22
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:23
 #: add-ons/forms/templates/form/fields/text/editable.php:27
 #: add-ons/forms/templates/form/fields/textarea/editable.php:27
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:27
 msgid "click to delete this field"
 msgstr "点击删除这个字段"
 
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:28
-#: add-ons/forms/templates/form/fields/email/editable.php:28
+#: add-ons/forms/templates/form/fields/email/editable.php:30
 #: add-ons/forms/templates/form/fields/hidden/editable.php:24
+#: add-ons/forms/templates/form/fields/image/editable.php:30
 #: add-ons/forms/templates/form/fields/invoice/editable.php:32
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:23
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:24
 #: add-ons/forms/templates/form/fields/text/editable.php:28
 #: add-ons/forms/templates/form/fields/textarea/editable.php:28
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:28
 msgid "click to duplicate this field"
 msgstr "点击复制这个字段"
 
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:29
-#: add-ons/forms/templates/form/fields/email/editable.php:29
+#: add-ons/forms/templates/form/fields/email/editable.php:31
 #: add-ons/forms/templates/form/fields/hidden/editable.php:25
+#: add-ons/forms/templates/form/fields/image/editable.php:31
 #: add-ons/forms/templates/form/fields/invoice/editable.php:33
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:24
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:25
 #: add-ons/forms/templates/form/fields/text/editable.php:29
 #: add-ons/forms/templates/form/fields/textarea/editable.php:29
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:29
 msgid "click to expand and edit the options for this field"
 msgstr "点击展开并编辑这个字段的属性"
 
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:54
-#: add-ons/forms/templates/form/fields/email/editable.php:55
+#: add-ons/forms/templates/form/fields/email/editable.php:57
+#: add-ons/forms/templates/form/fields/image/editable.php:57
 #: add-ons/forms/templates/form/fields/invoice/editable.php:59
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:47
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:48
 #: add-ons/forms/templates/form/fields/text/editable.php:55
 #: add-ons/forms/templates/form/fields/textarea/editable.php:55
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:55
 msgid "Appearance"
 msgstr "外观"
 
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:57
-#: add-ons/forms/templates/form/fields/email/editable.php:58
+#: add-ons/forms/templates/form/fields/email/editable.php:60
 #: add-ons/forms/templates/form/fields/hidden/editable.php:51
+#: add-ons/forms/templates/form/fields/image/editable.php:60
 #: add-ons/forms/templates/form/fields/invoice/editable.php:62
 #: add-ons/forms/templates/form/fields/text/editable.php:58
 #: add-ons/forms/templates/form/fields/textarea/editable.php:58
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:58
 msgid "Advanced"
 msgstr "高级"
 
 #: add-ons/forms/templates/form/fields/checkbox/editable.php:65
-#: add-ons/forms/templates/form/fields/email/editable.php:66
+#: add-ons/forms/templates/form/fields/email/editable.php:68
 #: add-ons/forms/templates/form/fields/hidden/editable.php:59
+#: add-ons/forms/templates/form/fields/image/editable.php:68
 #: add-ons/forms/templates/form/fields/invoice/editable.php:70
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:55
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:56
 #: add-ons/forms/templates/form/fields/text/editable.php:66
 #: add-ons/forms/templates/form/fields/textarea/editable.php:66
+#: add-ons/ultimate-member/templates/ultimate-member/account-my-orders.php:52
+#: templates/page/account-my-orders.php:47
+msgid "ID"
+msgstr "ID"
+
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:65
+#: add-ons/forms/templates/form/fields/email/editable.php:68
+#: add-ons/forms/templates/form/fields/hidden/editable.php:59
+#: add-ons/forms/templates/form/fields/image/editable.php:68
+#: add-ons/forms/templates/form/fields/invoice/editable.php:70
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:56
+#: add-ons/forms/templates/form/fields/text/editable.php:66
+#: add-ons/forms/templates/form/fields/textarea/editable.php:66
+msgid "<h6>ID</h6>Html ID must be unique."
+msgstr "<h6>ID</h6>Html ID 必须是唯一的。"
+
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:80
+#: add-ons/forms/templates/form/fields/email/editable.php:82
+#: add-ons/forms/templates/form/fields/hidden/editable.php:73
+#: add-ons/forms/templates/form/fields/image/editable.php:83
+#: add-ons/forms/templates/form/fields/invoice/editable.php:84
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:70
+#: add-ons/forms/templates/form/fields/text/editable.php:81
+#: add-ons/forms/templates/form/fields/textarea/editable.php:80
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:66
 msgid "Label"
 msgstr "标签"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:65
-#: add-ons/forms/templates/form/fields/email/editable.php:66
-#: add-ons/forms/templates/form/fields/hidden/editable.php:59
-#: add-ons/forms/templates/form/fields/invoice/editable.php:70
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:55
-#: add-ons/forms/templates/form/fields/text/editable.php:66
-#: add-ons/forms/templates/form/fields/textarea/editable.php:66
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:80
+#: add-ons/forms/templates/form/fields/email/editable.php:82
+#: add-ons/forms/templates/form/fields/hidden/editable.php:73
+#: add-ons/forms/templates/form/fields/image/editable.php:83
+#: add-ons/forms/templates/form/fields/invoice/editable.php:84
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:70
+#: add-ons/forms/templates/form/fields/text/editable.php:81
+#: add-ons/forms/templates/form/fields/textarea/editable.php:80
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:66
 msgid ""
 "<h6>Field Label</h6>Enter the label for this HTML block. it will be "
 "displayed on the form."
 msgstr "<h6>字段标签</h6>在表单中显示当前字段的标签。"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:85
-#: add-ons/forms/templates/form/fields/email/editable.php:86
-#: add-ons/forms/templates/form/fields/invoice/editable.php:90
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:75
-#: add-ons/forms/templates/form/fields/text/editable.php:86
-#: add-ons/forms/templates/form/fields/textarea/editable.php:86
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:100
+#: add-ons/forms/templates/form/fields/email/editable.php:102
+#: add-ons/forms/templates/form/fields/image/editable.php:103
+#: add-ons/forms/templates/form/fields/invoice/editable.php:104
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:90
+#: add-ons/forms/templates/form/fields/text/editable.php:101
+#: add-ons/forms/templates/form/fields/textarea/editable.php:100
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:86
 msgid ""
 "<h6>Field Description</h6>Enter the description for the form field.  This "
 "will be displayed to the user and provide some direction on how the field "
 "should be filled out or selected."
 msgstr "<h6>字段描述</h6>标签描述展示给用户，引导用户输入正确的值。"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:99
-#: add-ons/forms/templates/form/fields/email/editable.php:100
-#: add-ons/forms/templates/form/fields/hidden/editable.php:78
-#: add-ons/forms/templates/form/fields/invoice/editable.php:104
-#: add-ons/forms/templates/form/fields/text/editable.php:100
-#: add-ons/forms/templates/form/fields/textarea/editable.php:100
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:114
+#: add-ons/forms/templates/form/fields/email/editable.php:116
+#: add-ons/forms/templates/form/fields/hidden/editable.php:92
+#: add-ons/forms/templates/form/fields/image/editable.php:120
+#: add-ons/forms/templates/form/fields/invoice/editable.php:118
+#: add-ons/forms/templates/form/fields/text/editable.php:118
+#: add-ons/forms/templates/form/fields/textarea/editable.php:117
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:102
 msgid "Rules"
 msgstr "规则"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:105
-#: add-ons/forms/templates/form/fields/email/editable.php:106
-#: add-ons/forms/templates/form/fields/hidden/editable.php:84
-#: add-ons/forms/templates/form/fields/invoice/editable.php:110
-#: add-ons/forms/templates/form/fields/text/editable.php:106
-#: add-ons/forms/templates/form/fields/textarea/editable.php:106
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:120
+#: add-ons/forms/templates/form/fields/email/editable.php:122
+#: add-ons/forms/templates/form/fields/hidden/editable.php:98
+#: add-ons/forms/templates/form/fields/image/editable.php:126
+#: add-ons/forms/templates/form/fields/invoice/editable.php:124
+#: add-ons/forms/templates/form/fields/text/editable.php:124
+#: add-ons/forms/templates/form/fields/textarea/editable.php:123
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:108
 msgid "Required"
 msgstr "必须的"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:105
-#: add-ons/forms/templates/form/fields/email/editable.php:106
-#: add-ons/forms/templates/form/fields/hidden/editable.php:84
-#: add-ons/forms/templates/form/fields/invoice/editable.php:110
-#: add-ons/forms/templates/form/fields/text/editable.php:106
-#: add-ons/forms/templates/form/fields/textarea/editable.php:106
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:120
+#: add-ons/forms/templates/form/fields/email/editable.php:122
+#: add-ons/forms/templates/form/fields/hidden/editable.php:98
+#: add-ons/forms/templates/form/fields/image/editable.php:126
+#: add-ons/forms/templates/form/fields/invoice/editable.php:124
+#: add-ons/forms/templates/form/fields/text/editable.php:124
+#: add-ons/forms/templates/form/fields/textarea/editable.php:123
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:108
 msgid ""
 "<h6>Required Field</h6>Select this option to make the form field required. A "
 "required field will prevent the form from being submitted if it is not "
 "filled out or selected."
 msgstr "<h6>必须字段</h6>在表单提交时，验证当前字段是否输入值。"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:128
-#: add-ons/forms/templates/form/fields/email/editable.php:144
-#: add-ons/forms/templates/form/fields/invoice/editable.php:133
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:94
-#: add-ons/forms/templates/form/fields/text/editable.php:144
-#: add-ons/forms/templates/form/fields/textarea/editable.php:144
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:143
+#: add-ons/forms/templates/form/fields/email/editable.php:160
+#: add-ons/forms/templates/form/fields/image/editable.php:149
+#: add-ons/forms/templates/form/fields/invoice/editable.php:147
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:109
+#: add-ons/forms/templates/form/fields/text/editable.php:162
+#: add-ons/forms/templates/form/fields/textarea/editable.php:161
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:146
 msgid "Custom Class"
 msgstr "自定义class"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:128
-#: add-ons/forms/templates/form/fields/email/editable.php:144
-#: add-ons/forms/templates/form/fields/invoice/editable.php:133
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:94
-#: add-ons/forms/templates/form/fields/text/editable.php:144
-#: add-ons/forms/templates/form/fields/textarea/editable.php:144
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:143
+#: add-ons/forms/templates/form/fields/email/editable.php:160
+#: add-ons/forms/templates/form/fields/image/editable.php:149
+#: add-ons/forms/templates/form/fields/invoice/editable.php:147
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:109
+#: add-ons/forms/templates/form/fields/text/editable.php:162
+#: add-ons/forms/templates/form/fields/textarea/editable.php:161
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:146
 msgid ""
 "<h6>CSS Class Name</h6>Enter the CSS class name you would like to use in "
 "order to override the default styles for this field."
 msgstr "<h6>class名称</h6>覆盖系统自带的class名称。"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:135
-#: add-ons/forms/templates/form/fields/email/editable.php:151
-#: add-ons/forms/templates/form/fields/invoice/editable.php:140
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:101
-#: add-ons/forms/templates/form/fields/text/editable.php:151
-#: add-ons/forms/templates/form/fields/textarea/editable.php:151
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:150
+#: add-ons/forms/templates/form/fields/email/editable.php:167
+#: add-ons/forms/templates/form/fields/image/editable.php:156
+#: add-ons/forms/templates/form/fields/invoice/editable.php:154
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:116
+#: add-ons/forms/templates/form/fields/text/editable.php:169
+#: add-ons/forms/templates/form/fields/textarea/editable.php:168
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:153
 msgid "Custom Style"
 msgstr "自定义style"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:135
-#: add-ons/forms/templates/form/fields/email/editable.php:151
-#: add-ons/forms/templates/form/fields/invoice/editable.php:140
-#: add-ons/forms/templates/form/fields/subtitle/editable.php:101
-#: add-ons/forms/templates/form/fields/text/editable.php:151
-#: add-ons/forms/templates/form/fields/textarea/editable.php:151
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:150
+#: add-ons/forms/templates/form/fields/email/editable.php:167
+#: add-ons/forms/templates/form/fields/image/editable.php:156
+#: add-ons/forms/templates/form/fields/invoice/editable.php:154
+#: add-ons/forms/templates/form/fields/subtitle/editable.php:116
+#: add-ons/forms/templates/form/fields/text/editable.php:169
+#: add-ons/forms/templates/form/fields/textarea/editable.php:168
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:153
 msgid ""
 "<h6>CSS Style</h6>Enter the style you would like to use in order to override "
 "the default styles for this field."
 msgstr "<h6>自定义style</h6>覆盖系统自带的style。"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:146
-#: add-ons/forms/templates/form/fields/email/editable.php:162
-#: add-ons/forms/templates/form/fields/hidden/editable.php:107
-#: add-ons/forms/templates/form/fields/invoice/editable.php:151
-#: add-ons/forms/templates/form/fields/text/editable.php:162
-#: add-ons/forms/templates/form/fields/textarea/editable.php:162
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:161
+#: add-ons/forms/templates/form/fields/email/editable.php:178
+#: add-ons/forms/templates/form/fields/hidden/editable.php:121
+#: add-ons/forms/templates/form/fields/image/editable.php:167
+#: add-ons/forms/templates/form/fields/invoice/editable.php:165
+#: add-ons/forms/templates/form/fields/text/editable.php:180
+#: add-ons/forms/templates/form/fields/textarea/editable.php:179
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:164
 msgid "Default"
 msgstr "默认值"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:146
-#: add-ons/forms/templates/form/fields/email/editable.php:162
-#: add-ons/forms/templates/form/fields/hidden/editable.php:107
-#: add-ons/forms/templates/form/fields/invoice/editable.php:151
-#: add-ons/forms/templates/form/fields/text/editable.php:162
-#: add-ons/forms/templates/form/fields/textarea/editable.php:162
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:161
+#: add-ons/forms/templates/form/fields/email/editable.php:178
+#: add-ons/forms/templates/form/fields/hidden/editable.php:121
+#: add-ons/forms/templates/form/fields/image/editable.php:167
+#: add-ons/forms/templates/form/fields/invoice/editable.php:165
+#: add-ons/forms/templates/form/fields/text/editable.php:180
+#: add-ons/forms/templates/form/fields/textarea/editable.php:179
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:164
 msgid ""
 "<h6>Default Value</h6>If you would like to pre-populate the value of a "
 "field, enter it here."
 msgstr "<h6>默认值</h6>提供默认值。"
 
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:165
-#: add-ons/forms/templates/form/fields/email/editable.php:168
-#: add-ons/forms/templates/form/fields/hidden/editable.php:113
-#: add-ons/forms/templates/form/fields/invoice/editable.php:216
-#: add-ons/forms/templates/form/fields/text/editable.php:168
-#: add-ons/forms/templates/form/fields/textarea/editable.php:168
-msgid "Html ID"
-msgstr "Html ID"
-
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:165
-#: add-ons/forms/templates/form/fields/email/editable.php:168
-#: add-ons/forms/templates/form/fields/hidden/editable.php:113
-#: add-ons/forms/templates/form/fields/invoice/editable.php:216
-#: add-ons/forms/templates/form/fields/text/editable.php:168
-#: add-ons/forms/templates/form/fields/textarea/editable.php:168
-msgid ""
-"<h6>Html ID</h6>Define html id, so that you can find current field by js "
-"code."
-msgstr "<h6>Html ID</h6>声明html id,方便js找到当前对象。"
-
-#: add-ons/forms/templates/form/fields/checkbox/editable.php:171
-#: add-ons/forms/templates/form/fields/email/editable.php:174
-#: add-ons/forms/templates/form/fields/hidden/editable.php:119
-#: add-ons/forms/templates/form/fields/invoice/editable.php:222
-#: add-ons/forms/templates/form/fields/text/editable.php:174
-#: add-ons/forms/templates/form/fields/textarea/editable.php:174
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:179
+#: add-ons/forms/templates/form/fields/email/editable.php:190
+#: add-ons/forms/templates/form/fields/hidden/editable.php:128
+#: add-ons/forms/templates/form/fields/image/editable.php:215
+#: add-ons/forms/templates/form/fields/invoice/editable.php:231
+#: add-ons/forms/templates/form/fields/text/editable.php:187
+#: add-ons/forms/templates/form/fields/textarea/editable.php:186
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:176
 msgid "Hide in entry"
 msgstr "条目隐藏"
 
-#: add-ons/forms/templates/form/fields/email/editable.php:129
-#: add-ons/forms/templates/form/fields/text/editable.php:129
-#: add-ons/forms/templates/form/fields/textarea/editable.php:129
+#: add-ons/forms/templates/form/fields/checkbox/editable.php:179
+#: add-ons/forms/templates/form/fields/email/editable.php:190
+#: add-ons/forms/templates/form/fields/hidden/editable.php:128
+#: add-ons/forms/templates/form/fields/image/editable.php:215
+#: add-ons/forms/templates/form/fields/invoice/editable.php:231
+#: add-ons/forms/templates/form/fields/text/editable.php:187
+#: add-ons/forms/templates/form/fields/textarea/editable.php:186
+msgid "<h6>Hide in entry</h6>Current column data will not be show in entry."
+msgstr "<h6>表单条目影藏</h6>在表单条目中隐藏当前数据。"
+
+#: add-ons/forms/templates/form/fields/email/editable.php:145
+#: add-ons/forms/templates/form/fields/text/editable.php:147
+#: add-ons/forms/templates/form/fields/textarea/editable.php:146
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:131
 msgid "Placeholder"
 msgstr "占位符(placeholder)"
 
-#: add-ons/forms/templates/form/fields/email/editable.php:129
-#: add-ons/forms/templates/form/fields/text/editable.php:129
-#: add-ons/forms/templates/form/fields/textarea/editable.php:129
+#: add-ons/forms/templates/form/fields/email/editable.php:145
+#: add-ons/forms/templates/form/fields/text/editable.php:147
+#: add-ons/forms/templates/form/fields/textarea/editable.php:146
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:131
 msgid ""
 "<h6>Placeholder</h6>The Placeholder will not be submitted along with the "
 "form. Use the Placeholder to give a hint at the expected value or format."
 msgstr "<h6>占位符(placeholder)</h6>向用户提示期望值。"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:169
+#: add-ons/forms/templates/form/fields/email/editable.php:184
+msgid "New order email receiver"
+msgstr "新订单邮件接收者"
+
+#: add-ons/forms/templates/form/fields/email/editable.php:184
+msgid ""
+"<h6>New order email receiver</h6>New order email will be send to current "
+"email."
+msgstr "<h6>新订单邮件接收者</h6>新订单邮件将发送到当前邮箱。"
+
+#: add-ons/forms/templates/form/fields/image/editable.php:177
+#: includes/abstracts/abstract-xh-settings.php:937
+msgid "Upload Image"
+msgstr "上传图片"
+
+#: add-ons/forms/templates/form/fields/image/editable.php:178
+#: includes/abstracts/abstract-xh-settings.php:938
+msgid "Remove"
+msgstr "删除"
+
+#: add-ons/forms/templates/form/fields/image/editable.php:222
+msgid "Size"
+msgstr "大小"
+
+#: add-ons/forms/templates/form/fields/image/editable.php:222
+msgid "<h6>Size</h6> The size of image."
+msgstr "<h6>大小</h6> 图片大小。"
+
+#: add-ons/forms/templates/form/fields/image/html.php:94
+#: add-ons/forms/templates/form/fields/image/html.php:136
+msgid "Upload image"
+msgstr "上传图片"
+
+#: add-ons/forms/templates/form/fields/image/html.php:126
+msgid "Uploading..."
+msgstr "上传中..."
+
+#: add-ons/forms/templates/form/fields/invoice/editable.php:183
 msgid "Cost"
 msgstr "花费"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:169
+#: add-ons/forms/templates/form/fields/invoice/editable.php:183
 msgid "<h6>Cost</h6>The cost willbe added to order amount."
 msgstr "<h6>花费</h6>当前花费金额将计入订单总额。"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:172
+#: add-ons/forms/templates/form/fields/invoice/editable.php:186
 msgid "percent"
 msgstr "百分比"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:204
+#: add-ons/forms/templates/form/fields/invoice/editable.php:218
 msgid "Minnum Spend"
 msgstr "最小金额"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:204
+#: add-ons/forms/templates/form/fields/invoice/editable.php:218
 msgid ""
 "<h6>Minnum Spend</h6>This field allows you to set the minmum spend "
 "(subtotal, including taxes) allowed to use the invoice amount."
 msgstr "<h6>最小金额</h6>设置订单最小金额时，计算发票金额"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:210
+#: add-ons/forms/templates/form/fields/invoice/editable.php:224
 msgid "Maxnum Spend"
 msgstr "最大金额"
 
-#: add-ons/forms/templates/form/fields/invoice/editable.php:210
+#: add-ons/forms/templates/form/fields/invoice/editable.php:224
 msgid ""
 "<h6>Maxnum Spend</h6>This field allows you to set the maxmum spend "
 "(subtotal, including taxes) allowed to use the invoice amount."
 msgstr "<h6>最小金额</h6>设置订单最大金额时，计算发票金额"
+
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:170
+msgid "Html ID"
+msgstr "Html ID"
+
+#: add-ons/forms/templates/form/fields/textarea/editable1.php:170
+msgid ""
+"<h6>Html ID</h6>Define html id, so that you can find current field by js "
+"code."
+msgstr "<h6>Html ID</h6>声明html id,方便js找到当前对象。"
 
 #: add-ons/forms/templates/form/form-content.php:28
 #: templates/page/checkout-order-pay.php:30
@@ -1481,7 +1625,7 @@ msgstr "未找到会员升级信息！"
 
 #: add-ons/membership/includes/class-wshop-membership.php:315
 #: add-ons/membership/includes/class-wshop-membership.php:573
-#: add-ons/membership/init.php:365 add-ons/membership/init.php:366
+#: add-ons/membership/init.php:359 add-ons/membership/init.php:360
 msgid "Membership"
 msgstr "会员等级"
 
@@ -1584,55 +1728,55 @@ msgstr "当会员等级已过期时，邮件将会发送给接受者列表中的
 msgid "Your membership have expired"
 msgstr "您的会员等级已过期"
 
-#: add-ons/membership/init.php:342
+#: add-ons/membership/init.php:336
 msgid "Pay per view visit limit"
 msgstr "付费查看限制"
 
-#: add-ons/membership/init.php:346
+#: add-ons/membership/init.php:340
 msgid "Roles visit limit"
 msgstr "角色访问限制"
 
-#: add-ons/membership/init.php:368
+#: add-ons/membership/init.php:362
 msgid "Add New Membership"
 msgstr "新增会员等级"
 
-#: add-ons/membership/init.php:370
+#: add-ons/membership/init.php:364
 msgid "Edit Membership"
 msgstr "编辑会员等级"
 
-#: add-ons/membership/init.php:371
+#: add-ons/membership/init.php:365
 msgid "New Membership"
 msgstr "新会员等级"
 
-#: add-ons/membership/init.php:373
+#: add-ons/membership/init.php:367
 msgid "View Membership"
 msgstr "查看会员等级"
 
-#: add-ons/membership/init.php:374
+#: add-ons/membership/init.php:368
 msgid "Search Membership"
 msgstr "查询会员等级"
 
-#: add-ons/membership/init.php:375
+#: add-ons/membership/init.php:369
 msgid "No Membership found"
 msgstr "未找到会员等级"
 
-#: add-ons/membership/init.php:376
+#: add-ons/membership/init.php:370
 msgid "No Membership found in trash"
 msgstr "回收站中没有找到会员等级"
 
-#: add-ons/membership/init.php:377
+#: add-ons/membership/init.php:371
 msgid "Parent Membership"
 msgstr "父级会员等级"
 
-#: add-ons/membership/init.php:606 add-ons/membership/init.php:673
+#: add-ons/membership/init.php:596 add-ons/membership/init.php:663
 msgid "Administrator can not do upgrade!"
 msgstr "管理员无法升级！"
 
-#: add-ons/membership/init.php:651
+#: add-ons/membership/init.php:641
 msgid "Can not be remove administrator!"
 msgstr "无法删除administrator!"
 
-#: add-ons/membership/init.php:667
+#: add-ons/membership/init.php:657
 msgid "User info is not found!"
 msgstr "未找到用户信息！"
 
@@ -1708,11 +1852,6 @@ msgstr "订单"
 #: templates/page/account-my-orders.php:43
 msgid "My Orders"
 msgstr "我的订单"
-
-#: add-ons/ultimate-member/templates/ultimate-member/account-my-orders.php:52
-#: templates/page/account-my-orders.php:47
-msgid "ID"
-msgstr "ID"
 
 #: add-ons/ultimate-member/templates/ultimate-member/account-my-orders.php:53
 #: templates/page/account-my-orders.php:48
@@ -1817,7 +1956,7 @@ msgid "#%s"
 msgstr "#%s"
 
 #: includes/abstracts/abstract-wshop-order.php:340
-#: includes/shop/class-wshop-ajax.php:572
+#: includes/shop/class-wshop-ajax.php:670
 msgid "Payment gateway is invalid!"
 msgstr "支付方式异常！"
 
@@ -1835,12 +1974,12 @@ msgstr "订单状态从%s更改为%s。"
 msgid "Post is not found!"
 msgstr "数据加载失败！"
 
-#: includes/abstracts/abstract-wshop-product.php:239
+#: includes/abstracts/abstract-wshop-product.php:240
 msgid "Price settings"
 msgstr "价格设置"
 
-#: includes/abstracts/abstract-wshop-product.php:259
-#: includes/abstracts/abstract-wshop-product.php:289
+#: includes/abstracts/abstract-wshop-product.php:260
+#: includes/abstracts/abstract-wshop-product.php:290
 msgid "Sale price"
 msgstr "销售价格"
 
@@ -1869,14 +2008,6 @@ msgstr "数据保存成功!"
 #: includes/admin/menus/class-wshop-menu-email-edit-detail.php:53
 msgid "Ignore"
 msgstr "忽略"
-
-#: includes/abstracts/abstract-xh-settings.php:937
-msgid "Upload Image"
-msgstr "上传图片"
-
-#: includes/abstracts/abstract-xh-settings.php:938
-msgid "Remove"
-msgstr "删除"
 
 #: includes/admin/menus/class-wshop-menu-add-ons-install.php:31
 #: includes/admin/menus/class-wshop-page-add-ons.php:35
@@ -1979,6 +2110,11 @@ msgstr "搜索插件"
 msgid "Search plugins..."
 msgstr "搜索插件..."
 
+#: includes/admin/menus/class-wshop-menu-add-ons-install.php:372
+#: includes/admin/menus/class-wshop-menu-add-ons-recommend.php:85
+msgid "Search"
+msgstr "查询"
+
 #: includes/admin/menus/class-wshop-menu-add-ons-install.php:383
 #: includes/admin/menus/class-wshop-menu-add-ons-recommend.php:94
 msgid "Plugins list"
@@ -2070,8 +2206,8 @@ msgid "Application"
 msgstr "应用"
 
 #: includes/admin/menus/class-wshop-menu-default-payment-gateway.php:33
-#: includes/shop/class-wshop-query.php:43
-#: includes/shop/class-wshop-query.php:44
+#: includes/shop/class-wshop-query.php:53
+#: includes/shop/class-wshop-query.php:54
 msgid "Checkout"
 msgstr "结算"
 
@@ -2276,26 +2412,37 @@ msgstr "对不起，网络错误！"
 msgid "Ops!Something is wrong."
 msgstr "对不起！系统发生了错误！"
 
-#: includes/shop/class-wshop-ajax.php:608
+#: includes/shop/class-wshop-ajax.php:68 includes/shop/class-wshop-ajax.php:74
+#: includes/shop/class-wshop-ajax.php:87
+msgid "Invalid upload file name"
+msgstr ""
+
+#: includes/shop/class-wshop-ajax.php:100
+#: includes/shop/class-wshop-ajax.php:106
+#, fuzzy
+msgid "Something is wrong when save file"
+msgstr "对不起！系统发生了错误！"
+
+#: includes/shop/class-wshop-ajax.php:706
 msgid "Unpaid!"
 msgstr "未支付！"
 
-#: includes/shop/class-wshop-ajax.php:821
+#: includes/shop/class-wshop-ajax.php:919
 #, php-format
 msgid "Current add-on is relies on %s!"
 msgstr "当前扩展依赖%s!"
 
-#: includes/shop/class-wshop-ajax.php:829
+#: includes/shop/class-wshop-ajax.php:927
 #, php-format
 msgid "Core version must greater than or equal to %s!"
 msgstr "核心插件版本不能低于%s!"
 
-#: includes/shop/class-wshop-ajax.php:897
+#: includes/shop/class-wshop-ajax.php:995
 #, php-format
 msgid "\"%s\" is relies on current add-on!"
 msgstr "%s依赖于当前插件！"
 
-#: includes/shop/class-wshop-ajax.php:992
+#: includes/shop/class-wshop-ajax.php:1090
 #, php-format
 msgid ""
 "There is a new version of %s - %s. <a href=\"%s\" target=\"_blank\">View "
@@ -2304,7 +2451,7 @@ msgstr ""
 "有一个新版本 %s - %s. <a href=\"%s\" target=\"_blank\">查看版本 %s 详情</a> "
 "or <a href=\"%s\" target=\"_blank\">立即下载</a>."
 
-#: includes/shop/class-wshop-ajax.php:1002
+#: includes/shop/class-wshop-ajax.php:1100
 #, php-format
 msgid ""
 "<tr class=\"plugin-update-tr active\">\n"
@@ -2968,29 +3115,29 @@ msgstr ""
 msgid "Zambian kwacha"
 msgstr ""
 
-#: includes/shop/class-wshop-email.php:130 templates/emails/new-order.php:33
+#: includes/shop/class-wshop-email.php:132 templates/emails/new-order.php:33
 msgid "New order"
 msgstr "新订单"
 
-#: includes/shop/class-wshop-email.php:130
+#: includes/shop/class-wshop-email.php:132
 msgid "[{site_title}] New order ({order_number}) - {order_date}"
 msgstr "[{site_title}] 新订单 ({order_number}) - {order_date}"
 
-#: includes/shop/class-wshop-email.php:133
-#: includes/shop/class-wshop-email.php:138
+#: includes/shop/class-wshop-email.php:135
+#: includes/shop/class-wshop-email.php:140
 msgid ""
 "New order emails are sent to chosen recipient(s) when a new order is "
 "received."
 msgstr "当收到新订单时，新订单邮件将会发送给接受者列表中的人。"
 
-#: includes/shop/class-wshop-email.php:135
-#: includes/shop/class-wshop-query.php:49
+#: includes/shop/class-wshop-email.php:137
+#: includes/shop/class-wshop-query.php:59
 #: templates/page/checkout-order-received.php:16
 #: templates/page/checkout-order-received.php:26
 msgid "Order received"
 msgstr "收到订单"
 
-#: includes/shop/class-wshop-email.php:135
+#: includes/shop/class-wshop-email.php:137
 msgid "[{site_title}] Order received ({order_number}) - {order_date}"
 msgstr "[{site_title}] 订单已收到 ({order_number}) - {order_date}"
 
@@ -3010,18 +3157,38 @@ msgstr "WShop - 结算"
 msgid "Product info is invalid!"
 msgstr "商品信息异常！"
 
-#: includes/shop/class-wshop-query.php:45
+#: includes/shop/class-wshop-query.php:48
+msgid "Checkout page"
+msgstr "结算页面"
+
+#: includes/shop/class-wshop-query.php:49
+msgid "Checkout pages contains shipping address or other custom fields."
+msgstr "结算页面包含邮寄地址或其他自定义字段。"
+
+#: includes/shop/class-wshop-query.php:55
 msgid "Endpoint for the \"Checkout &rarr; Pay\" page."
 msgstr ""
 
-#: includes/shop/class-wshop-query.php:50
+#: includes/shop/class-wshop-query.php:60
 #: templates/order/order-items-view-order-received.php:12
 msgid "Order details"
 msgstr "订单详情"
 
-#: includes/shop/class-wshop-query.php:51
+#: includes/shop/class-wshop-query.php:61
 msgid "Endpoint for the \"Checkout &rarr; Order received\" page."
 msgstr ""
+
+#: includes/shop/class-wshop-query.php:76
+msgid "Endpoints"
+msgstr "节点"
+
+#: includes/shop/class-wshop-query.php:78
+msgid ""
+"Endpoints are appended to your page URLs to handle specific actions during "
+"the checkout process. They should be unique."
+msgstr ""
+"特征值”会被添加到页面URL中用来处理在结账过程中的具体操作类型。每个“特征值”都"
+"是独一无二的，不可以重复。"
 
 #: includes/shop/class-wshop-settings-basic-default.php:39
 msgid "Currency"
@@ -3060,117 +3227,93 @@ msgstr "如果你的网站启用了页面缓存(使用缓存插件wp super cache
 msgid "Checkout options"
 msgstr "支付选项"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:39
+#: includes/shop/class-wshop-settings-checkout-options.php:46
 msgid "Enable guest checkout"
 msgstr "允许游客支付"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:42
+#: includes/shop/class-wshop-settings-checkout-options.php:49
 msgid "Allows customers to checkout without creating an account."
 msgstr "允许用户在不创建用户的情况下付款"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:45
+#: includes/shop/class-wshop-settings-checkout-options.php:52
 msgid "Order Expire(minute)"
 msgstr "订单超时(分钟)"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:48
+#: includes/shop/class-wshop-settings-checkout-options.php:55
 msgid ""
 "When order expired,can not be paid again.(If set null or 0,order will be "
 "never expire)"
 msgstr "当订单超时，无法再次支付(如果设置为0或留空，则不过期)"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:51
+#: includes/shop/class-wshop-settings-checkout-options.php:58
 msgid "Order prefix"
 msgstr "订单号前缀"
 
-#: includes/shop/class-wshop-settings-checkout-options.php:61
-msgid "Checkout pages"
-msgstr "结算页面"
-
-#: includes/shop/class-wshop-settings-checkout-options.php:63
-msgid "Checkout pages contains shipping address or other custom fields."
-msgstr "结算页面包含邮寄地址或其他自定义字段。"
-
-#: includes/shop/class-wshop-settings-checkout-options.php:66
-msgid "Checkout page"
-msgstr "结算页面"
-
-#: includes/shop/class-wshop-settings-checkout-options.php:75
-msgid "Checkout endpoints"
-msgstr ""
-
-#: includes/shop/class-wshop-settings-checkout-options.php:77
-msgid ""
-"Endpoints are appended to your page URLs to handle specific actions during "
-"the checkout process. They should be unique."
-msgstr ""
-"特征值”会被添加到页面URL中用来处理在结账过程中的具体操作类型。每个“特征值”都"
-"是独一无二的，不可以重复。"
-
-#: includes/shop/class-wshop-wp-api.php:287
+#: includes/shop/class-wshop-wp-api.php:266
 msgid "image captcha"
 msgstr "图形验证码"
 
-#: includes/shop/class-wshop-wp-api.php:328
+#: includes/shop/class-wshop-wp-api.php:307
 msgid "image captcha is required!"
 msgstr "请输入图片验证码！"
 
-#: includes/shop/class-wshop-wp-api.php:333
+#: includes/shop/class-wshop-wp-api.php:312
 msgid "Please refresh the image captcha!"
 msgstr "请刷新图片验证码！"
 
-#: includes/shop/class-wshop-wp-api.php:337
+#: includes/shop/class-wshop-wp-api.php:316
 msgid "image captcha is invalid!"
 msgstr "图片验证码错误！"
 
-#: init.php:110 init.php:119
+#: init.php:113 init.php:122
 msgid "Cheatin&#8217; huh?"
 msgstr "Cheatin&#8217; huh?"
 
-#: init.php:413
+#: init.php:425
 msgid "Rebuild"
 msgstr "重新安装"
 
-#: init.php:417
+#: init.php:429
 msgid "Setup"
 msgstr "安装"
 
-#: init.php:567
+#: init.php:584
 msgid "No matches found"
 msgstr "未找到匹配项"
 
-#: init.php:568
+#: init.php:585
 msgid "Loading failed"
 msgstr "加载失败"
 
-#: init.php:569
+#: init.php:586
 msgid "Please enter 1 or more characters"
 msgstr "请至少输入一个字符"
 
-#: init.php:570
+#: init.php:587
 msgid "Please enter %qty% or more characters"
 msgstr "请输入大于等于%qty%个字符"
 
-#: init.php:571
+#: init.php:588
 msgid "Please delete 1 character"
 msgstr "请删除一个字符"
 
-#: init.php:572
+#: init.php:589
 msgid "Please delete %qty% characters"
 msgstr "请删除%qty%个字符"
 
-#: init.php:573
+#: init.php:590
 msgid "You can only select 1 item"
 msgstr "仅允许选择一条"
 
-#: init.php:574
+#: init.php:591
 msgid "You can only select %qty% items"
 msgstr "仅允许查询%qty%条数据"
 
-#: init.php:575
+#: init.php:592
 msgid "Loading more results&hellip;"
 msgstr "加载更多&帮助；"
 
-#: init.php:576
+#: init.php:593
 msgid "Loading..."
 msgstr "加载中..."
 
@@ -3358,11 +3501,6 @@ msgstr "验证"
 msgid "You have received an order from %s. The order is as follows:"
 msgstr "你已接收到来自%s的订单。订单内容："
 
-#: templates/emails/new-order.php:56 templates/emails/order-received.php:52
-#, php-format
-msgid "Order #%s"
-msgstr "订单 #%s"
-
 #: templates/emails/new-order.php:63 templates/emails/order-received.php:59
 #: templates/order/order-items-view-order-received.php:18
 msgid "Product"
@@ -3489,6 +3627,15 @@ msgstr "总额："
 #: templates/product/shopping-cart-item.php:14
 msgid "Product Info"
 msgstr "商品信息"
+
+#~ msgid "Cdkey search"
+#~ msgstr "卡密查询"
+
+#~ msgid "Enter order sn"
+#~ msgstr "输入订单交易号"
+
+#~ msgid "Checkout pages"
+#~ msgstr "结算页面"
 
 #~ msgid "View detail"
 #~ msgstr "查看详情"

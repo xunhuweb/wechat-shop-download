@@ -34,7 +34,7 @@ class WShop_Helper{
                 $arg.="&";
             }
             if(is_null($val)|| $val===''){
-                return;
+                continue;
             }
             if(is_bool($val)){
                 $val=$val?1:0;
@@ -46,7 +46,7 @@ class WShop_Helper{
             
             $arg.="$key=$val";
         }
-      
+     
         return md5($arg.$hashkey);
     }
 }

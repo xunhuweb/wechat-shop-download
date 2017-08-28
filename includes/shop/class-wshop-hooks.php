@@ -82,38 +82,50 @@ class WShop_Hooks{
     }
     
     public static function wshop_order_order_ordered($error,$order){
-        $user_email =null;
-        if($order->customer_id){
-            $user = get_user_by('id', $order->customer_id);
-            if($user&&is_email($user->user_email)){
-                $user_email = $user->user_email;
-            }
-        }
-         
-        $settings = apply_filters('wshop_order_order_ordered_email_settings', array(
-            '{email:customer}'=>$user_email,
-            '{order_number}'=>$order->id,
-            '{order_date}'=>date('Y-m-d H:i',$order->paid_date)
-        ),$order);
-    
-        $content =WShop::instance()->WP->requires(
-            WSHOP_DIR,
-            "emails/new-order.php",
-            array('order'=>$order)
+        $call = apply_filters('wshop_email_new_order',function($order){
+            $user_email = $order->get_email_receiver();
+            
+            $settings =  array(
+                '{email:customer}'=>$user_email,
+                '{order_number}'=>$order->id,
+                '{order_date}'=>date('Y-m-d H:i',$order->paid_date)
             );
-    
-        $email = new WShop_Email('new-order');
-        $email->send($settings,$content);
-    
-        $content =WShop::instance()->WP->requires(
-            WSHOP_DIR,
-            "emails/order-received.php",
-            array('order'=>$order)
+            
+            $content =WShop::instance()->WP->requires(
+                WSHOP_DIR,
+                "emails/new-order.php",
+                array('order'=>$order)
             );
-    
-        $email = new WShop_Email('order-received');
-        $email->send($settings,$content);
-    
+            $email =new WShop_Email('new-order');
+            return $email->send($settings,$content);
+        } ,$order);
+        
+        call_user_func($call, $order);
+        //ignore email error
+        
+        $call = apply_filters('wshop_email_order_received',function($order){
+            $user_email = $order->get_email_receiver();
+            
+            $settings =  array(
+                '{email:customer}'=>$user_email,
+                '{order_number}'=>$order->id,
+                '{order_date}'=>date('Y-m-d H:i',$order->paid_date)
+            );
+        
+            $content =WShop::instance()->WP->requires(
+                WSHOP_DIR,
+                "emails/order-received.php",
+                array('order'=>$order)
+            );
+        
+            $email = new WShop_Email('order-received');
+            return $email->send($settings,$content);
+            
+        } ,$order);
+        
+        call_user_func($call, $order);
+        //ignore email error
+       
         return $error;
     }
     
