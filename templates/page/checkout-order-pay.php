@@ -3,59 +3,69 @@ if (! defined('ABSPATH')) {
     exit();
 }
 
-$request = WShop_Async::instance()->shortcode_atts(array_merge(WShop::instance()->payment->pay_atts(),array(
-    'cart_id'=>0
-)), stripslashes_deep($_REQUEST));
-
-$params =  WShop_Async::instance()->shortcode_atts(array(
-    'notice_str'=>null,
-    'action'=>null
-), stripslashes_deep($_REQUEST));
-
-if(!WShop::instance()->WP->ajax_validate(array_merge($request,$params), isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
-    WShop::instance()->WP->wp_die(WShop_Error::err_code(701),false,false);
-    return;
-}
-
-$context = $request['context'];
+$context = WShop_Helper::generate_unique_id();
 ?>
-
+<style>
+.xh-form{border:3px solid #dadada;
+        border-radius: 6px;
+        -webkit-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.04);
+        -moz-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.04);
+        box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.04);}
+</style>
 <div class="xh-layout">
-<div class="xh-title-h3"><?php echo __('Checkstand',WSHOP)?></div>
 	<div class="xh-form">
-    	<?php 
-    	if(!is_user_logged_in()&&!$request['enable_guest']){
-    	    ?>
-		    <div id="fields-error" style="display: block;">
-    		    <div class="xh-alert xh-alert-danger" role="alert"><?php echo __('Sorry! You need to log in to continue.',WSHOP)?><a href="<?php echo wp_login_url($request['location'])?>"><?php echo __('Login now',WSHOP)?></a></div>
-		    </div>
-		    <?php 
-		}
-    			
-    	echo WShop::instance()->WP->requires(WSHOP_DIR, 'page/checkout-order-pay-shopping-cart.php',array(
-    	    'request'=>$request
-    	));
+		<ul class="steps clearfix">
+            <li>选择商品</li>
+            <li class="active">确认付款</li>
+            <li>下单成功</li>
+        </ul>
+    	<?php
+		//购物车
+    	echo WShop::instance()->WP->requires(WSHOP_DIR, 'page/checkout-order-pay-shopping-cart.php',$context);
     	
-    	do_action('wshop_checkout',$context,$request);
+    	//购物车扩展  -> 表单 /优惠券等
+    	$calls = apply_filters('wshop_checkout_cart',array(),$context);
+    	foreach ($calls as $call){
+    	    $call($context);
+    	}
     	
-    	echo WShop::instance()->WP->requires(WSHOP_DIR, 'page/checkout-order-pay-payment-gateways.php',array(
-    	    'request'=>$request
-    	));
+    	//支付网关
+    	echo WShop::instance()->WP->requires(WSHOP_DIR, 'page/checkout-order-pay-payment-gateways.php',$context);
     	
-    	do_action('wshop_checkout_step',$context,$request);
-    
-    	$request = stripslashes_deep($_REQUEST);
-    	$request['action'] = 'wshop_checkout';
-    	$request['tab'] = 'create_order';
-    	
-    	echo WShop::instance()->WP->requires(WSHOP_DIR, 'page/checkout-order-pay-btn.php',array(
-    	    'request'=>WShop_Async::instance()->shortcode_atts(array_merge(WShop::instance()->payment->pay_atts(),array(
-                    	    'cart_id'=>0,
-                	        'action'=>'',
-                	        'tab'=>''
-                       )), $request),
-    	    'content'=>__('Pay Now',WSHOP)
-    	));
+    	//其它字段，比如条款等
+    	$calls = apply_filters('wshop_checkout_payment_gateways',array(),$context);
+        foreach ($calls as $call){
+    	    $call($context);
+    	}
     	?>
+         <div class="block20"></div>       
+        	<div class="clearfix xh-checkoutbg" >
+            	<span class="xh-total-price xh-pull-left" style="display:none;" id="wshop-<?php echo $context?>-actual-amount"></span>
+            	<?php 
+            	echo WShop::instance()->WP->requires(WSHOP_DIR, 'page/checkout-order-pay-total-amount.php',array(
+            	    'context'=>$context
+            	));
+            	?><script type="text/javascript">
+            	(function($){
+					$(document).bind('wshop_<?php echo $context?>_show_amount',function(e,view){
+	    				var total =view.total_amount;
+	    				if(total<=0){
+	    					$('#wshop-<?php echo $context?>-actual-amount').html('').hide();
+	    				}else{
+	    					$('#wshop-<?php echo $context?>-actual-amount').html('<?php echo __('Total:',WSHOP)?>'+view.symbol+total.toFixed(2)).show();
+	    				}
+	    			});
+				})(jQuery);
+            	</script>
+            	<?php
+            	echo WShop::instance()->WP->requires(WSHOP_DIR, '__purchase.php',array(
+            	    'content'=>__('Pay Now',WSHOP),
+            	    'class'=>'xh-btn xh-btn-warning xh-btn-lg xh-pull-right',
+            	    'location'=>WShop_Helper_Uri::get_location_uri(),
+            	    'context'=>$context,
+            	    'modal'=>'checkout'
+            	));
+        	?>
+    	</div>
 	</div>
 </div>

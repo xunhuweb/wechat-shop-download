@@ -36,7 +36,7 @@ class WShop_Wechat_Api{
             //触发微信返回code码
             $params = array();
             $params["appid"] = $this->appid;
-            $params["redirect_uri"] = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+            $params["redirect_uri"] =WShop_Helper_Uri::get_location_uri();
             $params["response_type"] = "code";
             $params["scope"] = "snsapi_base";
             $params["state"] = "STATE";

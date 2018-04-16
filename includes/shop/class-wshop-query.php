@@ -9,7 +9,7 @@ class WShop_Query{
      * @since  1.0.0
      */
     private static $_instance;
-    
+    public $query_vars=array();
     public $endpoint_settings=array();
     /**
      * Instance
@@ -32,13 +32,16 @@ class WShop_Query{
         add_action( 'wshop_flush_rewrite_rules', array( $this, 'init_query_vars' ) ,11);
         add_action( 'wshop_flush_rewrite_rules', array( $this, 'add_endpoints' ) ,11);
         
-        add_filter('wshop_checkout_options_2', array($this,'wshop_checkout_options_2'),10,1);
+        add_filter('wshop_checkout_options_3', array($this,'wshop_checkout_options_3'),10,1);
         
-        add_action( 'init', array( $this, 'init_query_vars' ) ,11);
+        add_action( 'init', array( $this, 'init_query_vars' ) ,10);
         add_action( 'init', array( $this, 'add_endpoints' ) ,11);
         
+        //4.4.0 current_theme_supports( 'title-tag' ) 
+        add_filter('document_title_parts', array( $this, 'document_title_parts' ) ,10,1);
+        //4.4.0前老版本
+        add_filter('wp_title_parts', array($this,'document_title_parts'),10,1);
         
-        add_filter('the_title', array( $this, 'the_title' ) ,11,2);
         if ( ! is_admin() ) {
             add_filter( 'query_vars', array( $this, 'add_query_vars' ), 11 );
             add_action( 'parse_request', array( $this, 'parse_request' ), 11 );
@@ -62,7 +65,7 @@ class WShop_Query{
         ),array('WShop_Hooks','account_order_received'));
     }
     
-    public function wshop_checkout_options_2($settings){
+    public function wshop_checkout_options_3($settings){
         foreach ($this->pages as $page=>$page_setting){
             $page_setting =  shortcode_atts(array(
                 'title'=>$page,
@@ -118,22 +121,22 @@ class WShop_Query{
     }
     
     public function register_endpoint($page,$endpoint,$settings,$callback=null){
-        if(!isset($this->pages[$page])){
-            throw new Exception('unknow page');    
-        }
-        
         $settings = shortcode_atts(array(
             'title'=>$endpoint,
-            'page_title'=>$endpoint,
+            'page_title'=>null,
             'description'=>null,
             'type'=>'text',
             'default'=>$endpoint
         ), $settings);
+
+        if(empty($settings['page_title'])){
+            $settings['page_title'] = $settings['title'];
+        }
         
         $this->endpoint_settings[$page][$endpoint]=$settings;
         
         if($callback){
-            add_action("wshop_endpoint_{$page}_{$endpoint}",$callback,10,2);
+            add_filter("wshop_endpoint_{$page}_{$endpoint}",$callback,10,2);
         }
     }
   
@@ -146,27 +149,39 @@ class WShop_Query{
         }
         return '';
     }
-    
-    public function the_title($title,$post_ID){
-        global $wp_query;
+ 
+ /**
+     * @param array $title
+     * @return array
+     */
+    public function document_title_parts($title){
+        if(!is_page()){
+            return $title;
+        }
        
-        $endpoint=null;
-        if ( ! is_null( $wp_query ) && ! is_admin() && is_main_query() && is_page()) {
-            $post = $wp_query->post;
-            $endpoint = $this->get_current_endpoint();
-            if($post&&$post->post_type=='page'&&!empty($endpoint)){
-                foreach ($this->pages as $page=>$setting){
-                    if($setting['default']==$post->ID){
-                        if(isset($this->endpoint_settings[$page][$endpoint]['page_title'])){
-                           $title = $this->endpoint_settings[$page][$endpoint]['page_title'] ." - ".get_option('blogname');
-                        }
-                        break;
-                    }
-                }
-            } 
+        $endpoint = $this->get_current_endpoint();
+        if(!$endpoint){
+            return $title;
         }
         
-        return apply_filters('wshop_endpoint_title', $title,$endpoint);
+        foreach ($this->pages as $page=>$setting){
+            if(!isset($setting['default'])|| !is_page($setting['default'])){
+                continue;
+            }
+            if(isset($this->endpoint_settings[$page][$endpoint])){
+                if(!$title||!is_array($title)){
+                    $title = array();
+                }
+                
+                $new_title =array(
+                    'endpoint'=> apply_filters('xh_uc_endpoint_title', $this->endpoint_settings[$page][$endpoint]['page_title'],$endpoint,$page)
+                );
+                
+                return array_merge($new_title,$title);
+            }
+        }
+        
+        return $title;
     }
     
     /**
@@ -175,11 +190,13 @@ class WShop_Query{
     public function init_query_vars() {
         $options =WShop_Settings_Checkout_Options::instance();
     
-        foreach ($this->endpoint_settings as $page=>$endpoints){
+        foreach ($this->pages as $page=>$settings){
             $this->pages[$page]['default'] = $options->get_option("page_$page",null);
-            
+        }
+        
+        foreach ($this->endpoint_settings as $page=>$endpoints){
             foreach ($endpoints as $endpoint=>$setting){
-                $this->query_vars[$endpoint] = $options->get_option("endpoint_{$page}_$endpoint",$endpoint); 
+                $this->query_vars[$endpoint] = $options->get_option("endpoint_{$page}_$endpoint",$endpoint);
             }
         }
     }
@@ -201,7 +218,7 @@ class WShop_Query{
                 }
                 $permalink =  trailingslashit( $permalink ) . $endpoint  . $query_string;
             } else {
-                $permalink = add_query_arg( $endpoint, $permalink );
+                $permalink .= (strpos($permalink, '?')===false?'?':'&')."{$endpoint}=".($params&&is_array($params)&&isset($params[$endpoint])?$params[$endpoint]:'');
             }
         }
        

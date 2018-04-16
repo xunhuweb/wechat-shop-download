@@ -96,17 +96,12 @@ class WShop_Admin {
      */
     public function get_admin_pages(){
         return apply_filters('wshop_admin_pages', array(
-            WShop_Page_Order::instance(),
-            WShop_Page_Default::instance(),
-            WShop_Page_Add_Ons::instance()
+           10=> WShop_Page_Order::instance(),
+           50=> WShop_Page_Default::instance(),
+           100=> WShop_Page_Add_Ons::instance()
         ));
     }
-    
-    public function get_user_pages(){
-        return apply_filters('wshop_user_pages', array(
-            WShop_User_Page_Order::instance()
-        ));
-    }
+  
     
     /**
      * @return NULL|Abstract_WShop_Settings_Page
@@ -119,7 +114,7 @@ class WShop_Admin {
         }
     
         $page_id = isset($_GET['page'])?$_GET['page']:null;
-        return WShop_Helper_Array::first_or_default(array_merge($this->get_admin_pages(),$this->get_user_pages()),function($m,$pid){
+        return WShop_Helper_Array::first_or_default($this->get_admin_pages(),function($m,$pid){
             return $m->get_page_id()==$pid;
         },$page_id);
     }
@@ -156,7 +151,7 @@ class WShop_Admin {
             }
             
             if($submenu){
-                $query .="&tab={$submenu->id}";
+                $query .="&sub={$submenu->id}";
             }
         }
         
@@ -190,11 +185,29 @@ class WShop_Admin {
         }
         
         $menu_title = apply_filters('wshop_admin_menu_title', 'Wechat Shop');
-        add_menu_page( $menu_title, $menu_title, 'read', self::menu_tag, null, null, '55.5' );      
+             
        
+        global $current_user;
         $pages = $this->get_admin_pages();
-        $capability = apply_filters('wshop_manager_capability', 'administrator');
+        ksort($pages);
+        reset($pages);
         
+        $capabilitys = apply_filters('wshop_manager_capabilitys', array('administrator'));
+        
+        $user_roles = $current_user->roles&&is_array($current_user->roles)?$current_user->roles:array();
+        if(count($user_roles)==0){return;}
+        
+        $is_manager =false;
+        foreach ($user_roles as $role){
+            if(in_array($role, $capabilitys)){
+                $is_manager=true;
+                break;
+            }
+        }
+       
+        if(!$is_manager){return;}
+        
+        add_menu_page( $menu_title, $menu_title, 'read', self::menu_tag, null, null, '55.5' );
         foreach ($pages as $page){
             if(!$page||!$page instanceof Abstract_WShop_Settings_Page){
                 continue;
@@ -204,29 +217,9 @@ class WShop_Admin {
                 self::menu_tag,
                 $page->title,
                 $page->title,
-                $capability,
+                'read',
                 $page->get_page_id(),
                 array($page,'render'));
-        }
-        
-        global $current_user;
-        if(!$current_user->has_cap($capability)){
-            $pages = $this->get_user_pages();
-            $capability = apply_filters('wshop_user_capability', 'read');
-            
-            foreach ($pages as $page){
-                if(!$page||!$page instanceof Abstract_WShop_Settings_Page){
-                    continue;
-                }
-            
-                add_submenu_page(
-                    self::menu_tag,
-                    $page->title,
-                    $page->title,
-                    $capability,
-                    $page->get_page_id(),
-                    array($page,'render'));
-            }
-        }
+        }     
     }
 }

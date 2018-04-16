@@ -16,6 +16,9 @@ abstract class Abstract_WShop_Payment_Gateway extends Abstract_WShop_Settings{
      */
     public $icon;
     public $icon_small;
+    
+    public $group;
+    
     /**
      * 判断是否启用
      * 

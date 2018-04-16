@@ -127,7 +127,7 @@ class WShop_Settings_Add_Ons_Install_Installed extends Abstract_WShop_Settings {
             		          $index++;
             		          $plugin_ids[]=$plugin->id;
             		          ob_start();
-            		          if($plugin->is_authoirzed){
+            		          if($plugin->ia){
                 		          ?>
                   		           <script type="text/javascript">
                   		          		 window.xh_plugin_view.update('<?php echo WShop::instance()->ajax_url(array('action'=>'wshop_plugin','tab'=>'update_plugin_list','plugin_id'=>$plugin->id),true,true)?>');
@@ -268,7 +268,7 @@ class WShop_Settings_Add_Ons_Install_Installed extends Abstract_WShop_Settings {
 								this.loading=true;
 								
 								var txt = $('#plugin-'+params.plugin_id).html();
-								 $('#plugin-'+params.plugin_id).html('<img src="<?php echo WSHOP_URL?>/assets/image/loading.gif" style="width:15px;margin-right:5px;"/>'+txt);
+								 $('#plugin-'+params.plugin_id).html('<img src="<?php echo WSHOP_URL?>/assets/image/loading.gif" style="width:20px;height:20px;margin-right:5px;"/>'+txt);
 								
 								jQuery.ajax({
 						            url: '<?php echo WShop::instance()->ajax_url()?>',
@@ -298,6 +298,7 @@ class WShop_Settings_Add_Ons_Install_Installed extends Abstract_WShop_Settings {
 										}
 						            	
 						            	window.view.error(m.errmsg);
+						            	location.href='#wpbody-content';
 						            },
 						            error:function(e){
 						            	window.view.error('<?php echo __('Internal Server Error!',WSHOP)?>');
@@ -362,7 +363,7 @@ class WShop_Settings_Add_Ons_Install_Find extends Abstract_WShop_Settings {
         <div class="wrap plugin-install-tab-featured">
         	<div class="wp-filter" >
         	<ul class="filter-links">
-    			<li class="plugin-install-featured"><a href="<?php echo admin_url('admin.php?page=shop_page_add_ons&section=menu_add_ons_install&sub=settings_add_ons_install_find')?>" class="current"><?php echo __('All',WSHOP)?></a> </li>
+    			<li class="plugin-install-featured"><a href="<?php echo admin_url('admin.php?page=wshop_page_add_ons&section=menu_add_ons_install&sub=settings_add_ons_install_find')?>" class="current"><?php echo __('All',WSHOP)?></a> </li>
         	</ul>
             	<div class="search-form search-plugins">
             		<label>
@@ -402,7 +403,7 @@ class WShop_Settings_Add_Ons_Install_Find extends Abstract_WShop_Settings {
       	        $license_list[]=array(
       	            'id'=>$plugin->id,
       	            'version'=>$plugin->version,
-      	            'admin_uri'=>admin_url('admin.php?page=shop_page_add_ons&section=menu_add_ons_install&sub=settings_add_ons_install_installed')
+      	            'admin_uri'=>admin_url('admin.php?page=wshop_page_add_ons&section=menu_add_ons_install&sub=settings_add_ons_install_installed')
       	        );
       	    }
       	}

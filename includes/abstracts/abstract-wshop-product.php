@@ -16,21 +16,9 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
     public function __construct($post=null){
         parent::__construct($post);
         
-        $this->post = $this->get_post();
+        $this->post = new WP_Post($this);
     }
-    
-    public function is_load(){
-        if(!$this->post){
-            return false;
-        }
-        
-        $onlines = WShop::instance()->payment->get_online_post_types();
-        if(!isset($onlines[$this->post->post_type])){
-           return false;
-        }
-        return parent::is_load();
-    }
-    
+  
     /**
      * {@inheritDoc}
      * @see WShop_Object::get_table_name()
@@ -50,8 +38,10 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
         // TODO Auto-generated method stub
         return apply_filters('wshop_product_properties', array(
             'post_ID'=>0,
+            'inventory'=>null,
+            'sale_qty'=>0,
             'sale_price'=>0
-        ));
+        ),$this);
     }
     
     /**
@@ -62,8 +52,8 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
         if(!$this->is_load()){
             throw new Exception('Post is not load!!');
         }
-         
-        return apply_filters('wshop_product_link', get_post_permalink($this->post->ID));
+       
+        return apply_filters('wshop_product_link', get_post_permalink($this->post->ID),$this);
     }
     
     /**
@@ -76,9 +66,13 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
         }
          
         $thumbnail_id = get_post_thumbnail_id($this->post->ID);
+        if(!$thumbnail_id){
+            $thumbnail_id= get_post_thumbnail_id(WShop_Settings_Default_Basic_Default::instance()->get_option('product_img_default',0));
+        }
+        
         $thumb= $thumbnail_id?wp_get_attachment_image_src($thumbnail_id, 'thumbnail'):null;
          
-        return apply_filters('wshop_product_img', $thumb&&count($thumb)>0?$thumb[0]:WSHOP_URL.'/assets/image/default.png');
+        return apply_filters('wshop_product_img', $thumb&&count($thumb)>0?$thumb[0]:WSHOP_URL.'/assets/image/default.png',$this);
     }
     
     /**
@@ -90,7 +84,7 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
             throw new Exception('Post is not load!!');
         }
     
-        return apply_filters('wshop_product_title', $this->post->post_title);
+        return apply_filters('wshop_product_title', $this->post->post_title,$this);
     }
     
     /**
@@ -102,7 +96,11 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
             throw new Exception('Post is not load!!');
         }
          
-        return apply_filters('wshop_product_desc', $this->post->post_excerpt);
+        return apply_filters('wshop_product_desc', $this->post->post_excerpt,$this);
+    }
+    
+    public function get_inventory(){
+        return $this->get('inventory');
     }
     
     /**
@@ -115,14 +113,23 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
             throw new Exception('post is not loaded!');
         }
     
-        $sale_price = isset($this->sale_price)? round(floatval($this->sale_price),2):0.00;
-         
+        $osale_price = $sale_price =apply_filters('wshop_product_single_price', isset($this->sale_price)? round(floatval($this->sale_price),2):0.00,$this->post); 
+        
         if($symbol){
-            $symbol =WShop_Currency::get_currency_symbol(WShop::instance()->payment->get_currency());
-            $sale_price = "<span class=\"wshop-price-symbol\">$symbol</span>".WShop_Helper_String::get_format_price($sale_price);
+            $symbol_txt =$this->get_currency_symbol();
+            $sale_price = $symbol_txt.WShop_Helper_String::get_format_price($sale_price);
         }
+
+        return apply_filters('wshop_product_single_price_html',$sale_price,$osale_price,$symbol,$this);
+    }
     
-        return $sale_price;
+    /**
+     * 
+     * @return 获取货币符号
+     * @since 1.0.4
+     */
+    public function get_currency_symbol(){
+        return WShop_Currency::get_currency_symbol(WShop::instance()->payment->get_currency());
     }
 
     /**
@@ -130,53 +137,26 @@ abstract class Abstract_WShop_Product extends WShop_Post_Object{
      * @return string
      * @since 1.0.0
      */
-    public function shopping_cart_item_html($shopping_cart,$qty,$request){
+    public function shopping_cart_item_html($shopping_cart,$qty,$context){
         if(!$this->is_load()){
             ob_start();
             WShop::instance()->WP->wp_die(__('Post is not found!',WSHOP));
             return ob_get_clean();
         }
         
-        $html = apply_filters('wshop_product_shopping_cart_item_html', null,$this,$shopping_cart,$qty,$request);
+        $html = apply_filters("wshop_product_shopping_cart_item_html", null,$this,$shopping_cart,$qty,$context);
         if(!empty($html)){
             return $html;
         }
-        
+
         return WShop::instance()->WP->requires(WSHOP_DIR, 'product/shopping-cart-item.php',array(
+            'context'=>$context,
             'cart'=>$shopping_cart,
             'qty'=>$qty,
-            'request'=>$request,
             'product'=>$this
         ));
     }
-    
-    /**
-     * @param WShop_Shopping_Cart $cart
-     * @param array $request
-     */
-    public function to_order_item($cart,$request){
-        if(!$this->is_load()){
-            return WShop_Error::error_custom('Post is not found!!',WSHOP);
-        }
-        
-        $order_item =new WShop_Order_Item();
-        $meta = isset($cart->items[$this->post->ID])?$cart->items[$this->post->ID]:null;
-        if(!$meta){
-            return WShop_Error::error_custom('invalid shopping cart item!',WSHOP);
-        }
-        
-        $order_item->price = $this->get_single_price(false);
-        $order_item->qty =$meta['qty'];
-        $order_item->post_ID = $this->post->ID;
-        $order_item->metas =array(
-            'title'=>$this->get_title(),
-            'img'=>$this->get_img(),
-            'link'=>$this->get_link(),
-            'post_type'=>$this->post->post_type
-        );
-        
-        return $order_item;
-    }
+   
 }
 
 class WShop_Product_Model extends Abstract_WShop_Schema{
@@ -192,6 +172,8 @@ class WShop_Product_Model extends Abstract_WShop_Schema{
             "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}wshop_product` (
                 `post_ID` BIGINT(20) NOT NULL,
                 `sale_price` decimal(12,2) NOT NULL DEFAULT '0.00',
+                `inventory`  int(11) NULL DEFAULT NULL,
+                `sale_qty`  int(11) NOT NULL DEFAULT 0,
                 PRIMARY KEY (`post_ID`)
             ) 
             $collate;");
@@ -200,6 +182,39 @@ class WShop_Product_Model extends Abstract_WShop_Schema{
             WShop_Log::error($wpdb->last_error);
             throw new Exception($wpdb->last_error);
         }
+        
+        $column =$wpdb->get_row(
+           "select column_name
+			from information_schema.columns
+			where table_name='{$wpdb->prefix}wshop_product'
+					and table_schema ='".DB_NAME."'
+					and column_name ='inventory'
+			limit 1;");
+        
+        if(!$column||empty($column->column_name)){
+            $wpdb->query("alter table `{$wpdb->prefix}wshop_product` add column `inventory` int(11) NULL DEFAULT NULL;");
+        }
+        if(!empty($wpdb->last_error)){
+            WShop_Log::error($wpdb->last_error);
+            throw new Exception($wpdb->last_error);
+        }
+        
+        $column =$wpdb->get_row(
+           "select column_name
+            from information_schema.columns
+            where table_name='{$wpdb->prefix}wshop_product'
+            and table_schema ='".DB_NAME."'
+								and column_name ='sale_qty'
+						limit 1;");
+        
+        if(!$column||empty($column->column_name)){
+            $wpdb->query("alter table `{$wpdb->prefix}wshop_product` add column `sale_qty` int(11) NOT NULL DEFAULT 0;");
+        }
+        if(!empty($wpdb->last_error)){
+            WShop_Log::error($wpdb->last_error);
+            throw new Exception($wpdb->last_error);
+        }
+        
     }
 }
 
@@ -248,7 +263,6 @@ class WShop_Product_Fields extends Abstract_XH_WShop_Fields{
         }
     }
 
-
     public function manage_posts_columns($existing_columns){
         if(!$existing_columns){$existing_columns=array();}
 
@@ -265,14 +279,14 @@ class WShop_Product_Fields extends Abstract_XH_WShop_Fields{
         return $new_columns;
     }
 
-    public function validate_sale_price_field($key){
-        $field = $this->get_field_key ( $key );
-        return isset($_POST[$field])?round( floatval($_POST[$field]),2):0;
-    }
-
     public function manage_posts_custom_column($column,$post_ID){
+        global $current_wshop_product;
+        if(!$current_wshop_product||$current_wshop_product->post_ID!=$post_ID){
+            $current_wshop_product =  new WShop_Product($post_ID);
+        }
+        
+        $product =$current_wshop_product;
         if($column=='wshop_sale_price'){
-            $product = new WShop_Product($post_ID);
             if($product->is_load()){
                 echo $product->get_single_price(true);
             }
@@ -284,12 +298,18 @@ class WShop_Product_Fields extends Abstract_XH_WShop_Fields{
      * @see Abstract_WShop_Settings::init_form_fields()
      * @since 1.0.0
      */
-    public function _init_form_fields($post){
-        $this->form_fields = apply_filters('wshop_product_fields', array(
-            'sale_price'=>array(
-                'title'=>__('Sale price',WSHOP),
-                'type'=>'custom',
-                'func'=>function($key,$api,$data){
+    public function init_form_fields(){
+        global $post;
+        $settings=array();
+        
+        $settings = apply_filters('wshop_product_fields0', $settings,$post,$this);
+       
+        $settings['sale_price']=array(
+            'title'=>__('Sale price',WSHOP),
+            'type'=>'custom',
+            //'default'=>'123',
+            'required'=>true,
+            'func'=>function($key,$api,$data){
                 $field = $api->get_field_key ( $key );
                 $defaults = array (
                     'title' => '',
@@ -305,26 +325,55 @@ class WShop_Product_Fields extends Abstract_XH_WShop_Fields{
                 
                 $data = wp_parse_args ( $data, $defaults );
                 ?>
-                    <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
-                    	<th scope="row" class="titledesc">
-                    		<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
-                    		<?php echo $api->get_tooltip_html( $data ); ?>
-                    	</th>
-                    	<td class="forminp">
-                    		<fieldset>
-                    			<legend class="screen-reader-text">
-                    				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
-                    			</legend>
-                    			<?php $symbol =WShop_Currency::get_currency_symbol(WShop::instance()->payment->get_currency());?>
-                    			<?php echo $symbol?> <input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( ( $api->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $api->get_custom_attribute_html( $data ); ?> />
-                    			<?php echo $api->get_description_html( $data ); ?>
-                    		</fieldset>
-                    	</td>
-                    </tr>
-                    <?php
+                <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
+                	<th scope="row" class="titledesc">
+                		<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <span style="color:red;">*</span></label>
+                		<?php echo $api->get_tooltip_html( $data ); ?>
+                	</th>
+                	<td class="forminp">
+                		<fieldset>
+                			<legend class="screen-reader-text">
+                				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
+                			</legend>
+                			<?php $symbol =WShop_Currency::get_currency_symbol(WShop::instance()->payment->get_currency());?>
+                			<?php echo $symbol?> <input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( ( $api->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $api->get_custom_attribute_html( $data ); ?> />
+                			<?php echo $api->get_description_html( $data ); ?>
+                		</fieldset>
+                	</td>
+                </tr>
+                <?php
+            },
+            'validate'=>function($key,$api){
+                $field = $api->get_field_key ( $key );
+                return isset($_POST[$field])?round( floatval($_POST[$field]),2):0;
+            }
+        );
+        $settings = apply_filters('wshop_product_fields1', $settings,$post,$this);
+        if(apply_filters('wshop_enable_inventory', WShop_Settings_Checkout_Options::instance()->get_option('enable_inventory')==='yes',$post)){
+            $settings['inventory']=array(
+                'title'=>__('Inventory',WSHOP),
+                'type'=>'number',
+                //'default'=>'123',
+                'description'=>'如果留空，那么当前产品每次下单只能购买一个；如果整数值，那么每次下单，当前库存将减少',
+                'validate'=>function($key,$api){
+                    $field = $api->get_field_key ( $key );
+                    return isset($_POST[$field])&&$_POST[$field]!='' ?intval($_POST[$field]):null;
                 }
-            )
-        ),$post,$this);
+            );
+       
+            $settings['sale_qty']=array(
+                'title'=>__('Sold qty',WSHOP),
+                'type'=>'number',
+                'custom_attributes'=>array('readonly'=>'readonly'),
+                'default'=>'0',
+                'validate'=>function($key,$api){
+                    $field = $api->get_field_key ( $key );
+                    return isset($_POST[$field])&&$_POST[$field]!='' ?intval($_POST[$field]):null;
+                }
+            );
+        }
+        
+        $this->form_fields = apply_filters('wshop_product_fields2', $settings,$post,$this);
     }
 
     /**

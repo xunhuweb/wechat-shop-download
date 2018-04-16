@@ -2,11 +2,15 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-$data = WShop_Temp_Helper::get('atts','templates');
+$data = WShop_Temp_Helper::clear('atts','templates');
 $location = isset($data['location'])?$data['location']:null;
 $pageSize = isset($data['pageSize'])?intval($data['pageSize']):20;
 if(!is_user_logged_in()){
-    WShop::instance()->WP->wp_die(WShop_Error::err_code(501),false,false);
+   ?>
+   <script type="text/javascript">
+		location.href='<?php echo wp_login_url(WShop_Helper_Uri::get_location_uri())?>';
+	</script>
+   <?php
     return;
 }
 
@@ -19,10 +23,11 @@ $user_id = get_current_user_id();
 
 global $wpdb;
 $query =$wpdb->get_row(
-    "select count(o.id) as qty
+   "select count(o.id) as qty
     from {$wpdb->prefix}wshop_order o
     where o.removed=0
-            and o.customer_id ={$user_id};");
+          and o.status!='".WShop_Order::Unconfirmed."'
+          and o.customer_id ={$user_id};");
 $total_qty = intval($query->qty);
 if($total_qty>0&&$pageIndex>$total_qty){
     $pageIndex = $total_qty;
@@ -35,7 +40,8 @@ $orders = $wpdb->get_results(
     "select o.*
     from {$wpdb->prefix}wshop_order o
     where o.removed=0
-            and o.customer_id ={$user_id}
+          and o.status!='".WShop_Order::Unconfirmed."'
+          and o.customer_id ={$user_id}
     order by o.id desc
     limit $start,$pageSize;");
 ?>
@@ -59,7 +65,8 @@ $orders = $wpdb->get_results(
          <?php 
      }else{
          foreach ($orders as $wp_order){
-             $order = WShop_Mixed_Object_Factory::to_entity($wp_order);
+             $order = new WShop_Order($wp_order);
+             
              ?><tr>
                  <td>#<?php echo $order->id?></td>
                  <td><?php echo date('Y-m-d H:i',$order->order_date)?></td>
@@ -79,12 +86,11 @@ $orders = $wpdb->get_results(
      <div class="clearfix xh-pull-right mB20" >
        <?php 
        require_once WSHOP_DIR.'/includes/paging/class-xh-paging-model.php';
-       
+       if(empty($location)){
+           $location = WShop_Helper_Uri::get_location_uri();
+       }
        $pagging = new WShop_Paging_Model($pageIndex, $pageSize, $total_qty,function($pageIndex,$location){
-           $params = array();
-           $location = empty($location)?WShop_Helper_Uri::get_uri_without_params(WShop_Helper_Uri::get_location_uri(),$params):$location;
-           $params['pageIndex']=$pageIndex;
-           return $location."?".http_build_query($params); 
+           return WShop_Helper_Uri::get_new_uri($location,array('pageIndex'=>$pageIndex));
        },$location);
        echo $pagging->bootstrap();
        ?>

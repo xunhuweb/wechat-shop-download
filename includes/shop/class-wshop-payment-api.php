@@ -37,40 +37,74 @@ class WShop_Payment_Api{
     private function __construct(){
         
     }
-    public function is_validate_get_pay_per_view($post_id,$roles){
+    public function is_validate_get_pay_per_view($post_id,$roles=array()){
         if(!$post_id){
             return false;
         }
-    
-        global $wpdb;
-        $status_sql ="'".join("','", Abstract_WShop_Order::get_paid_order_status())."'";
-        $user_id = get_current_user_id();
-        if($user_id<=0){
-            return false;
-        }
+        
         if(WShop::instance()->payment->is_user_roles_allowed($roles)){
             return true;
         }
-    
-        $order = $wpdb->get_row(
-            "select o.id
-            from {$wpdb->prefix}wshop_order_item oi
-            inner join {$wpdb->prefix}wshop_order o on o.id = oi.order_id
-            where oi.post_ID={$post_id}
+        
+        global $wpdb;
+        $status_sql ="'".join("','", Abstract_WShop_Order::get_paid_order_status())."'";
+        $user_id = get_current_user_id();
+        
+        if(WShop::instance()->WP->is_enable_guest_purchase()){
+            $ip = WShop_Helper_Http::get_client_ip();
+            $now = time()-60*60;
+            $order = $wpdb->get_row($wpdb->prepare(
+               "select o.id
+                from {$wpdb->prefix}wshop_order_item oi
+                inner join {$wpdb->prefix}wshop_order o on o.id = oi.order_id
+                where oi.post_ID={$post_id}
+                    and o.status in ($status_sql)
+                    and o.removed=0
+                    and o.paid_date>$now
+                    and (o.customer_id=$user_id or o.ip='%s')
+                order by o.order_date desc
+                limit 1;", $ip));
+        }else{
+            if(!is_user_logged_in()){
+                return false;
+            }
+            
+            $order = $wpdb->get_row(
+               "select o.id
+                from {$wpdb->prefix}wshop_order_item oi
+                inner join {$wpdb->prefix}wshop_order o on o.id = oi.order_id
+                where oi.post_ID={$post_id}
                     and o.status in ($status_sql)
                     and o.removed=0
                     and o.customer_id=$user_id
-            order by o.order_date desc
-            limit 1;");
+                order by o.order_date desc
+                limit 1;");
+        }
+        
     
         return $order?true:false;
     }
+    public function get_exchange_rate(){
+        $exchange_rate =  round(floatval(WShop_Settings_Default_Basic_Default::instance()->get_option('exchange_rate')),3);
+        if($exchange_rate<=0){$exchange_rate=1;}
+        return $exchange_rate;
+    }
     
-    public function is_user_roles_allowed($roles){
+    private function remove_role_empty_valus($roles=array()){
         if(!$roles||!is_array($roles)){
-            $roles =array();
+            $roles = array();
         }
         
+        $_roles = array();
+        foreach ($roles as $role){
+            if(!empty($role)){
+                $_roles[]=$role;
+            }
+        }
+        
+        return $_roles;
+    }
+    public function is_user_roles_allowed($roles=array()){
         global $current_user;
         if(!is_user_logged_in()){
             return false;
@@ -79,13 +113,24 @@ class WShop_Payment_Api{
         if(!$current_user->roles||!is_array($current_user->roles)){
             $current_user->roles=array();
         }
+ 
+        $roles = $this->remove_role_empty_valus($roles);
+       
+        if(count($roles)==0){
+            $roles =$this->remove_role_empty_valus(apply_filters('wshop_unlimit_roles', array()));
+        }
+     
+        //所有会员必须在线下单
+        if(in_array('none', $roles)){
+            return false;
+        }
         
-        $unlimit_roles = apply_filters('wshop_membership_download_unlimit_roles', array('administrator'));
+        //所有会员都可查看
+        if(in_array('all', $roles)){
+            return true;
+        }
+        
         foreach ($current_user->roles as $role){
-            if(in_array($role, $unlimit_roles)){
-                return true;
-            }
-        
             if(in_array($role, $roles)){
                 return true;
             }
@@ -107,82 +152,6 @@ class WShop_Payment_Api{
         }
     
         return new WShop_Product(get_post($post_ID));
-    }
-   
-    public function add_to_cart($post_id){
-        $product = new WShop_Product($post_id);
-        if(!$product->is_load()){
-            return WShop_Error::error_custom(__('Product info is invalid!',WSHOP));
-        }
-        $shopping_cart = new WShop_Shopping_Cart(array(
-            'customer_id'=>get_current_user_id(),
-            'items'=> array(
-                $post_id=>array(
-                    'qty'=>1
-                )
-            ),
-            'created_time'=>current_time( 'timestamp' )
-        ));
-    
-        $error = $shopping_cart->insert();
-        if(!WShop_Error::is_valid($error)){
-            return $error;
-        }
-         
-        return $shopping_cart;
-    }
-    public  function pay($request){
-        $order = apply_filters('wshop_pay_new_order', new WShop_Order());
-    
-        /*
-         $on_pre_order_instert=null,
-         $on_after_order_instert=null,
-         $on_pre_order_item_instert=null,
-         $on_after_order_item_instert=null,
-         $on_order_created=null
-         * */
-        $error =  $order->create_payment(
-            $request,
-            function($order,$request){
-                return apply_filters('wshop_pay_on_pre_order_instert',WShop_Error::success(), $order,$request);
-            },
-            function($order,$request){
-                return apply_filters('wshop_pay_on_after_order_instert',WShop_Error::success(), $order,$request);
-            },
-            function($order_item,$order,$request){
-                return apply_filters('wshop_pay_on_pre_order_item_instert',WShop_Error::success(), $order_item,$order,$request);
-            },
-            function($order_item,$order,$request){
-                return apply_filters('wshop_pay_on_after_order_item_instert',WShop_Error::success(), $order_item,$order,$request);
-            },
-            function($order,$request){
-                return apply_filters('wshop_pay_on_order_created',WShop_Error::success(), $order,$request);
-            });
-         
-        if(!WShop_Error::is_valid($error)){
-            return $error;
-        }
-         
-        return $order;
-    }
-    public function pay_atts(){
-        $request = array(
-            'location'=>isset($_GET['location'])?esc_url_raw($_GET['location']):null,
-            'context'=>strtolower(WShop_Helper_String::guid()),
-            'enable_guest'=>WShop_Settings_Checkout_Options::instance()->get_option('enable_guest_checkout','yes')==='yes'?1:0,
-        );
-        
-        return apply_filters('wshop_pay_atts',$request);
-    }
-  
-    /**
-     * 获取购物车页面
-     * @return NULL|WP_Post
-     * @since 1.0.0
-     */
-    public function get_page_shopping_cart(){
-        ;
-        return ;
     }
   
     /**
@@ -235,7 +204,7 @@ class WShop_Payment_Api{
             return null;
         }
     
-        return WShop_Mixed_Object_Factory::to_entity($wp_order);
+        return new WShop_Order($wp_order);
     }
   
     /**
@@ -244,29 +213,25 @@ class WShop_Payment_Api{
      * @since 1.0.0
      */
     public function get_online_post_types(){
-        static $wshop_online_post_types=false;
-        if($wshop_online_post_types!==false){  
-            return $wshop_online_post_types;
-        }
-        
-        $post_types= apply_filters('wshop_online_post_types', array());
-        if(!did_action('init')){
-            throw new Exception('get_online_post_types can be visit after init action');
-        }
-        
         global $wp_post_types;
-        $wshop_online_post_types = array();
-        if($post_types&&$wp_post_types){
+        $types = array();
+        
+        if($wp_post_types){
             foreach ($wp_post_types as $key=>$type){
-                if(!in_array($key, $post_types)){continue;}
-               
-                if($type->show_ui&&$type->public){
-                    $wshop_online_post_types[$type->name]=(empty($type->label)?$type->name:$type->label).'('.$type->name.')';
+                if(isset($type->wshop_include)&&$type->wshop_include){
+                    $types[]=$key;
                 }
             }
         }
+        
+        $post_types= apply_filters('wshop_online_post_types',$types);
+        
+        $_results = array();
+        foreach ($post_types as $type){
+            $_results[$type] =  isset($wp_post_types[$type])&&isset($wp_post_types[$type]->label)&&!empty($wp_post_types[$type]->label)?"{$wp_post_types[$type]->label}({$type})":$type;
+        }
    
-        return $wshop_online_post_types;
+        return $_results;
     }
   
  
@@ -276,7 +241,9 @@ class WShop_Payment_Api{
      * @since 1.0.0
      */
     public function get_currency(){
-        return WShop_Settings_Default_Basic_Default::instance()->get_option('currency');
+        $currency =  WShop_Settings_Default_Basic_Default::instance()->get_option('currency');
+        if(empty($currency)){$currency='CNY';}
+        return $currency;
     }
     
     /**
@@ -285,7 +252,7 @@ class WShop_Payment_Api{
      * @since 1.0.0
      */
     public function get_order_expire_minues(){
-        return intval(WShop_Settings_Default_Basic_Default::instance()->get_option('order_expire_minute'));
+        return intval(WShop_Settings_Checkout_Options::instance()->get_option('order_expire_minute'));
     }
     /**
      * 获取所有登录接口(已开启的)
@@ -328,7 +295,10 @@ class WShop_Payment_Api{
      * @param array $action_includes 接口约束 
      * @return Abstract_WShop_Payment_Gateway
      */
-    public function get_payment_gateway($id){   
+    public function get_payment_gateway($id){ 
+        if(!$id){
+            return null;
+        }
         return WShop_Helper_Array::first_or_default($this->get_payment_gateways(),function($m,$id){
             return $m->id===$id;
         },$id);

@@ -46,8 +46,8 @@ class WShop_WP_Api
      * @param array $request
      * @return bool
      */
-    public function is_enable_guest_purchase($request){
-        return apply_filters('wshop_enable_guest', isset($request['enable_guest'])?intval($request['enable_guest']):0,$request);
+    public function is_enable_guest_purchase(){
+        return apply_filters('wshop_enable_guest', WShop_Settings_Checkout_Options::instance()->get_option('enable_guest_checkout','yes')==='yes');
     }
     
     /**
@@ -82,16 +82,6 @@ class WShop_WP_Api
     }
 
     /**
-     *
-     * @param string $key            
-     * @since 1.0.0
-     */
-    public function get_global($key)
-    {
-        return WShop_Temp_Helper::get($key, 'globals');
-    }
-
-    /**
      * 判断当前用户是否允许操作
      * 
      * @param array $roles            
@@ -120,38 +110,7 @@ class WShop_WP_Api
      */
     public function get_client_ip()
     {
-        $ip = getenv('HTTP_CLIENT_IP');
-        if ($ip && strcasecmp($ip, 'unknown')) {
-            return preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches[0] : null;
-        }
-        
-        $ip = getenv('HTTP_X_FORWARDED_FOR');
-        if ($ip && strcasecmp($ip, 'unknown')) {
-            return preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches[0] : null;
-        }
-        
-        $ip = getenv('REMOTE_ADDR');
-        if ($ip && strcasecmp($ip, 'unknown')) {
-            return preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches[0] : null;
-        }
-        
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
-        if ($ip && strcasecmp($ip, 'unknown')) {
-            return preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches[0] : null;
-        }
-        
-        return null;
-    }
-
-    /**
-     *
-     * @param string $key            
-     * @param mixed $val            
-     * @since 1.0.0
-     */
-    public function set_global($key, $val)
-    {
-        WShop_Temp_Helper::set($key, $val, 'globals');
+       return WShop_Helper_Http::get_client_ip();
     }
 
     /**
@@ -167,14 +126,6 @@ class WShop_WP_Api
             return false;
         }
 
-        if ($validate_notice && 'yes' === WShop_Settings_Default_Basic_Default::instance()->get_option('defense_CSRF', 'no')) {
-            if (isset($request['action']) && isset($request[$request['action']])) {  
-                return check_ajax_referer($request['action'], $request['action'], false);
-            } else {   
-                return false;
-            }
-        }
-     
         return true;
     }
 
@@ -241,90 +192,6 @@ class WShop_WP_Api
         }
     }
 
-    public function clear_captcha()
-    {
-        WShop::instance()->session->__unset('shop_captcha');
-    }
-
-    /**
-     * 获取图片验证字段
-     * 
-     * @return array
-     * @since 1.0.0
-     */
-    public function get_captcha_fields()
-    {
-        $fields['captcha'] = array(
-            'type' => function ($form_id, $data_name, $settings) {
-                $form_name = $data_name;
-                $name = $form_id . "_" . $data_name;
-                ob_start();
-                ?>
-                    <div class="xh-input-group" style="width: 100%;">
-                    	<input name="<?php echo esc_attr($name);?>" type="text"
-                    		id="<?php echo esc_attr($name);?>" maxlength="6" class="form-control"
-                    		placeholder="<?php echo __('image captcha',WSHOP)?>"> <span
-                    		class="xh-input-group-btn" style="width: 96px;"><img alt="loading..." style="width:96px;height:35px;border:1px solid #ddd;background:url('<?php echo WSHOP_URL?>/assets/image/loading.gif') no-repeat center;" id="img-captcha-<?php echo esc_attr($name);?>"/></span>
-                    </div>
-                    
-                    <script type="text/javascript">
-            			(function($){
-            				if(!$){return;}
-
-                            window.captcha_<?php echo esc_attr($name);?>_load=function(){
-                            	$('#img-captcha-<?php echo esc_attr($name);?>').attr('src','');
-                            	$.ajax({
-        				            url: '<?php echo WShop::instance()->ajax_url('wshop_captcha',true,true)?>',
-        				            type: 'post',
-        				            timeout: 60 * 1000,
-        				            async: true,
-        				            cache: false,
-        				            data: {},
-        				            dataType: 'json',
-        				            success: function(m) {
-        				            	if(m.errcode==0){
-        				            		$('#img-captcha-<?php echo esc_attr($name);?>').attr('src',m.data);
-        								}
-        				            }
-        				         });
-                            };
-                            
-            				$('#img-captcha-<?php echo esc_attr($name);?>').click(function(){
-            					window.captcha_<?php echo esc_attr($name);?>_load();
-            				});
-            				
-            				window.captcha_<?php echo esc_attr($name);?>_load();
-            			})(jQuery);
-                    </script>
-				<?php
-                WShop_Helper_Html_Form::generate_field_scripts($form_id, $data_name);
-                return ob_get_clean();
-            },
-            'validate' => function ($name, $datas, $settings) {
-                // 插件未启用，那么不验证图形验证码
-                $code_post = isset($_POST[$name]) ? trim($_POST[$name]) : '';
-                if (empty($code_post)) {
-                    return WShop_Error::error_custom(__('image captcha is required!', WSHOP));
-                }
-                
-                $captcha = WShop::instance()->session->get('shop_captcha');
-                if (empty($captcha)) {
-                    return WShop_Error::error_custom(__('Please refresh the image captcha!', WSHOP));
-                }
-                
-                if ($captcha != $code_post) {
-                    return WShop_Error::error_custom(__('image captcha is invalid!', WSHOP));
-                }
-                
-                WShop::instance()->session->__unset('shop_captcha');
-                
-                return $datas;
-            }
-        );
-        
-        return apply_filters('wshop_captcha_fields', $fields);
-    }
-
     /**
      * 获取插件列表
      * 
@@ -334,7 +201,7 @@ class WShop_WP_Api
     {
         $base_dirs = array(
             WP_CONTENT_DIR . '/wechat-shop/add-ons/',
-            WP_CONTENT_DIR . '/wshop/add-ons/',
+           // WP_CONTENT_DIR . '/wshop/add-ons/',
             WSHOP_DIR . '/add-ons/'
         );
         
@@ -420,6 +287,8 @@ class WShop_WP_Api
             WShop_Temp_Helper::set('atts', $params, 'templates');
         }
         ob_start();
+        $dir =apply_filters('wshop_require_dir', $dir,$templete_name);
+
         require $this->get_template($dir, $templete_name);
         return ob_get_clean();
     }
@@ -438,5 +307,89 @@ class WShop_WP_Api
         }
         
         return $page_template_dir . '/templates/' . $page_template;
+    }
+    public function clear_captcha($field_key){
+        WShop::instance()->session->__unset($field_key);
+    }
+    /**
+     * 获取图片验证字段
+     * @return array
+     * @since 1.0.3
+     */
+    public function get_captcha_fields($field_name = 'wshop_captcha'){
+        $fields[$field_name]=array(
+            'title'=>__('Image captcha',WSHOP),
+            'wshop_key'=>$field_name,
+            'type'=>function($form_id,$data_name,$settings){
+                $html_name = $data_name;
+                $html_id =isset($settings['id'])?$settings['id']:  ($form_id."_".$data_name);
+                ob_start();
+                ?>
+                <div class="xh-form-group">
+                	<?php if(isset($settings['title'])&&!empty($settings['title'])){
+                	    ?><label><?php echo $settings['title']?></label><?php 
+                	}?>
+                    <div class="xh-input-group">
+                        <input name="<?php echo esc_attr($html_name);?>" type="text" id="<?php echo esc_attr($html_id);?>" maxlength="6" class="form-control" placeholder="<?php echo __('image captcha',WSHOP)?>">
+                        <span class="xh-input-group-btn" style="width:96px;"><img style="width:96px;height:35px;border:1px solid #ddd;background:url('<?php echo WSHOP_URL?>/assets/image/loading-big.gif') no-repeat center;" id="img-captcha-<?php echo esc_attr($html_id);?>"/></span>
+                    </div>
+                </div>
+                
+                <script type="text/javascript">
+        			(function($){
+        				if(!$){return;}
+
+                        window.captcha_<?php echo esc_attr($html_id);?>_load=function(){
+                        	$('#img-captcha-<?php echo esc_attr($html_id);?>').attr('src','<?php echo WSHOP_URL?>/assets/image/empty.png');
+                        	$.ajax({
+    				            url: '<?php echo WShop::instance()->ajax_url(array('action'=>'wshop_captcha','wshop_key'=>$settings['wshop_key']),true,true)?>',
+    				            type: 'post',
+    				            timeout: 60 * 1000,
+    				            async: true,
+    				            cache: false,
+    				            data: {},
+    				            dataType: 'json',
+    				            success: function(m) {
+    				            	if(m.errcode==0){
+    				            		$('#img-captcha-<?php echo esc_attr($html_id);?>').attr('src',m.data);
+    								}
+    				            }
+    				         });
+                        };
+                        
+        				$('#img-captcha-<?php echo esc_attr($html_id);?>').click(function(){
+        					window.captcha_<?php echo esc_attr($html_id);?>_load();
+        				});
+        				
+        				window.captcha_<?php echo esc_attr($html_id);?>_load();
+        			})(jQuery);
+                </script>
+                <?php 
+                WShop_Helper_Html_Form::generate_field_scripts($form_id, $html_name,$html_id);
+                return ob_get_clean();
+            },
+            'validate'=>function($name,$datas,$settings){
+                //插件未启用，那么不验证图形验证码     
+                $code_post =isset($_REQUEST[$name])?trim($_REQUEST[$name]):'';
+                if(empty($code_post)){
+                    return WShop_Error::error_custom(__('image captcha is required!',WSHOP));
+                }
+                
+                $captcha =WShop::instance()->session->get($settings['wshop_key']);
+                if(empty($captcha)){
+                    return WShop_Error::error_custom(__('Please refresh the image captcha!',WSHOP));
+                }
+                
+                if(strcasecmp($captcha, $code_post)!==0){
+                    return WShop_Error::error_custom(__('image captcha is invalid!',WSHOP));
+                }
+                
+                WShop::instance()->session->__unset($settings['wshop_key']);
+               
+                return $datas;
+            }
+        );
+    
+        return apply_filters('wshop_captcha_fields', $fields);
     }
 }

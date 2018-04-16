@@ -2,7 +2,7 @@
 if (! defined ( 'ABSPATH' ))
 	exit (); // Exit if accessed directly
 
-$data = WShop_Temp_Helper::get('atts','templates');
+$data = WShop_Temp_Helper::clear('atts','templates');
 $order = isset($data['order'])&&$data['order'] instanceof WShop_Order?$data['order']:null;
 $user = $order->customer_id?get_user_by('id', $order->customer_id):null;
 if(!$order){
@@ -115,6 +115,8 @@ if(!$order){
 															</table>
 															<?php 
 															do_action('wshop_order_email_sections',$order);
+															
+															do_action("wshop_order_{$order->obj_type}_email_sections",$order);
 															?>
 														</div>
 													</td>

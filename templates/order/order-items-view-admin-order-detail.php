@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$data = WShop_Temp_Helper::get('atts','templates');
+$data = WShop_Temp_Helper::clear('atts','templates');
 $order = $data['order'];
 $order_items = $order->get_order_items();
 ?>

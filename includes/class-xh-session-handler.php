@@ -165,18 +165,25 @@ class XH_Session_Handler extends Abstract_XH_Session {
 				$this->update_session_timestamp( $this->_customer_id, $this->_session_expiration );
 			}
 
+		    $this->_data = $this->get_session_data();
+			//$current_customer_id =$this->generate_customer_id();
+				
+			//如果已登录，那么把session_id 切换成用户ID
+// 			if(is_user_logged_in()&&$this->_customer_id!=$current_customer_id){
+// 			    $this->_customer_id = $current_customer_id;
+// 			}
 		} else {
 			$this->set_session_expiration();
 			$this->_customer_id = $this->generate_customer_id();
+			$this->_data = $this->get_session_data();
 		}
-
-		$this->_data = $this->get_session_data();
 
 		// Actions
 		add_action( 'wp', array( $this, 'set_customer_session_cookie' ), 99 ); // Set cookies
 		add_action( 'shutdown', array( $this, 'set_customer_session_cookie' ), 0 ); // Set cookies before shutdown and ob flushing
 		add_action( 'shutdown', array( $this, 'save_data' ), 20 );
-		add_action( 'wp_logout', array( $this, 'destroy_session' ) );
+		add_action( 'wp_logout', array( $this, 'destroy_session' ));
+		add_action( 'wp_login', array( $this, 'destroy_session' ));
 		if ( ! is_user_logged_in() ) {
 			add_filter( 'nonce_user_logged_out', array( $this, 'nonce_user_logged_out' ) );
 		}
@@ -251,11 +258,11 @@ class XH_Session_Handler extends Abstract_XH_Session {
 	 * @return int|string
 	 */
 	public function generate_customer_id() {
-		if ( is_user_logged_in() ) {
-			return get_current_user_id();
-		} else {
+		//if ( is_user_logged_in() ) {
+			//return get_current_user_id();
+		//} else {
 			return strtolower($this->guid());
-		}
+		//}
 	}
 	private  function guid(){
 	    $guid = '';

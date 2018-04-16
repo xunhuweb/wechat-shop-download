@@ -9,9 +9,8 @@ abstract class Abstract_XH_WShop_Fields extends Abstract_WShop_Settings{
     protected $post_types ;
     
     protected function __construct(){
-        add_action('admin_init', array($this,'admin_init'),10);
+       add_action('admin_init', array($this,'admin_init'),10);
     }
-    
     public function admin_init(){
         $this->post_types =$this->get_post_types();
         
@@ -35,31 +34,30 @@ abstract class Abstract_XH_WShop_Fields extends Abstract_WShop_Settings{
     public function meta_box_html(){
         global $post;
          
-        $this->_admin_options($post);
+        $this->admin_options();
     }
-    
-    public function init_form_fields(){
-        throw new Exception('invalid call');
-    }
-    
-    abstract function _init_form_fields($post);
     
     public function process_object_update($post){
         global $wpdb;
         $product =$this->get_object($post);
-        
+        if(!$product){
+            return WShop_Error::success();
+        }
         //如果post属性，则添加post_ID属性
         $this->sanitized_fields[$product->get_primary_key()]=$post->ID;
-        
+       
         if(!$product->is_load()){
             foreach ($this->sanitized_fields as $key=>$val){
                 $product->{$key} = $val;
             }
             
-            return $product->insert();
+            $error =  $product->insert();
         }else{
-            return $product->update($this->sanitized_fields);
+            $error =  $product->update($this->sanitized_fields);
         }
+        
+        $error = apply_filters('wshop_process_object_update', $error,$product);
+        return apply_filters("wshop_{$post->post_type}_process_object_update", $error,$product);
     }
     /**
      *
@@ -68,53 +66,50 @@ abstract class Abstract_XH_WShop_Fields extends Abstract_WShop_Settings{
      * @since 1.0.0
      */
     public function save_meta_box_data($post_ID, $post, $update ){
-        $this->_process_admin_options($post);
+        $this->process_admin_options($post);
     }
     
     abstract function get_post_types();
-  
+    public function is_admin_client(){return is_admin();}
     public function admin_options(){
-        throw new Exception('invalid call');
-    }
-    
-    public function _admin_options($post) {
-        $this->_init_form_fields($post);
-        $this->_init_settings($post);
+        $this->init_form_fields();
+        $this->init_settings();
         ?>
 	    <style type="text/css">
             .form-table tr{display:block;}
         </style>
+        <input type="hidden" name="wshop_post_fields" value="<?php echo $this->id?>"/>
         <table class="form-table">
 			<?php $this->generate_settings_html(); ?>
 		</table>
 		<?php
+    }
+
+	public function init_form_fields(){
+	    //兼容老版本插件 "_init_form_fields"
+	    if(method_exists($this, '_init_form_fields')){
+	        if(func_num_args()==0){
+	            global $post;
+	        }else{
+	            global $post;
+	            $post = func_get_arg(0);
+	        }
+	        $this->_init_form_fields($post);
+	    }else{
+	        parent::init_form_fields($post);
+	    }
 	}
 	
-    public function get_option($key, $empty_value = null) {
-	    if (empty ( $this->settings )) {
-	        $this->settings=array();
-	       // $this->init_settings ();
-	    }
-	
-	    // Get option default if unset.
-	    if (! isset ( $this->settings [$key] )) {
-	        $form_fields = $this->get_form_fields ();
-	        $this->settings [$key] = isset ( $form_fields [$key] ['default'] ) ? $form_fields [$key] ['default'] : '';
-	    }
-	
-	    if (! is_null ( $empty_value ) && empty ( $this->settings [$key] ) && '' === $this->settings [$key]) {
-	        $this->settings [$key] = $empty_value;
-	    }
-	
-	    return $this->settings [$key];
-	}
-    
 	public function init_settings() {
-	    throw new Exception('invalid call');
-	}
-	
-	public function _init_settings($post) {
+	    if(func_num_args()==0){
+	        global $post;
+	    }else{
+	        global $post;
+	        $post = func_get_arg(0);
+	    }
+	    
 	    $product = $this->get_object($post);
+	    if(!$product){return;}
 	    $this->settings=array();
 	    if($product->is_load()){
 	        foreach (get_object_vars($product) as $key=>$val){
@@ -148,7 +143,64 @@ abstract class Abstract_XH_WShop_Fields extends Abstract_WShop_Settings{
 	}
 	
 	public function process_admin_options() {
-	    throw new Exception('invalid call');
+	    if(func_num_args()==0){
+	        global $post;
+	    }else{
+	        global $post;
+	        $post = func_get_arg(0);
+	    }
+	   
+	    $wp_error=func_num_args()>1?func_get_arg(1):false;
+	   
+	    if(!$post
+	        ||!isset($_POST['wshop_post_fields'])
+	        ||
+	        (isset($_REQUEST['post_ID'])&&$post->ID!=$_REQUEST['post_ID'])
+	        ||
+	        (isset($_REQUEST['post_type'])&&$post->post_type!=$_REQUEST['post_type'])
+	        ){
+	        return $wp_error?WShop_Error::error_unknow():false;
+	    }
+	   
+	    $this->init_settings ($post);
+	    $this->init_form_fields($post);
+	    $this->validate_settings_fields ();
+	    if (count ( $this->errors ) > 0) {
+	        if($wp_error){
+	            return WShop_Error::error_custom($this->errors[0]);
+	        }
+	        $this->display_errors ();
+	        return false;
+	    } 
+	    
+        try {
+            $error = $this-> process_object_update($post);
+            if(!WShop_Error::is_valid($error)){
+                if($wp_error){
+                    return $error;
+                }
+                
+                $this->errors[]=$error->to_json();
+                $this->display_errors ();
+                return false;
+            }
+            
+            foreach ($this->sanitized_fields as $key=>$val){
+                update_post_meta($post->ID, "wshop_{$key}", $val);
+            }
+        } catch (Exception $e) {
+            if($wp_error){
+                return WShop_Error::error_custom($e->getMessage());
+            }
+            
+            $this->errors[]=$e->getMessage();
+            $this->display_errors ();
+            return false;
+        }
+
+        $this->init_settings ($post);
+        
+        return $wp_error?WShop_Error::success():true;
 	}
 	
 	public function display_errors() {
@@ -157,52 +209,6 @@ abstract class Abstract_XH_WShop_Fields extends Abstract_WShop_Settings{
 	    }
 	    
 	    wp_die(__('Update failed,detail error:',WSHOP).join('<br/>',$this->errors));
-	}
-	
-	public function _process_admin_options($post) {
-	    global $post;
-	  
-	    if(!$post||in_array($post->post_status, array('auto-draft','trash'))){
-	        return;
-	    }
-	    if(isset($_POST['action'])&&in_array($_POST['action'], array(
-	        'trash',
-	        'untrash'
-	    ))){
-	        return;
-	    }
-	    
-	    
-	    if(!apply_filters('wshop_do_post_process_admin_options', true,$post)){
-	        return;
-	    }
-	    $this->_init_settings ($post);
-	    $this->_init_form_fields($post);
-	    $this->validate_settings_fields ();
-	    if (count ( $this->errors ) > 0) {
-	        $this->display_errors ();
-	        return false;
-	    } else {
-	        try {
-	            $error = $this-> process_object_update($post);
-	            if($error instanceof WShop_Error&&!WShop_Error::is_valid($error)){
-	                $this->errors[]=$error->to_json();
-	                $this->display_errors ();
-	                return false;
-	            }
-	            
-	            foreach ($this->sanitized_fields as $key=>$val){
-	                update_post_meta($post->ID, "wshop_{$key}", $val);
-	            }
-	        } catch (Exception $e) {
-	            $this->errors[]=$e->getMessage();
-	            $this->display_errors ();
-	            return false;
-	        }
-	
-	        $this->_init_settings ($post);
-	        return true;
-	    }
 	}
 	
 	/**

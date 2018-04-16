@@ -28,7 +28,19 @@ class WShop_Install extends Abstract_XH_Install{
         parent::__construct();
     }
     
-
+    public function add_ons_update(){
+        $plugin_options = $this->get_plugin_options();
+        $version = $plugin_options&&isset($plugin_options['version'])?$plugin_options['version']:'1.0.0';
+        
+        if(version_compare($version, WShop::instance()->version,'<')){
+            WShop::instance()->on_update($version);
+             
+            $this->update_plugin_options(array(
+                'version'=>WShop::instance()->version
+            ));
+        }
+    }
+    
     public function get_plugin_install_url($step=null){
         $request =array('action'=>$this->ajax_key,'tab'=>'plugin_install');
         if(!empty($step)){
@@ -243,8 +255,8 @@ class WShop_Install extends Abstract_XH_Install{
         		<tr>
         			<td><?php echo __('PHP mbstring:',WSHOP)?></td>
         			<td class="help"><span class="xunhuweb-help-tip"></span></td>
-        			<td><?php
-        			     if(function_exists('mb_strlen')){
+        			<td><?php 
+        			     if(function_exists('mb_strwidth')){
         			         ?><span style="color:green;">YES</span><?php
         			     }else{
         			         $is_valid=false;
@@ -527,7 +539,7 @@ class WShop_Install extends Abstract_XH_Install{
     			<input type="text" class="regular-text" value="<?php print esc_attr( $license_key)?>" name="license_key" placeholder="<?php echo __('license key',WSHOP)?>">
     		</form>
     		<p class="wc-setup-actions step">
-    			<?php if($add_on->is_authoirzed){
+    			<?php if($add_on->ia){
     			    ?><a href="javascript:void(0);" onclick="window.view.submit();" class="button-primary button button-large button-next"><?php echo __('Change',WSHOP)?></a><?php
     			    ?><a href="<?php echo $add_on->get_settings_url();?>" class="button button-large"><?php echo __('Settings',WSHOP)?></a><?php
     			}else{

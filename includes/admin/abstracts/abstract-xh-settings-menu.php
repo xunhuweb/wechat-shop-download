@@ -37,6 +37,8 @@ abstract class Abstract_WShop_Settings_Menu extends Abstract_WShop_Settings{
         $index=0;
         $menu =null;
         $menus = $this->menus();
+        ksort($menus);
+        reset($menus);
         foreach ($menus as $item){
             if($index++===0){
                 $menu=$item;
@@ -103,10 +105,12 @@ class WShop_Menu_View extends WShop_View_Form{
      */
     public function menus(){
         $menus = $this->page->menus();
+        ksort($menus);
+        reset($menus);
         $show_menus = array();
         foreach ($menus as $menu){
             $show_menus[]=array(
-                'name'=>$menu->title,
+                'name'=>isset($menu->menu_title)&&!empty($menu->menu_title)?$menu->menu_title: $menu->title,
                 'url'=>$menu->get_menu_url($this->page),
                 'selected'=>$this->menu->id===$menu->id
             );
@@ -120,6 +124,8 @@ class WShop_Menu_View extends WShop_View_Form{
      */
     public function sub_menus() {
         $submenus = $this->menu->menus();
+        ksort($submenus);
+        reset($submenus);
         $show_menus = array();
         if(!$this->submenu){
             return $show_menus;
@@ -127,7 +133,7 @@ class WShop_Menu_View extends WShop_View_Form{
         
         foreach ($submenus as $menu){
             $show_menus[]=array(
-                'name'=>$menu->title,
+                'name'=>isset($menu->menu_title)&&!empty($menu->menu_title)?$menu->menu_title:$menu->title,
                 'url'=>$this->menu->get_submenu_url($this->page, $menu->id),
                 'selected'=>$this->submenu->id===$menu->id
             );

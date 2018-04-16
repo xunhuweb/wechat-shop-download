@@ -2,7 +2,7 @@
 if (! defined('ABSPATH')) {
     exit();
 }
-$data = WShop_Temp_Helper::get('atts','templates');
+$data = WShop_Temp_Helper::clear('atts','templates');
 $order = isset($data['order'])?$data['order']:null;
 if(!$order||!$order instanceof WShop_Order){
     WShop::instance()->WP->wp_die(WShop_Error::err_code(404),false,false);
@@ -10,34 +10,19 @@ if(!$order||!$order instanceof WShop_Order){
 }
 
 ?>
+<style>
+.xh-form{border:3px solid #dadada;
+        border-radius: 6px;
+    -webkit-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.04);
+    -moz-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.04);
+    box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.04);}
+</style>
 <div class="xh-layout">
-	<?php if($order->is_paid()){
-	    ?>
-	     <div class="xh-title-h3 clearfix" style="text-align: center;">  <span ><?php echo __('Order received',WSHOP)?></span> </div>
-	    <?php 
-	}else{
-	    ?>
-	    <div class="xh-title-h3 clearfix" style="text-align: center;">  <span ><?php echo __('Waitting for payment!',WSHOP)?></span> </div>
-	    <?php
-	}?>
+	<?php $order->order_view_title_order_received(); ?>
 
 	<div class="xh-form">
-	<?php if($order->is_paid()){
-	      ?><div class="xh-title"><?php echo __('Order received',WSHOP)?></div>
-	      <div class="block20"></div>
-    	    <div  class="clearfix"><?php echo __('Thanks,we have received your order.',WSHOP)?></div><?php 
-    	}else{
-    	    ?><div class="xh-title clearfix"><?php echo __('Waitting for payment',WSHOP); 
-    	       if($order->can_pay()){
-    	           ?> <a class="xh-pull-right xh-btn xh-btn-sm xh-btn-primary" href="<?php echo $order->get_pay_url()?>"><?php echo __('Pay',WSHOP)?></a>
-    	           <?php
-    	       }?></div>
-    	    <div class="block20"></div>
-    	    <div class="clearfix">
-    	    	<?php echo __('Sorry,your order have unpaid yet.',WSHOP);?>
-    	    </div>
-    	    <?php 
-    	}?>
+	
+	<?php $order->order_view_desc_order_received(); ?>
 		
 		<div class="block20"></div>
 		<ul class="xh-orderinfo clearfix">

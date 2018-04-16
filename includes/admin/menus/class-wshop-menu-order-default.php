@@ -135,10 +135,10 @@ class WShop_Menu_Order_Default_Settings extends Abstract_WShop_Settings {
 	           		
 	           		 <style type="text/css">
                         .column-status{width:45px;text-align:center;}
-                        .manage-column.column-status{width:45px;text-align:center;}
+                        .manage-column.column-status{width:35px;text-align:center;}
                         .column-ID{width: 15%;}
                         .column-order_date{width: 9%;}
-                        .column-total{width: 9%;}
+                        .column-total{width: 19%;}
                         .column-toolbar{width: 9%;}
                    </style>
 	           		<?php
@@ -496,6 +496,7 @@ class WShop_Order_List_Table extends WP_List_Table {
             Abstract_WShop_Order::Processing,
             Abstract_WShop_Order::Complete,
             Abstract_WShop_Order::Pending,
+            Abstract_WShop_Order::Canceled,
             'trash'
         );
     }
@@ -512,12 +513,13 @@ class WShop_Order_List_Table extends WP_List_Table {
         $status_pending = Abstract_WShop_Order::Pending;
         $status_processing = Abstract_WShop_Order::Processing;
         $status_complete = Abstract_WShop_Order::Complete;
-    
+        $status_canceled = Abstract_WShop_Order::Canceled;
         $result =$wpdb->get_row(
            "select sum(if(o.`removed`=1,0,1)) as total,
             sum(if(o.`status`='$status_processing' and o.`removed`=0,1,0)) as processing,
             sum(if(o.`status`='$status_pending' and o.`removed`=0,1,0)) as pending,
             sum(if(o.`status`='$status_complete' and o.`removed`=0,1,0)) as complete,
+            sum(if(o.`status`='$status_canceled' and o.`removed`=0,1,0)) as canceled,
             sum(o.`removed`) as removed
             from `{$wpdb->prefix}wshop_order` o;");
          
@@ -537,6 +539,10 @@ class WShop_Order_List_Table extends WP_List_Table {
             'pending'    => array(
                 'title'=>__('Pending',WSHOP),
                 'count'=>intval( $result->pending )
+            ),
+            'canceled'    => array(
+                'title'=>__('Canceled',WSHOP),
+                'count'=>intval( $result->canceled )
             ),
             'trash'=> array(
                 'title'=>__('Trash',WSHOP),
@@ -585,7 +591,7 @@ class WShop_Order_List_Table extends WP_List_Table {
             $sort ='desc';
         }
 
-        $order_status ='trash'==$this->order_status?" and o.removed=1 ":  (empty($this->order_status)?" and o.removed=0 ":" and o.removed=0 and o.status='{$this->order_status}'");
+        $order_status ='trash'==$this->order_status?(" and o.removed=1 and o.status!='".WShop_Order::Unconfirmed."'"):  (empty($this->order_status)?(" and o.removed=0  and o.status!='".WShop_Order::Unconfirmed."'"):" and o.removed=0 and o.status='{$this->order_status}'");
         $customer_id = !$this->customer_searched?"":" and o.customer_id={$this->customer_searched->ID}";
         $order_date ="";
         if($this->order_date){
@@ -658,7 +664,7 @@ class WShop_Order_List_Table extends WP_List_Table {
         $items = $wpdb->get_results($wpdb->prepare($sql, $this->order_id,$this->order_id));   
         if($items){
             foreach ($items  as $item){
-                $this->items[]=WShop_Mixed_Object_Factory::to_entity($item);
+                $this->items[]=new WShop_Order($item);
             }
         }
     }
@@ -682,7 +688,8 @@ class WShop_Order_List_Table extends WP_List_Table {
               	});
            	})(jQuery);
 	   </script>
-       <select class="wshop-customer-search" name="_cid" data-sortable="true" data-placeholder="<?php esc_attr_e( 'Search for a customer&hellip;', WSHOP); ?>" data-allow_clear="true">
+	   <style type="text/css">.select2-container {width: 200px !important;}</style>
+       <select class="wshop-search" data-type='customer' name="_cid" data-sortable="true" data-placeholder="<?php echo __( 'Search for a customer(ID/user_login)&hellip;', WSHOP); ?>" data-allow_clear="true">
 			<?php 
 			if($this->customer_searched){
 			    ?>
@@ -697,7 +704,8 @@ class WShop_Order_List_Table extends WP_List_Table {
 			}
 			?>
 		</select>
-		 <select class="wshop-product-search" name="_pid" data-sortable="true" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', WSHOP); ?>" data-allow_clear="true">
+		<style type="text/css">.select2-container {width: 200px !important;}</style>
+		 <select class="wshop-search" data-type='product' name="_pid" data-sortable="true" data-placeholder="<?php echo __( 'Search for a product(ID/post_title)&hellip;', WSHOP); ?>" data-allow_clear="true">
 			<?php 
 			if($this->product_searched){
 			    ?>
@@ -724,6 +732,7 @@ class WShop_Order_List_Table extends WP_List_Table {
             'trash' => esc_html__( 'Move to trash', WSHOP ),
             'mark_processing' => esc_html__( 'Mark as Processing', WSHOP ),
             'mark_complete' => esc_html__( 'Mark as Complete', WSHOP ),
+            'mark_canceled' => esc_html__( 'Mark as Canceled', WSHOP ),
             'mark_pending' => esc_html__( 'Mark as Pending', WSHOP )
         );
     }
@@ -819,6 +828,7 @@ class WShop_Order_List_Table extends WP_List_Table {
 	    ));
     ?>
         <a href="<?php echo $edit_url;?>" class="row-title"><strong>#<?php echo $item->id?></strong></a>
+       
         <?php if($item->customer_id){
             $user = get_user_by('id', $item->customer_id);
             if($user){
@@ -874,6 +884,13 @@ class WShop_Order_List_Table extends WP_List_Table {
                ?>
                 <small class="meta"><?php echo sprintf(__('via %s',WSHOP),$payment_gateway->title)?></small>
                <?php 
+           }
+           
+           if(!empty($item->sn)){
+               ?><div><b>SN:</b> <br/><?php echo $item->sn;?></div><?php
+           }
+           if(!empty($item->transaction_id)){
+               ?><div><b>TRANSACTION ID:</b> <br/><?php echo $item->transaction_id;?></div><?php 
            }
        }
     }

@@ -69,6 +69,9 @@ class WShop_Email extends WShop_Object{
      * @return boolean
      */
     public function send($settings,$message){
+        if('yes'!=WShop_Settings_Default_Basic_Default::instance()->get_option('enable_mail','yes')){
+            return;
+        }
         if(!$this->enabled){return;}
         $admin_email =get_option('admin_email');
         $defaults = array(
@@ -94,7 +97,12 @@ class WShop_Email extends WShop_Object{
         }
         
         try {
-            return @wp_mail($recipients, $subject, $message,self::$email_types[$this->email_type]);
+            //不触发第三方的wp_mail_failed事件
+            remove_all_filters('wp_mail_failed');
+            add_filter('wp_mail_failed', function($error){
+                throw new Exception($error->get_error_message(),$error->get_error_code());
+            },10,1);
+            return @wp_mail(array_unique($recipients), $subject, $message,self::$email_types[$this->email_type]);
         } catch (Exception $e) {
             WShop_Log::error($e->getMessage());
             return false;

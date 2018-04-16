@@ -2,10 +2,7 @@
 if (! defined('ABSPATH')) {
     exit();
 }
-
-$data = WShop_Temp_Helper::get('atts','templates');
-$request = $data['request'];
-$context = $request['context'];
+$context = WShop_Temp_Helper::clear('atts','templates');
 ?>
 <div class="block20"></div>
 <div class="xh-title-soft clearfix"><?php echo __('Payment method',WSHOP)?></div>
@@ -41,5 +38,5 @@ $context = $request['context'];
 </script>
 <?php 
 
-do_action('wshop_checkout_order_pay_payments',$request);
+do_action('wshop_checkout_order_pay_payments',$context);
 ?>

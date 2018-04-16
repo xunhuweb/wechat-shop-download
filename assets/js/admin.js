@@ -53,17 +53,26 @@ jQuery( function( $ ) {
 	}
 
 	try {
-			var wshop_types=['customer','product'];
-			$(document).trigger('wshop_enhanced_select_types',[wshop_types]);
+			//var wshop_types=[];
+			//$(document).trigger('wshop_enhanced_select_types',[wshop_types]);
 			$( document.body ).on( 'wshop-enhanced-select-init', function() {
 				
 				// Ajax search boxes
-				function on_obj_search(obj_type){
-					$( ':input.wshop-'+obj_type+'-search' ).filter( ':not(.enhanced)' ).each( function() {
+				window.wsocial_function_on_obj_search=function(filter){
+					$( filter ).filter( ':not(.enhanced)' ).each( function() {
+						var obj_type = $( this ).data( 'type' );
+						var custom_params = $( this ).data( 'custom_params' );
+						if(custom_params&&typeof custom_params=='string'){
+							custom_params = jQuery.parseJSON(custom_params);
+						}
+						
+						if(!custom_params||typeof custom_params!='object'){custom_params={};}
+						
 						var select2_args = {
+							multiple: $( this ).data( 'multiple' )=='1'?true:false,
 							allowClear:  $( this ).data( 'allow_clear' ) ? true : false,
 							placeholder: $( this ).data( 'placeholder' ),
-							minimumInputLength: $( this ).data( 'minimum_input_length' ) ? $( this ).data( 'minimum_input_length' ) : '1',
+							minimumInputLength: $( this ).data( 'minimum_input_length' ) ? $( this ).data( 'minimum_input_length' ) : '0',
 							escapeMarkup: function( m ) {
 								return m;
 							},
@@ -72,10 +81,10 @@ jQuery( function( $ ) {
 								dataType:    'json',
 								delay:       250,
 								data:        function( params ) {
-									return {
-										obj_type:obj_type,
-										term:params.term
-									};
+									custom_params.obj_type=obj_type;
+									custom_params.term=params.term;
+									
+									return custom_params;
 								},
 								processResults: function( data ) {
 									if ( data &&data.items) {
@@ -95,31 +104,11 @@ jQuery( function( $ ) {
 						select2_args = $.extend( select2_args, getEnhancedSelectFormatString() );
 
 						$( this ).select2( select2_args ).addClass( 'enhanced' );
-
-						/*if ( $( this ).data( 'sortable' ) ) {
-							var $select = $(this);
-							var $list   = $( this ).next( '.select2-container' ).find( 'ul.select2-selection__rendered' );
-
-							$list.sortable({
-								placeholder : 'ui-state-highlight select2-selection__choice',
-								forcePlaceholderSize: true,
-								items       : 'li:not(.select2-search__field)',
-								tolerance   : 'pointer',
-								stop: function() {
-									$( $list.find( '.select2-selection__choice' ).get().reverse() ).each( function() {
-										var id     = $( this ).data( 'data' ).id;
-										var option = $select.find( 'option[value="' + id + '"]' )[0];
-										$select.prepend( option );
-									} );
-								}
-							});
-						}*/
 					});
 				}
 				
-				for(var i=0;i<wshop_types.length;i++){
-					on_obj_search(wshop_types[i]);
-				}
+				window.wsocial_function_on_obj_search(':input.wshop-search');
+				$(document).trigger('wshop-on-select2-inited');
 			})
 			.trigger( 'wshop-enhanced-select-init' );
 
@@ -127,9 +116,7 @@ jQuery( function( $ ) {
 			
 			$( 'html' ).on( 'click', function( event ) {
 				if ( this === event.target ) {
-					for(var i=0;i<wshop_types.length;i++){
-						$( ':input.wshop-'+wshop_types[i]+'-search' ).filter( '.select2-hidden-accessible' ).select2( 'close' );
-					}
+					$( ':input.wshop-search' ).filter( '.select2-hidden-accessible' ).select2( 'close' );
 				}
 			});
 		

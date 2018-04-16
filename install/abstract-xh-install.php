@@ -67,7 +67,7 @@ if (! class_exists('Abstract_XH_Install')) {
             $this->_unzip_file_pclzip($file, $to);
         }
 
-        private function _unzip_file_pclzip($file, $to)
+        public function _unzip_file_pclzip($file, $to)
         {
             mbstring_binary_safe_encoding();
             
@@ -169,7 +169,7 @@ if (! class_exists('Abstract_XH_Install')) {
             }
         }
 
-        private function _unzip_file_ziparchive($file, $to)
+        public function _unzip_file_ziparchive($file, $to)
         {
             if (! class_exists('ZipArchive')) {
                 throw new Exception('PHP ZipArchive is missing!');
@@ -292,7 +292,7 @@ if (! class_exists('Abstract_XH_Install')) {
             $z->close();
         }
 
-        protected function load_writeable_dir($dir, $create_if_not_exists = true)
+        public function load_writeable_dir($dir, $create_if_not_exists = true)
         {
             try {
                 if (! @is_dir($dir)) {
@@ -314,7 +314,7 @@ if (! class_exists('Abstract_XH_Install')) {
             return true;
         }
 
-        protected function load_readable_dir($dir, $create_if_not_exists = true)
+        public function load_readable_dir($dir, $create_if_not_exists = true)
         {
             try {
                 if (! @is_dir($dir)) {
@@ -379,7 +379,7 @@ if (! class_exists('Abstract_XH_Install')) {
             }
             
             $key = plugin_basename($this->plugin_file());
-            if (! $xh_install_plugins[$key]) {
+            if (! isset($xh_install_plugins[$key])) {
                 $xh_install_plugins[$key] = array();
             }
             
@@ -387,7 +387,7 @@ if (! class_exists('Abstract_XH_Install')) {
             update_option('xh_install_plugins', $xh_install_plugins, true);
         }
 
-        protected function capability($roles = array('administrator'))
+        public function capability($roles = array('administrator'))
         {
             global $current_user;
             if (! is_user_logged_in()) {}
@@ -457,7 +457,7 @@ if (! class_exists('Abstract_XH_Install')) {
             exit();
         }
 
-        protected function get_plugin_info()
+        public function get_plugin_info()
         {
             $path = $this->plugin_file();
             if (! is_readable($path)) {
@@ -503,7 +503,7 @@ if (! class_exists('Abstract_XH_Install')) {
             return $url;
         }
 
-        protected function generate_hash(array $datas)
+        public function generate_hash(array $datas)
         {
             ksort($datas);
             reset($datas);
@@ -518,7 +518,7 @@ if (! class_exists('Abstract_XH_Install')) {
                     $arg .= "&";
                 }
                 
-                if (! is_string($val) && ! is_integer($val)) {
+                if (! is_string($val) && ! is_numeric($val)) {
                     continue;
                 }
                 $arg .= "$key=$val";

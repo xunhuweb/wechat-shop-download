@@ -71,7 +71,7 @@ class WShop_Async{
     
     public  function async_call($shortcode,$before,$after,$default_atts, &$atts,&$content){
         if(!$atts||!is_array($atts)){$atts=array();}
-         
+        $atts['context']= WShop_Helper::generate_unique_id();
         $atts =$this->shortcode_atts($default_atts,$atts);
         if(!WShop_Async::instance()->is_asyncing){
             $before($atts,$content);
@@ -91,7 +91,7 @@ class WShop_Async{
      * @since 1.0.1
      */
     public function scripts($hook,$atts=array(),$content=null){
-        $async_context = strtolower(WShop_Helper_String::guid());
+        $async_context =WShop_Helper::generate_unique_id();
         $async_request = array(
             'action'=>'wshop_async_load',
             'hook'=>$hook,

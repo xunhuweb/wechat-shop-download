@@ -62,10 +62,29 @@ class WShop_Settings_Checkout_Options extends Abstract_WShop_Settings{
               
           ));
         
-           $form_fields1 =apply_filters('wshop_checkout_options_2', array());
+       $form_fields1 =apply_filters('wshop_checkout_options_2', array(
+           'modal_title'=>array(
+               'title'=>__('Checkout modal',WSHOP),
+               'type'=>'subtitle'
+           ),
+           'modal'=>array(
+               'title'=>__('Modal',WSHOP),
+               'type'=>'section',
+               'options'=>array(
+                   'shopping_list'=>'弹窗+支付按钮跳转',
+                   'shopping_one_step'=>'弹窗+微信/支付宝扫码',
+                   'shopping_cart'=>'购物车+结算页面'
+               )
+           ),
+            'enable_inventory'=>array(
+              'tr_css'=>'section-modal section-shopping_cart',
+              'title'=>__('Enable inventory',WSHOP),
+              'type'=>'checkbox'
+            )
+       ));
            
-       
-        $this->form_fields = array_merge($form_fields,$form_fields1);
+        $form_fields2 =apply_filters('wshop_checkout_options_3', array());
+        $this->form_fields = array_merge($form_fields,$form_fields1,$form_fields2);
     }
 }
 ?>

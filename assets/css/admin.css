@@ -1,3 +1,4 @@
+.subsection{margin-left:40px;}
 /*--------select 2----------*/
 .select2-container {
 	box-sizing: border-box;
@@ -335,7 +336,7 @@
 
 .select2-container--default.select2-container--focus .select2-selection--multiple
 	{
-	border: 1px solid #000;
+	width:400px;
 	outline: 0
 }
 
@@ -785,7 +786,7 @@
 
 .select2-container {
 	float: left;
-	width: 200px !important;
+	width: 400px !important;
 	font-size: 14px;
 	vertical-align: middle;
 	margin: 1px 6px 4px 1px
@@ -1288,11 +1289,11 @@ ul.order_notes li p.meta {
     box-sizing: border-box;
 }
 
-.panel, .wshop_page_settings .wshop_options_panel {
+.wshop_page_settings .wshop_options_panel {
     padding: 0;
 }
 
-.panel, .wshop_options_panel {
+.wshop_options_panel {
     padding: 9px;
     color: #555;
 }
@@ -1308,7 +1309,7 @@ ul.order_notes li p.meta {
     padding: 5px 9px;
     line-height: 24px;
 }
-.panel, .wshop_options_panel {
+.wshop_options_panel {
     padding: 9px;
     color: #555;
 }
@@ -1325,7 +1326,7 @@ ul.order_notes li p.meta {
     padding: 0;
     margin: 0 0 0 -150px;
 }
-.panel, .wshop_options_panel {
+.wshop_options_panel {
     padding: 9px;
     color: #555;
 }
@@ -1344,7 +1345,7 @@ ul.order_notes li p.meta {
     padding: 5px 9px;
     line-height: 24px;
 }
-.panel, .wshop_options_panel {
+.wshop_options_panel {
     padding: 9px;
     color: #555;
 }

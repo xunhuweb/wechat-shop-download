@@ -8,6 +8,7 @@ class WShop_Page{
     
     public static function init(){
         add_filter( 'theme_page_templates',__CLASS__.'::theme_page_templates',10,4);
+        add_filter( 'page_template_hierarchy', __CLASS__.'::page_template_hierarchy' ,10,1);
         add_filter( 'template_include', __CLASS__.'::template_include' ,10,1);
         
         //template must be start with shop.
@@ -54,43 +55,40 @@ class WShop_Page{
         return true;
     }
     
-
-    /**
-     * rewrite page templates
-     * @param string $template
-     * @return string
-     */
+    private static $_templates = array();
+    public static function page_template_hierarchy($templates){  
+        if(!is_page()){
+            return $templates;
+        }
+        
+        self::$_templates=$templates;
+        
+        return $templates;
+    }
+    
     public static function template_include($template){
-        global $post;
-        if(!$post||$post->post_type!='page'){
+        //兼容4.7.0版本之前，没有page_template_hierarchy 这个钩子函数
+        if(count(self::$_templates)==0&&!did_action('page_template_hierarchy')){
+            self::$_templates[] = get_page_template_slug();
+        }
+        
+        if(!is_page()||count(self::$_templates)==0){
             return $template;
         }
-         
-        $page_template = get_page_template_slug($post);
-        if(empty($page_template)){
-            return $template;
+       
+        $default_template = self::$_templates[0];
+        if(file_exists(STYLESHEETPATH.'/wechat-shop/'.$default_template)){
+            return STYLESHEETPATH.'/wechat-shop/'.$default_template;
         }
-         
-        if($page_template==$template){
-            return $template;
-        }
-         
-        //加载插件默认模板
+        
         foreach ( self::$page_templates as $dir=>$templates){
             foreach ($templates as $ltemplate=>$name){
-                if($page_template==$ltemplate){
-                    if(file_exists(STYLESHEETPATH.'/wechat-shop/'.$page_template)){
-                        return STYLESHEETPATH.'/wechat-shop/'.$page_template;
-                    }
-    
-                    $file = $dir.'/templates/'.$ltemplate;
-                    if(file_exists($file)){
-                        return $file;
-                    }
+                if($default_template==$ltemplate){
+                    return $dir.'/templates/'.$ltemplate;
                 }
             }
         }
-    
+       
         return $template;
     }
     

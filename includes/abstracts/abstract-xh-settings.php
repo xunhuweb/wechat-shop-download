@@ -34,6 +34,12 @@ abstract class Abstract_WShop_Settings {
 	public $title = '';
 	
 	/**
+	 * menu title
+	 * @var string
+	 */
+	public $menu_title='';
+	
+	/**
 	 * Method description.
 	 * 
 	 * @var string
@@ -76,18 +82,19 @@ abstract class Abstract_WShop_Settings {
 	public $sanitized_fields = array ();
 	
 	public function admin_form_start(){
-	    if( isset($_POST['notice-'.$this->id])){
-	        if(wp_verify_nonce($_POST['notice-'.$this->id], WShop::instance()->session->get_notice('admin:form:'.$this->id,true))){
-	           $this->process_admin_options(); 
-	           
-	        }else{
-	            $this->errors[]=WShop_Error::err_code(701)->errmsg;
-	            $this->display_errors();
-	        }
-	    }
-	    ?><form method="post" id="mainform" action="" enctype="multipart/form-data"><?php
+    	    if( isset($_POST['notice-'.$this->id])){
+    	        if(wp_verify_nonce($_POST['notice-'.$this->id], WShop::instance()->session->get_notice('admin:form:'.$this->id,true))){
+    	           $this->process_admin_options(); 
+    	           
+    	        }else{
+    	            $this->errors[]=WShop_Error::err_code(701)->errmsg;
+    	            $this->display_errors();
+    	        }
+    	    }
+    	    ?><form method="post" id="mainform" action="" enctype="multipart/form-data"><?php
+	  
 	}
-
+	
 	/**
 	 * Admin Options.
 	 *
@@ -96,32 +103,33 @@ abstract class Abstract_WShop_Settings {
 	 *
 	 * @since 1.0.0
 	 */
-	public function admin_options() {	    
+	public function admin_options() {	
+    	      ?>
+    	    <style type="text/css">
+                .form-table tr{display:block;}
+            </style>
+            <h3><?php echo ( ! empty( $this->title ) ) ? $this->title : __( 'Settings') ; ?></h3>
+            <?php echo ( ! empty( $this->description ) ) ? wpautop( $this->description ) : ''; ?>
+            
+            <?php do_action('wshop_admin_options_header_'.$this->id)?>
+            
+            <input type="hidden" name="action" value="<?php print esc_attr($this->id)?>"/>
+            <table class="form-table">
+    			<?php $this->generate_settings_html(); ?>
+    		</table>
+    		<?php
+	}
+
+	public function post_options() {
+	   $title = isset($this->menu_title)&&!empty($this->menu_title)?$this->menu_title:$this->title;
 	      ?>
 	    <style type="text/css">
             .form-table tr{display:block;}
         </style>
-        <h3><?php echo ( ! empty( $this->title ) ) ? $this->title : __( 'Settings') ; ?></h3>
+        <h3><?php echo  ! empty( $title)  ?$title: __( 'Settings') ; ?></h3>
         <?php echo ( ! empty( $this->description ) ) ? wpautop( $this->description ) : ''; ?>
         
-        <?php do_action('wshop_admin_options_header_'.$this->id)?>
-        
-        <input type="hidden" name="action" value="<?php print esc_attr($this->id)?>"/>
-        <table class="form-table">
-			<?php $this->generate_settings_html(); ?>
-		</table>
-		<?php
-	}
-	
-	public function post_options() {
-	    ?>
-	    <style type="text/css">
-            .form-table tr{display:block;}
-        </style>
-        <h3><?php echo ( ! empty( $this->title ) ) ? $this->title : __( 'Settings') ; ?></h3>
-        <?php echo ( ! empty( $this->description ) ) ? wpautop( $this->description ) : ''; ?>
-        
-        <?php do_action('wshop_admin_options_header_'.$this->id)?>
+        <?php do_action('xh_social_admin_options_header_'.$this->id)?>
         
         <input type="hidden" name="action" value="<?php print esc_attr($this->id)?>"/>
         <table class="form-table">
@@ -131,12 +139,14 @@ abstract class Abstract_WShop_Settings {
 	}
 	
 	public function admin_form_end(){
-	   ?><p class="submit">
-			<input type="hidden" name="notice-<?php print $this->id?>" value="<?php print wp_create_nonce ( WShop::instance()->session->get_notice('admin:form:'.$this->id));?>"/>
-			<input type="submit" value="<?php print __('Save Changes')?>" class="button-primary" />
-		 </p>
-		</form><?php
+    	   ?><p class="submit">
+    			<input type="hidden" name="notice-<?php print $this->id?>" value="<?php print wp_create_nonce ( WShop::instance()->session->get_notice('admin:form:'.$this->id));?>"/>
+    			<input type="submit" value="<?php print __('Save Changes')?>" class="button-primary" />
+    		 </p>
+    		</form><?php
+	    
 	}
+	
 	/**
 	 * Initialise Settings Form Fields.
 	 *
@@ -355,13 +365,13 @@ abstract class Abstract_WShop_Settings {
 	    }
 	
 	    foreach ($wp_post_types as $key=>$type){
-	        if(in_array($key, array('page','attachment'))){continue;}
+	        if(in_array($key, array('attachment'))){continue;}
 	
-	        if($type->show_ui&&$type->public){
-	            $types[$type->name]=(empty($type->label)?$type->name:$type->label).'('.$type->name.')';
+	        if($type->show_ui&&$type->public&&!(isset($type->wshop_ignore)&&$type->wshop_ignore)){
+	            $types[$key]=isset($type->label)&& !empty($type->label)?"{$type->label}({$key})":$key;
 	        }
 	    }
-	    return $types;
+	    return apply_filters('wshop_post_types', $types);
 	}
 	
 	/**
@@ -503,7 +513,7 @@ abstract class Abstract_WShop_Settings {
 	 * @return string
 	 */
 	public function get_tooltip_html($data) {
-		if ($data ['desc_tip'] === true) {
+	    if (isset($data ['desc_tip'])&&$data ['desc_tip'] === true) {
 			$tip = $data ['description'];
 		} elseif (! empty ( $data ['desc_tip'] )) {
 			$tip = $data ['desc_tip'];
@@ -587,52 +597,51 @@ abstract class Abstract_WShop_Settings {
 	    $data = wp_parse_args ( $data, $defaults );
 	
 	    ob_start ();
-	    ?>
-        <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>" data-type="section" data-key="<?php echo esc_attr($key)?>">
-        	<th scope="row" class="titledesc"><label
-        		for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
-        					<?php echo $this->get_tooltip_html( $data ); ?>
-        				</th>
-        	<td class="forminp">
-        		<fieldset>
-        			<legend class="screen-reader-text">
-        				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
-        			</legend>
-        			<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
-					<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
-						<option value="<?php echo esc_attr( $option_key ); ?>"
-			           <?php selected( $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
-					<?php endforeach; ?>
-				</select>
-				<?php echo $this->get_description_html( $data ); ?>
-			</fieldset>
-				<script type="text/javascript">
-				(function($){
-					window.on_<?php echo esc_attr( $key ); ?>_change=function(){
-						<?php foreach ( $data['options'] as $k=>$val){
-						    ?>
-						    $('.section-<?php echo esc_attr($k)?>.section-<?php echo esc_attr($key)?>').css('display','none');
-						    <?php 
-						}?>
-						
-						$('.section-<?php echo esc_attr($key)?>.section-'+$('#<?php echo esc_attr( $field ); ?>').val()).css('display','block');
-					}
-					
-					$(function(){
-						window.on_<?php echo esc_attr($key ); ?>_change();
-						if(window.after_onload){window.after_onload();}
-					});
-					
-					$('#<?php echo esc_attr( $field ); ?>').change(function(){
-						window.on_<?php echo esc_attr(  $key ); ?>_change();
-					});
-					
-				})(jQuery);
-			</script>
-        	</td>
-        </tr>
-        
-        <?php
+    	    ?>
+            <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>" data-type="section" data-key="<?php echo esc_attr($key)?>">
+            	<th scope="row" class="titledesc"><label
+            		for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+            					<?php echo $this->get_tooltip_html( $data ); ?>
+            				</th>
+            	<td class="forminp">
+            		<fieldset>
+            			<legend class="screen-reader-text">
+            				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
+            			</legend>
+            			<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
+    					<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
+    						<option value="<?php echo esc_attr( $option_key ); ?>"
+    			           <?php selected( $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
+    					<?php endforeach; ?>
+    				</select>
+    				<?php echo $this->get_description_html( $data ); ?>
+    			</fieldset>
+    				<script type="text/javascript">
+    				(function($){
+    					window.on_<?php echo esc_attr( $key ); ?>_change=function(){
+    						<?php foreach ( $data['options'] as $k=>$val){
+    						    ?>
+    						    $('.section-<?php echo esc_attr($k)?>.section-<?php echo esc_attr($key)?>').css('display','none');
+    						    <?php 
+    						}?>
+    						
+    						$('.section-<?php echo esc_attr($key)?>.section-'+$('#<?php echo esc_attr( $field ); ?>').val()).css('display','block');
+    					}
+    					
+    					$(function(){
+    						window.on_<?php echo esc_attr($key ); ?>_change();
+    						if(window.after_onload){window.after_onload();}
+    					});
+    					
+    					$('#<?php echo esc_attr( $field ); ?>').change(function(){
+    						window.on_<?php echo esc_attr(  $key ); ?>_change();
+    					});
+    					
+    				})(jQuery);
+    			</script>
+            	</td>
+            </tr>
+            <?php
 		
 		return ob_get_clean ();
 	}
@@ -656,58 +665,58 @@ abstract class Abstract_WShop_Settings {
 	
 	    ob_start ();
 	    ?>
-	    <tr class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
-    	    <td colspan="2" style="display:block;margin:0;padding:0;">
-        	    <hr/>
-               <h4 class="nav-tab-wrapper woo-nav-tab-wrapper">
-               <?php 
-                foreach ($data['options'] as $k=>$val){
-                    ?><a href="javascript:void(0);" class="nav-tab nav-tab-<?php echo esc_attr($field); ?>" data-key="<?php echo esc_attr($k)?>" style="font-size:8px;line-height:18px;"><?php echo $val;?></a><?php 
-                }
-               ?>
-               </h4>
-               
-               <script type="text/javascript">
-            		(function($){
-                		var $tabs =$('.nav-tab-<?php echo esc_attr($field); ?>');
-                		if( $tabs.length>0){
-                   		 	$tabs.click(function(){
-                				<?php foreach ( $data['options'] as $k=>$val){
-                				    ?>
-                				    $('.tab-<?php echo esc_attr($key); ?>.tab-<?php echo esc_attr($k)?>').css('display','none');
-                				    <?php 
-                				}?>
-                				
-                				$('.nav-tab-<?php echo esc_attr($field); ?>.nav-tab-active').removeClass('nav-tab-active');
-                				$(this).addClass('nav-tab-active');
-								var sections = [];
-                				$('.tab-<?php echo esc_attr($key); ?>.tab-'+$(this).attr('data-key')).each(function(){
-									var data_type = $(this).attr('data-type');
-									if(data_type=='section'){
-										sections.push('window.on_'+$(this).attr('data-key')+'_change()');
-									}
-
-									$(this).css('display','block');
-                    			});
-
-								for(var i=0;i<sections.length;i++){
-									eval(sections[i]);
-								}
-                    		});
-
-                   	        window.after_onload=function(){
-                   	        	$tabs.first().click();
-                       	    };
-                      		$(function(){
-                      			$tabs.first().click();
-                          	});
-                		}
-            		})(jQuery);
-            	</script>
-    	    </td>
-	    </tr>
-       
-        <?php
+    	    <tr class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
+        	    <td colspan="2" style="display:block;margin:0;padding:0;">
+            	    <hr/>
+                   <h4 class="nav-tab-wrapper woo-nav-tab-wrapper">
+                   <?php 
+                    foreach ($data['options'] as $k=>$val){
+                        ?><a href="javascript:void(0);" class="nav-tab nav-tab-<?php echo esc_attr($field); ?>" data-key="<?php echo esc_attr($k)?>" style="font-size:8px;line-height:18px;"><?php echo $val;?></a><?php 
+                    }
+                   ?>
+                   </h4>
+                   
+                   <script type="text/javascript">
+                		(function($){
+                    		var $tabs =$('.nav-tab-<?php echo esc_attr($field); ?>');
+                    		if( $tabs.length>0){
+                       		 	$tabs.click(function(){
+                    				<?php foreach ( $data['options'] as $k=>$val){
+                    				    ?>
+                    				    $('.tab-<?php echo esc_attr($key); ?>.tab-<?php echo esc_attr($k)?>').css('display','none');
+                    				    <?php 
+                    				}?>
+                    				
+                    				$('.nav-tab-<?php echo esc_attr($field); ?>.nav-tab-active').removeClass('nav-tab-active');
+                    				$(this).addClass('nav-tab-active');
+    								var sections = [];
+                    				$('.tab-<?php echo esc_attr($key); ?>.tab-'+$(this).attr('data-key')).each(function(){
+    									var data_type = $(this).attr('data-type');
+    									if(data_type=='section'){
+    										sections.push('window.on_'+$(this).attr('data-key')+'_change()');
+    									}
+    
+    									$(this).css('display','block');
+                        			});
+    
+    								for(var i=0;i<sections.length;i++){
+    									eval(sections[i]);
+    								}
+                        		});
+    
+                       	        window.after_onload=function(){
+                       	        	$tabs.first().click();
+                           	    };
+                          		$(function(){
+                          			$tabs.first().click();
+                              	});
+                    		}
+                		})(jQuery);
+                	</script>
+        	    </td>
+    	    </tr>
+           
+            <?php
 		
 		return ob_get_clean ();
 	}
@@ -748,12 +757,48 @@ abstract class Abstract_WShop_Settings {
         			<legend class="screen-reader-text">
         				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
         			</legend>
-        			<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
+        			<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo $data['type']!='password'? esc_attr( $this->get_option( $key ) ):null; ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
 					<?php echo $this->get_description_html( $data ); ?>
 				</fieldset>
         	</td>
         </tr>
         <?php
+		
+		return ob_get_clean ();
+	}
+	 
+	/**
+	 * Generate Text Input HTML.
+	 *
+	 * @param mixed $key
+	 * @param mixed $data
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public function generate_hidden_html($key, $data) {
+	    $field = $this->get_field_key ( $key );
+	    $defaults = array (
+	        'title' => '',
+	        'disabled' => false,
+	        'class' => '',
+	        'css' => 'min-width:400px;',
+	        'placeholder' => '',
+	        'type' => 'hidden',
+	        'desc_tip' => false,
+	        'description' => '',
+	        'custom_attributes' => array ()
+	    );
+	
+	    $data = wp_parse_args ( $data, $defaults );
+	
+	    ob_start ();
+	        ?>
+	        <tr style="display:none;">
+	        	<td>
+	        		<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="<?php echo esc_attr( $data['type'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo $data['type']!='password'? esc_attr( $this->get_option( $key ) ):null; ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
+	        	</td>
+	        </tr>
+	        <?php
 		
 		return ob_get_clean ();
 	}
@@ -803,6 +848,7 @@ abstract class Abstract_WShop_Settings {
 		
 		return ob_get_clean ();
 	}
+	
 	
 	/**
 	 * Generate Decimal Input HTML.
@@ -857,12 +903,72 @@ abstract class Abstract_WShop_Settings {
 	        'disabled' => false,
 	        'class' => '',
 	        'css' => '',
-	        'format'=>'yyyy-MM-dd HH:mm',
+	        'format'=>'Y-m-d H:i',
+	        'data_format'=>'date',//date|time
+	        'format_js'=>'yyyy-MM-dd HH:mm',
+	        'placeholder' => '',
+	        'type' => 'text',
+	        'default'=>null,
+	        'desc_tip' => false,
+	        'description' => '',
+	        'custom_attributes' => array ()
+	    );
+	
+	    $data = wp_parse_args ( $data, $defaults );
+	
+		$val = $this->get_option( $key,$data['default'] );
+		if($val){
+			$val =date($data['format'],is_numeric($val)?$val:strtotime($val) );
+		}
+		
+	    ob_start ();
+	    ?>
+	        <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
+	        	<th scope="row" class="titledesc">
+	        		<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+	        		<?php echo $this->get_tooltip_html( $data ); ?>
+	        	</th>
+	        	<td class="forminp">
+	        		<fieldset>
+	        			<legend class="screen-reader-text">
+	        				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
+	        			</legend>
+	        			<input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $val ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
+	        			<script type="text/javascript">
+								jQuery(function($){
+									$("#<?php echo esc_attr( $field ); ?>").focus(function() {
+                              			WdatePicker({
+                              				dateFmt: '<?php echo $data['format_js']?>'
+                              			});
+                              		});
+								});
+	        			</script>
+	        			<?php echo $this->get_description_html( $data ); ?>
+	        		</fieldset>
+	        	</td>
+	        </tr>
+	        <?php
+			
+		return ob_get_clean ();
+	}
+	
+	public function generate_image_html($key, $data) {
+	    $field = $this->get_field_key ( $key );
+	    $defaults = array (
+	        'title' => '',
+	        'disabled' => false,
+	        'class' => '',
+	        'css' => '',
 	        'placeholder' => '',
 	        'type' => 'text',
 	        'desc_tip' => false,
 	        'description' => '',
-	        'custom_attributes' => array ()
+	        'custom_attributes' => array (),
+	        'validate'=>function($key,$api){
+    	       $field = $api->get_field_key($key);
+    	       $data = isset($_POST[$field])?stripslashes($_POST[$field]):null;
+	            return $data;
+	        }
 	    );
 	
 	    $data = wp_parse_args ( $data, $defaults );
@@ -879,26 +985,190 @@ abstract class Abstract_WShop_Settings {
 	        			<legend class="screen-reader-text">
 	        				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
 	        			</legend>
-	        			<input class="wc_input_decimal input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( ( $this->get_option( $key ) ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?> />
-	        			<script type="text/javascript">
-								jQuery(function($){
-									$("#<?php echo esc_attr( $field ); ?>").focus(function() {
-                              			WdatePicker({
-                              				dateFmt: '<?php echo $data['format']?>'
-                              			});
-                              		});
-								});
-	        			</script>
+	        			
+						<img id="<?php echo esc_attr( $field ); ?>-img" style="max-width:100px;max-height:100px;" src="<?php echo esc_attr(  $this->get_option( $key ) ); ?>">
+						<input type="hidden" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" value="<?php echo esc_attr(  $this->get_option( $key ) ); ?>" />
+						<input type="button" class="button" id="btn-<?php echo esc_attr( $field ); ?>-upload-img" value="<?php echo __('Upload Image',WSHOP)?>" />
+						<a href="javascript:void(0);" style="margin-left:5px;" id="btn-<?php echo esc_attr( $field ); ?>-remove"><?php echo __('Remove',WSHOP)?></a>
+						<script type="text/javascript">
+						(function($){
+							$('#btn-<?php echo esc_attr( $field ); ?>-upload-img').click(function() {  
+								var send_attachment_bkp = wp.media.editor.send.attachment;
+							    wp.media.editor.send.attachment = function(props, attachment) {
+								    
+							        $('#<?php echo esc_attr( $field ); ?>').val(attachment.url);
+							        $('#<?php echo esc_attr( $field ); ?>-img').attr('src',attachment.url);
+							        wp.media.editor.send.attachment = send_attachment_bkp;
+							    }
+							    wp.media.editor.open();
+							    return false;    
+						    });   
+						    $('#btn-<?php echo esc_attr( $field ); ?>-remove').click(function(){
+								if(confirm('<?php echo __('Are you sure?',WSHOP)?>')){
+									$('#<?php echo esc_attr( $field ); ?>').val('');
+									$('#<?php echo esc_attr( $field ); ?>-img').attr('src','');
+								}
+							});
+						})(jQuery);
+						</script>
+	        			
 	        			<?php echo $this->get_description_html( $data ); ?>
 	        		</fieldset>
 	        	</td>
 	        </tr>
 	        <?php
-			
-			return ob_get_clean ();
-		}
+		return ob_get_clean ();
+	}
 	
-	public function generate_image_html($key, $data) {
+	/*public function generate_img_html($key, $data){
+	    $data = wp_parse_args ( $data, $defaults );
+	    
+	    $singles = explode('x', $data['size']);
+	    $img_size=array(
+	        'width'=>0,
+	        'height'=>0
+	    );
+	    switch (count($singles)){
+	        case 1:
+	            $img_size=array(
+	            'width'=>absint($singles[0]),
+	            'height'=>absint($singles[0]),
+	            );
+	            break;
+	        case 2:
+	            $img_size=array(
+	            'width'=>absint($singles[0]),
+	            'height'=>absint($singles[1]),
+	            );
+	            break;
+	    }
+	    
+	    $default_val=array();
+	    if(!empty($default)){
+	        $default_val = WShop::instance()->generate_request_params(array(
+	            'url'=>$data['default']
+	        ));
+	    }
+	     
+	    if(!defined('xh_webuploader')){
+	        define('xh_webuploader', 'xh_webuploader');
+	        ?>
+	        <style type="text/css">
+	        .webuploader-container {
+	        	position: relative;
+	        }
+	        .webuploader-element-invisible {
+	        	position: absolute !important;
+	        	clip: rect(1px 1px 1px 1px); 
+	            clip: rect(1px,1px,1px,1px);
+	        }
+	        
+	        .webuploader-pick {
+	        	position: relative;
+	        	display: inline-block;
+	        	cursor: pointer;
+	        	background: #337ab7;
+	        	padding: 4px 12px;
+	        	color: #fff;
+	        	text-align: center;
+	        	border-radius: 3px;
+	        	overflow: hidden;
+	        	margin-top:5px;
+	        	
+	        }
+	        .webuploader-pick-hover {
+	        	background: #00a2d4;
+	        }
+	        
+	        .webuploader-pick-disable {
+	        	opacity: 0.6;
+	        	pointer-events:none;
+	        }
+	        </style>
+	    	<script type="text/javascript" src="<?php echo WSHOP_URL?>/assets/webuploader-0.1.7-alpha/webuploader.js"></script>
+	        <?php 
+	    }
+	    
+	    $input_id = $field;
+	    $input_name = $field;
+	    $required = $data['required'];
+	    $description = $data['description'];
+	    $label = $data['title'];
+	    $default = $data['default'];
+	    ?>
+		<div class="xh-form-group" id="form-group-<?php echo $input_id?>">
+            <label class="<?php echo $required?"required":""?>"><?php echo $label;?></label>
+            <div>
+            	<img class="thumbnail" id="image-<?php print $input_id;?>" src="<?php echo esc_url($default)?>" style="max-width:80px;max-height:80px;"/>
+            	<div id="image-<?php print $input_id;?>-picker"><?php echo __('Upload image',WSHOP)?></div>
+            	 
+                <span class="help-block"><?php echo $description?></span>
+                <input type="hidden" value="<?php echo esc_attr(json_encode($default_val))?>" name="<?php echo $input_name;?>" id="<?php echo $input_id;?>"/>
+            </div>
+        </div>
+        <script type="text/javascript">
+        	(function($){
+        		if ( !WebUploader.Uploader.support() ) {
+        	       return;
+        	    }
+        
+        		var <?php print $input_id;?>_config ={
+        			swf:'<?php echo WSHOP_URL.'/assets/webuploader-0.1.5/Uploader.swf'?>',
+        			server:'<?php echo WSHOP::instance()->ajax_url(array('action'=>"xh_uc_upload_img",'w'=>$img_size['width'],'h'=>$img_size['height']),true,true)?>',
+        			dnd:'#form-group-<?php echo $input_id?>',
+        			paste:document.body,
+        			pick:'#image-<?php print $input_id;?>-picker',
+        			accept:{
+        		        title: 'Images',
+        		       // extensions: 'gif,jpg,jpeg,bmp,png',
+        		       // mimeTypes: 'image/gif,image/jpg,image/jpeg,image/bmp,image/png'
+        		    },
+        		    auto :true,
+        		    fileNumLimit:1			    
+        		};
+        
+        		     //do something
+        		var <?php print $input_id;?>_uploader = WebUploader.create(<?php print $input_id;?>_config);
+        		
+        		// 文件上传失败，显示上传出错。
+        		<?php print $input_id;?>_uploader.on( 'uploadStart', function( file ) {
+        			$('#image-<?php print $input_id;?>-picker .webuploader-pick').text('<?php echo __('Uploading...',WSHOP)?>');
+        		});
+        		// 文件上传失败，显示上传出错。
+        		<?php print $input_id;?>_uploader.on( 'uploadError', function( file ,reason) {
+        			<?php print $input_id;?>_uploader.reset();
+        			alert('<?php echo WSHOP_Error::err_code(500)->errmsg?>');
+        		});
+        
+        		// 完成上传完了，成功或者失败，先删除进度条。
+        		<?php print $input_id;?>_uploader.on( 'uploadComplete', function( file ) {
+        			$('#image-<?php print $input_id;?>-picker .webuploader-pick').text('<?php echo __('Upload image',WSHOP)?>');
+        		});
+        		
+        		<?php print $input_id;?>_uploader.on( 'uploadSuccess', function( file ,response) {
+        			<?php print $input_id;?>_uploader.reset();
+        			
+        			if(!response||typeof response.errcode=='undefined'){
+        				alert('<?php echo WSHOP_Error::error_unknow()->errmsg?>');
+        				return;
+        			}
+        			
+        			if(response.errcode!=0){
+        				alert(response.errmsg);
+        				return;
+        			}
+        
+        			$('#<?php echo $input_id;?>').val(JSON.stringify(response.data));
+        			$('#image-<?php print $input_id;?>').attr('src',response.data.url);
+        			
+        		});
+        		
+        	})(jQuery);
+        </script>
+        <?php
+	}*/
+	
+	public function generate_attachment_html($key, $data) {
 	    $field = $this->get_field_key ( $key );
 	    $defaults = array (
 	        'title' => '',
@@ -915,7 +1185,7 @@ abstract class Abstract_WShop_Settings {
 	    $data = wp_parse_args ( $data, $defaults );
 	
 	    ob_start ();
-	    ?>
+	        ?>
 	        <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
 	        	<th scope="row" class="titledesc">
 	        		<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
@@ -926,36 +1196,23 @@ abstract class Abstract_WShop_Settings {
 	        			<legend class="screen-reader-text">
 	        				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
 	        			</legend>
-	        			
-	        			<script type="text/javascript">
-	        			if(!window.thickboxL10n){
-							window.thickboxL10n = {"next":"\u4e0b\u4e00\u9875 >","prev":"< \u4e0a\u4e00\u9875","image":"\u56fe\u50cf","of":"\/","close":"\u5173\u95ed","noiframes":"\u8fd9\u4e2a\u529f\u80fd\u9700\u8981iframe\u7684\u652f\u6301\u3002\u60a8\u53ef\u80fd\u7981\u6b62\u4e86iframe\u7684\u663e\u793a\uff0c\u6216\u60a8\u7684\u6d4f\u89c8\u5668\u4e0d\u652f\u6301\u6b64\u529f\u80fd\u3002","loadingAnimation":"http:\/\/ranj.mabaodian.com\/wp-includes\/js\/thickbox\/loadingAnimation.gif"};
-	        			}
-						</script>
-						<img id="<?php echo esc_attr( $field ); ?>-img" style="max-width:100px;max-height:100px;" src="<?php echo esc_attr(  $this->get_option( $key ) ); ?>">
+	        			<?php $img =wp_get_attachment_image_src($this->get_option( $key ) );?>
+						<img id="<?php echo esc_attr( $field ); ?>-img" style="max-width:100px;max-height:100px;" src="<?php echo esc_attr( count($img)>0?$img[0]:""); ?>">
 						<input type="hidden" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" value="<?php echo esc_attr(  $this->get_option( $key ) ); ?>" />
 						<input type="button" class="button" id="btn-<?php echo esc_attr( $field ); ?>-upload-img" value="<?php echo __('Upload Image',WSHOP)?>" />
 						<a href="javascript:void(0);" style="margin-left:5px;" id="btn-<?php echo esc_attr( $field ); ?>-remove"><?php echo __('Remove',WSHOP)?></a>
 						<script type="text/javascript">
 						(function($){
 							$('#btn-<?php echo esc_attr( $field ); ?>-upload-img').click(function() {  
-								 window.send_to_editor = function(html) { 
-									 var imgurl='';
-									 var $img = $(html).children('img');
-									 if($img.length>0){
-										 imgurl=$img.attr('src');  
-								    }else{
-								    	imgurl = $(html).attr('src');  
-									 }
-							      
-							          $('#<?php echo esc_attr( $field ); ?>').val(imgurl);
-							          $('#<?php echo esc_attr( $field ); ?>-img').attr('src',imgurl);
-							     
-							         tb_remove();   
-							    } ;   
-							    
-						         tb_show('', 'media-upload.php?type=image&amp;TB_iframe=true');   
-						         return false;   
+								var send_attachment_bkp = wp.media.editor.send.attachment;
+							    wp.media.editor.send.attachment = function(props, attachment) {
+								    
+							        $('#<?php echo esc_attr( $field ); ?>').val(attachment.id);
+							        $('#<?php echo esc_attr( $field ); ?>-img').attr('src',attachment.url);
+							        wp.media.editor.send.attachment = send_attachment_bkp;
+							    }
+							    wp.media.editor.open();
+							    return false;    
 						    });   
 						    $('#btn-<?php echo esc_attr( $field ); ?>-remove').click(function(){
 								if(confirm('<?php echo __('Are you sure?',WSHOP)?>')){
@@ -972,8 +1229,8 @@ abstract class Abstract_WShop_Settings {
 	        </tr>
 	        <?php
 			
-			return ob_get_clean ();
-		}
+		return ob_get_clean ();
+	}
 	
 	/**
 	 * Generate Password Input HTML.
@@ -1146,42 +1403,128 @@ abstract class Abstract_WShop_Settings {
 				'placeholder' => '',
 				'type' => 'text',
 				'desc_tip' => false,
+		        'default'=>null,
 				'description' => '',
 				'custom_attributes' => array (),
 				'options' => array () 
 		);
 		
-		if(isset($data['func'])&&$data['func']){
-		    $data['options'] = call_user_func($data['options']);
-		}
-		
 		$data = wp_parse_args ( $data, $defaults );
 		
-		ob_start ();
-		?>
-        <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
-        	<th scope="row" class="titledesc"><label
-        		for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
-        					<?php echo $this->get_tooltip_html( $data ); ?>
-        				</th>
-        	<td class="forminp">
-        		<fieldset>
-        			<legend class="screen-reader-text">
-        				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
-        			</legend>
-        			<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
-        							<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
-        								<option value="<?php echo esc_attr( $option_key ); ?>"
-        					<?php selected( $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
-        							<?php endforeach; ?>
-        						</select>
-        						<?php echo $this->get_description_html( $data ); ?>
-        					</fieldset>
-        	</td>
-        </tr>
-        <?php
+		if(!isset($data['post_type'])||!$data['post_type']){
 		
-		return ob_get_clean ();
+    		if(isset($data['func'])&&$data['func']){
+    		    $data['options'] = call_user_func($data['options']);
+    		}
+    		
+    		ob_start ();
+    		?>
+            <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
+            	<th scope="row" class="titledesc"><label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+					<?php echo $this->get_tooltip_html( $data ); ?>
+				</th>
+            	<td class="forminp">
+            		<fieldset>
+            			<legend class="screen-reader-text">
+            				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
+            			</legend>
+            			<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
+							<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
+								<option value="<?php echo esc_attr( $option_key ); ?>"
+					           <?php selected( $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<?php echo $this->get_description_html( $data ); ?>
+					</fieldset>
+            	</td>
+            </tr>
+            <?php
+    		return ob_get_clean ();
+		}else{
+		    if(!is_string($data['post_type'])&&is_callable($data['post_type'])){
+		        $data['post_type'] = call_user_func($data['post_type']);
+		    }
+		    
+		    ob_start ();
+		    $multiple = isset($data['multiple'])&&$data['multiple']?1:0;
+		    $field_key = $field;
+		    if($multiple){
+		        $field .="[]";
+		    }
+		    ?>
+                <tr valign="top" class="<?php echo isset($data['tr_css'])?$data['tr_css']:''; ?>">
+                	<th scope="row" class="titledesc"><label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+    					<?php echo $this->get_tooltip_html( $data ); ?>
+    				</th>
+                	<td class="forminp">
+                		<fieldset>
+                			<legend class="screen-reader-text">
+                				<span><?php echo wp_kses_post( $data['title'] ); ?></span>
+                			</legend>
+                		    <?php 
+                		    $custom_params = isset($data['custom_params'])?$data['custom_params']:null;
+                		    $custom_params_method = isset($data['custom_params_method'])?$data['custom_params_method']:null;
+                		    if(!$custom_params&&$custom_params_method){
+                		        $custom_params=call_user_func($custom_params_method);
+                		    }
+                		    ?>
+                			<select class="wshop-search" data-multiple="<?php echo $multiple?>" data-custom_params="<?php echo $custom_params?esc_attr(json_encode($custom_params)):null; ?>" data-type='<?php echo $data['post_type'];?>' name="<?php echo esc_attr( $field ); ?>" id="<?php echo esc_attr( $field_key ); ?>" data-sortable="true" data-placeholder="<?php echo __( 'Search...', WSHOP); ?>" data-allow_clear="true">
+                    			<?php 
+                    			$vals=array();
+                    			if(isset($data['get_values'])){
+                    			    $posts = call_user_func($data['get_values'], $data);
+                    			    if($posts){
+                    			        foreach ($posts as $p){
+                    			            $vals[]=$p->ID;
+                    			            ?>
+                            			    <option value="<?php echo $p->ID;?>">
+                            			    	<?php echo $p->post_title; ?>
+                            			    </option>
+                            			    <?php 
+                    			        }
+                    			    }
+                    			}else{
+                        			$value = $this->get_option($key,$data['default']);
+                        			if($value&&is_array($value)){
+                        			    foreach ($value as $value1) {
+                            			    $p = $value?get_post($value1):null;
+                            			    if($p){
+                            			        $vals[]=$value1;
+                            			        ?>
+                                			    <option value="<?php echo $value1;?>">
+                                			    	<?php echo $p->post_title; ?>
+                                			    </option>
+                                			    <?php 
+                                			}
+                        			    }
+                        			}else{
+                        			    $p = $value?get_post($value):null;
+                        			    if($p){$vals[]=$value;
+                        			        ?>
+                            			    <option value="<?php echo $value;?>">
+                            			    	<?php echo $p->post_title; ?>
+                            			    </option>
+                            			    <?php 
+                            			}
+                        			}
+                    			}
+                    			?>
+                    		</select>
+                    		<script type="text/javascript">
+                        		(function($){
+    								$(document).bind('wshop-on-select2-inited',function(){
+    									$("#<?php echo esc_attr( $field_key ); ?>").val(<?php echo json_encode($vals)?>).trigger('change');
+    								});
+    								
+    							})(jQuery);
+                    		</script>
+    						<?php echo $this->get_description_html( $data ); ?>
+    					</fieldset>
+                	</td>
+                </tr>
+                <?php
+        		return ob_get_clean ();
+		}
 	}
 	
 	/**
@@ -1326,7 +1669,11 @@ abstract class Abstract_WShop_Settings {
 			$type = empty ( $field ['type'] ) ? 'text' : $field ['type'];
 			
 			// Look for a validate_FIELDID_field method for special handling
-			if (method_exists ( $this, 'validate_' . $key . '_field' )) {
+			if(isset($field['validate'])){
+			    $func =$field['validate'];
+			    $field = call_user_func_array($func,array( $key ,$this));
+			}
+			elseif (method_exists ( $this, 'validate_' . $key . '_field' )) {
 				$field = $this->{'validate_' . $key . '_field'} ( $key );
 				
 				// Exclude certain types from saving
@@ -1338,18 +1685,13 @@ abstract class Abstract_WShop_Settings {
 				// Look for a validate_FIELDTYPE_field method
 			} elseif (method_exists ( $this, 'validate_' . $type . '_field' )) {
 				$field = $this->{'validate_' . $type . '_field'} ( $key );
-				
 				// Fallback to text
-			}else if(isset($field['validate'])){
-			    $func =$field['validate'];
-			    $field = call_user_func_array($func,array( $key ,$this));
 			} else {
 				$field = $this->validate_text_field ( $key );
 			}
 			
 			$this->sanitized_fields [$key] = $field;
 		}
-		
 	}
 	
 	/**
@@ -1366,10 +1708,33 @@ abstract class Abstract_WShop_Settings {
 		$field = $this->get_field_key ( $key );
 		
 		if (isset ( $_POST [$field] )) {
-			$text = wp_kses_post ( trim ( stripslashes ( $_POST [$field] ) ) );
+		    $settings = $this->form_fields[$key];
+		if(isset($settings['ignore_kses_post'])&&$settings['ignore_kses_post']){
+	            $text = !is_array( $_POST [$field])? ( trim ( stripslashes ( $_POST [$field] ) ) ): $_POST [$field];
+	        }else{
+	            $text =!is_array( $_POST [$field])? wp_kses_post ( trim ( stripslashes ( $_POST [$field] ) ) ): $_POST [$field];
+	        }
+			
 		}
 		
 		return $text;
+	}
+	
+	public function validate_select_field($key) {
+	    $text = $this->get_option ( $key );
+	    $field = $this->get_field_key ( $key );
+	
+	    if (isset ( $_POST [$field] )) {
+	        $settings = $this->form_fields[$key];
+	        if(isset($settings['ignore_kses_post'])&&$settings['ignore_kses_post']){
+	            $text = !is_array( $_POST [$field])? ( trim ( stripslashes ( $_POST [$field] ) ) ): $_POST [$field];
+	        }else{
+	            $text =!is_array( $_POST [$field])? wp_kses_post ( trim ( stripslashes ( $_POST [$field] ) ) ): $_POST [$field];
+	        }
+	        	
+	    }
+	
+	    return $text;
 	}
 	
 	/**
@@ -1430,7 +1795,9 @@ abstract class Abstract_WShop_Settings {
 	        'disabled' => false,
 	        'class' => '',
 	        'css' => '',
-	        'format'=>'yyyy-MM-dd HH:mm',
+	        'format'=>'Y-m-d H:i',
+	        'data_format'=>'date',//date|time
+	        'format_js'=>'yyyy-MM-dd HH:mm',
 	        'placeholder' => '',
 	        'type' => 'text',
 	        'desc_tip' => false,
@@ -1446,7 +1813,11 @@ abstract class Abstract_WShop_Settings {
 	    if (isset ( $_POST [$field] )) {
 	        	
 	        if ($_POST [$field] !== '') {
-	            $text =  date($data['format'],strtotime( trim ( stripslashes ( $_POST [$field] ) ))) ;
+	            if($data['data_format']=='date'){
+	               $text =  date($data['format'],strtotime( trim ( stripslashes ( $_POST [$field] ) ))) ;
+	            }else{
+	                $text =  strtotime( trim ( stripslashes ( $_POST [$field] ) )) ;
+	            }
 	        } else {
 	            $text = '';
 	        }
@@ -1485,7 +1856,11 @@ abstract class Abstract_WShop_Settings {
 		
 		if (isset ( $_POST [$field] )) {
 			
-			$text = wp_kses ( trim ( stripslashes ( $_POST [$field] ) ), array_merge ( array (
+		    $settings = $this->form_fields[$key];
+		    if(isset($settings['ignore_kses_post'])&&$settings['ignore_kses_post']){
+		        $text =   trim ( stripslashes ( $_POST [$field]  ));
+	    }else{
+		        $text = wp_kses ( trim ( stripslashes ( $_POST [$field] ) ), array_merge ( array (
 					'iframe' => array (
 							'src' => true,
 							'style' => true,
@@ -1493,6 +1868,9 @@ abstract class Abstract_WShop_Settings {
 							'class' => true 
 					) 
 			), wp_kses_allowed_html ( 'post' ) ) );
+		    }
+		    
+			
 		}
 		
 		return $text;
@@ -1518,25 +1896,14 @@ abstract class Abstract_WShop_Settings {
 		return $status;
 	}
 	
-	/**
-	 * Validate Select Field.
-	 *
-	 * Make sure the data is escaped correctly, etc.
-	 *
-	 * @param mixed $key        	
-	 * @since 1.0.0
-	 * @return string
-	 */
-	public function validate_select_field($key) {
-
-		$value = $this->get_option ( $key );
-		$field = $this->get_field_key ( $key );
-	
-		if (isset ( $_POST [$field] )) {
-			$value =stripslashes ( $_POST [$field] ) ;
+	public function validate_number_field($key) {
+	    $field = $this->get_field_key ( $key );
+		$value = trim ( stripslashes ( $_POST [$field] ) );
+		if($value===''){
+		    return null;
 		}
 		
-		return $value;
+		return intval($value);
 	}
 	
 	/**

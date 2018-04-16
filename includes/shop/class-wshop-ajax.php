@@ -19,7 +19,7 @@ class WShop_Ajax {
 		$shortcodes = array(
 		    'wshop_cron'   =>__CLASS__ . '::cron',
 		    'wshop_async_load'   =>__CLASS__ . '::async_load',
-		    'wshop_checkout'=>__CLASS__ . '::checkstand',
+		    'wshop_checkout_v2'=>__CLASS__ . '::checkout',
 		    'wshop_plugin'=>__CLASS__ . '::plugin',
 		    'wshop_service'=>__CLASS__ . '::service',
 		    'wshop_captcha'=>__CLASS__ . '::captcha',
@@ -150,7 +150,11 @@ class WShop_Ajax {
 	    $api->is_asyncing=true;
 	    $api->async_atts = $atts;
 	    
-	    echo WShop_Error::success(apply_filters("wshop_async_load_{$params['hook']}",$atts,$params['content']))->to_json();
+	    $content = apply_filters("wshop_async_load_{$params['hook']}",$atts,$params['content']);
+	    if(is_array($content)){$content=null;}
+	    $content = apply_filters("wshop_async_load",$content,$atts);
+
+	    echo WShop_Error::success($content)->to_json();
 	    exit;
 	}
 	
@@ -161,34 +165,35 @@ class WShop_Ajax {
 	    $now = time();
 	    
 	    //间隔30秒
-	    $step =$last_execute_time-($now-60);
+	    $step =$last_execute_time-($now-30);
 	    if($step>0){
 	       echo 'next step:'.$step;
 	       exit;
 	    }
 	    
 	    update_option('wshop_cron',$now,false);
-	    
-	   try {
-	       do_action('wshop_cron');
-	   } catch (Exception $e) {
-	       WShop_Log::error($e);
-	       //ignore
-	   }
-	    
-	    //清楚session 数据
-	    WShop::instance()->session->cleanup_sessions();
-	    $plugin_options = WShop_Install::instance()->get_plugin_options();
-	    $version = $plugin_options&&isset($plugin_options['version'])?$plugin_options['version']:'1.0.0';
+        
+        try {
+           do_action('wshop_cron');
+        } catch (Exception $e) {
+           WShop_Log::error($e);
+           //ignore
+        }
+        
+        try {
+           WShop_Order::free_orders();
+        } catch (Exception $e) {
+           WShop_Log::error($e);
+        }
 	   
-	    if(version_compare($version, WShop::instance()->version,'<')){
-	        WShop::instance()->on_update($version);
-	        
-	        WShop_Install::instance()->update_plugin_options(array(
-	            'version'=>WShop::instance()->version
-	        ));
-	        
-	    }
+// 	    try {
+// 	        WShop_Install::instance()->add_ons_update();
+// 	    } catch (Exception $e) {
+// 	        WShop_Log::error($e);
+// 	    }
+	    
+	    //清除session 数据
+	    WShop::instance()->session->cleanup_sessions();
 	    
 	    echo 'hello wshop cron';
 	    exit;
@@ -242,7 +247,7 @@ class WShop_Ajax {
 	               'order_id'=>$order->id
 	            ));
 	            
-	            if(!in_array($note['note_type'], array_keys(WShop_Order_Note::get_note_types()))){
+	            if(!in_array($note->note_type, array_keys(WShop_Order_Note::get_note_types()))){
 	                echo WShop_Error::err_code(404)->to_json();
 	                exit;
 	            }
@@ -284,7 +289,7 @@ class WShop_Ajax {
 	 */
 	public static function obj_search(){
 	    $action ='wshop_obj_search';
-	   $params=shortcode_atts(array(
+	    $params=shortcode_atts(array(
             'notice_str'=>null,
             'action'=>$action,
             $action=>null
@@ -294,24 +299,29 @@ class WShop_Ajax {
 	        echo WShop_Error::err_code(701)->to_json();
 	        exit;
 	    }
+	    if(!isset($_REQUEST['term'])){
+	        $_REQUEST['term'] ='';
+	    }
 	    
-	    $keywords = isset($_REQUEST['term'])?stripslashes($_REQUEST['term']):null;
-	 
+	    $post_ID = 0;
+	    $keywords=null;
+	    if(isset($_REQUEST['term'])&&is_numeric($_REQUEST['term'])){
+	        $post_ID =absint($_REQUEST['term']);
+	    }else{
+    	    $keywords = isset($_REQUEST['term'])?trim(stripslashes($_REQUEST['term'])):null;
+    	    $keywords = mb_strimwidth(trim($keywords,'%'), 0, 32,'','utf-8');
+	    }
+	    
 	    $type = isset($_REQUEST['obj_type'])?sanitize_key($_REQUEST['obj_type']):null;
-	    if(empty($keywords)||empty($type)){
+	   
+	    $results = apply_filters("wshop_obj_search_{$type}",null,$type, $keywords,$post_ID);
+	    if(!is_null($results)){
 	        echo json_encode(array(
-	            'items'=>null
+	            'items'=>$results
 	        ));
 	        exit;
 	    }
 	    
-	    $len =mb_strlen($keywords);
-	    if($len<1||$len>=15){
-	        echo json_encode(array(
-	            'items'=>null
-	        ));
-	        exit;
-	    }
 	    global $wpdb;
 	  
 	   switch ($type){
@@ -321,8 +331,9 @@ class WShop_Ajax {
         	               u.user_login,
         	               u.user_email
 	               from {$wpdb->prefix}users u
-	               where (u.user_login like %s or u.user_email like %s)
-	               limit 10;", "$keywords%","$keywords%"));
+	               where ($post_ID=0 or u.ID=$post_ID)
+	                     and (%s='' or u.user_login like %s or u.user_email like %s)
+	               limit 10;",$keywords, "$keywords%","$keywords%"));
 	            
 	           $results = array();
 	           if($users){
@@ -348,26 +359,29 @@ class WShop_Ajax {
 	       case 'product':
 	           global $wpdb;
 	           $post_types = WShop::instance()->payment->get_online_post_types();
+	        
 	           $sql ="";
 	           if(count($post_types)>0){
 	               $sql.=" and u.post_type in (";
 	               $index=0;
 	               foreach ($post_types as $type=>$att){
 	                   if($index++!=0){
-	                       $sql+=",";
+	                       $sql.=",";
 	                   }
 	                   $sql.="'{$type}'";
 	               }
 	               $sql.=")";
 	           }
-	           
+	          
 	           $posts = $wpdb->get_results($wpdb->prepare(
 	               "select u.ID,
 	                       u.post_title
 	               from {$wpdb->prefix}posts u
-	               where (u.post_title like %s)
+	               where ($post_ID=0 or u.ID=$post_ID)
+	                     and (%s = '' or u.post_title like %s)
 	                     $sql
-	               limit 10;", "$keywords%"));
+	                     and u.post_status='publish'
+	               limit 10;",$keywords, "$keywords%"));
 	      
 	           $results = array();
 	           if($posts){
@@ -384,28 +398,41 @@ class WShop_Ajax {
 	           ));
 	           exit;
 	       default:
+	           if(empty($type)){
+	               $posts = $wpdb->get_results($wpdb->prepare(
+	                   "select u.ID,
+	                           u.post_title
+	                   from {$wpdb->prefix}posts u
+	                   where ($post_ID=0 or u.ID=$post_ID)
+    	                   and (%s='' or u.post_title like %s)
+    	                   and u.post_status='publish'
+	                   limit 10;",$keywords,"$keywords%"));
+	           }else{
+	               $posts = $wpdb->get_results($wpdb->prepare(
+	                   "select u.ID,
+	                           u.post_title
+	                   from {$wpdb->prefix}posts u
+	                   where ($post_ID=0 or u.ID=$post_ID)
+    	                   and (%s='' or u.post_title like %s)
+    	                   and u.post_type=%s
+	                       and u.post_status='publish'
+	                   limit 10;",$keywords,"$keywords%", $type));
+	           }
 	           
-	           $posts = $wpdb->get_results($wpdb->prepare(
-	               "select u.ID,
-	                       u.post_title
-	               from {$wpdb->prefix}posts u
-	               where (u.post_title like %s)
-	                      and u.post_type=%s
-	               limit 10;","$keywords%", $type));
-	               $results = array();
-	               if($posts){
-	                   foreach ($posts as $post){
-	                       $results[]=array(
-	                           'id'=>$post->ID,
-	                           'text'=>$post->post_title
-	                       );
-	                   }
-	               }
-	           
-	               echo json_encode(array(
-	                   'items'=>$results
-	               ));
-	               exit;
+               $results = array();
+               if($posts){
+                   foreach ($posts as $post){
+                       $results[]=array(
+                           'id'=>$post->ID,
+                           'text'=>$post->post_title
+                       );
+                   }
+               }
+           
+               echo json_encode(array(
+                   'items'=>$results
+               ));
+               exit;
 	   }
 	}
 
@@ -414,254 +441,370 @@ class WShop_Ajax {
 	 * @since 1.0.0
 	 */
 	public static function captcha(){
-	    require_once WSHOP_DIR.'/includes/captcha/CaptchaBuilderInterface.php';
-	    require_once WSHOP_DIR.'/includes/captcha/PhraseBuilderInterface.php';
-	    require_once WSHOP_DIR.'/includes/captcha/CaptchaBuilder.php';
-	    require_once WSHOP_DIR.'/includes/captcha/PhraseBuilder.php';
-	   
-	    $action ='wshop_captcha';
-	   $params=shortcode_atts(array(
-            'notice_str'=>null,
-            'action'=>$action,
-            $action=>null
-        ), stripslashes_deep($_REQUEST));
+	    $func = apply_filters('wshop_captcha', function(){
+	        require_once WSHOP_DIR.'/includes/captcha/CaptchaBuilderInterface.php';
+	        require_once WSHOP_DIR.'/includes/captcha/PhraseBuilderInterface.php';
+	        require_once WSHOP_DIR.'/includes/captcha/CaptchaBuilder.php';
+	        require_once WSHOP_DIR.'/includes/captcha/PhraseBuilder.php';
+	        
+	        $action ='wshop_captcha';
+	        $params=shortcode_atts(array(
+	            'notice_str'=>null,
+	            'action'=>$action,
+	            $action=>null,
+	            'hash'=>null
+	        ), stripslashes_deep($_REQUEST));
+	         
+	        if(isset($_REQUEST['wshop_key'])){
+	            $params['wshop_key'] =$_REQUEST['wshop_key'];
+	        }else{
+	            $params['wshop_key'] ='wshop_captcha';
+	        }
+	         
+	        if(!WShop::instance()->WP->ajax_validate($params,$params['hash'],true)){
+	            WShop::instance()->WP->wp_die(WShop_Error::err_code(701)->errmsg);
+	            exit;
+	        }
+	         
+	        $builder = Gregwar\Captcha\CaptchaBuilder::create() ->build();
+	        WShop::instance()->session->set($params['wshop_key'], $builder->getPhrase());
+	         
+	        return WShop_Error::success($builder ->inline());
+	    });
 	    
-	   $hash=WShop_Helper::generate_hash($params, WShop::instance()->get_hash_key());
-	   if(!WShop::instance()->WP->ajax_validate($params, isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
-           WShop::instance()->WP->wp_die(WShop_Error::err_code(701));
-           exit;
-	   }
-	    
-	    // header('Content-type: image/jpeg');
-	    $builder = Gregwar\Captcha\CaptchaBuilder::create() ->build();
-	    WShop::instance()->session->set('shop_captcha', $builder->getPhrase());
-	    
-	    echo WShop_Error::success($builder ->inline())->to_json();
+	    $error = call_user_func($func);
+	    echo $error->to_json();
 	    exit;
 	}
 	
-	
-	public static function checkstand(){   
-	    $action ='wshop_checkout';
-	    $tab = isset($_REQUEST['tab'])?stripslashes($_REQUEST['tab']):null;
+	private static function confirm_order($request){
+	    $action = 'wshop_checkout_v2';
+	    
+	    $datas=shortcode_atts(array(
+	        'notice_str'=>null,
+	        'action'=>$action,
+	        $action=>null,
+	        'tab'=>null,
+	        'order_id'=>null,
+	        'modal'=>null,
+	        'hash'=>null
+	    ), $request);
+	    
+	    if(!WShop::instance()->WP->ajax_validate($datas, $datas['hash'])){
+	        return WShop_Error::err_code(701);
+	    }
+	   
+	    $order = new WShop_Order($datas['order_id']);
+	    if(!$order->is_load()){
+	        return WShop_Error::err_code(404);
+	    }
+	    
+	    if($order->is_expired()){
+	        return WShop_Error::success($order->get_received_url());
+	    }
+	    if(!$order->is_unconfirmed()&&!$order->is_pending()){
+	        return WShop_Error::success($order->get_received_url());
+	    }
 
+	    if(!isset($request['modal'])||empty($request['modal'])){
+	        $request['modal'] = 'shopping';
+	    }
+	    
+	    $calls = apply_filters("wshop_confirm_order_{$request['modal']}", array(function($order,$request){
+	        if(isset($request['payment_method'])&&!empty($request['payment_method'])){
+	            $payment_method = WShop::instance()->payment->get_payment_gateway($request['payment_method']);
+	            if(!$payment_method){
+	                return WShop_Error::error_custom(__('Payment gateway is invalid!',WSHOP));
+	            }
+	             
+	            return $order->set_change('payment_method', $payment_method->id);
+	        }
+	         
+	        return $order;
+	    }),$order,$request);
+
+        foreach ($calls as $call){
+            $order = call_user_func_array($call, array($order,$request));
+            if($order instanceof WShop_Error){
+                return $order;
+            }
+        }
+         
+        $order->set_change('status',WShop_Order::Pending);
+         
+        $order = $order->save_changes();
+        if($order instanceof WShop_Error){
+            return $order;
+        }
+       
+        $call = apply_filters("wshop_confirm_order_{$request['modal']}_func", function($order,$request){
+            return WShop_Error::success(WShop::instance()->ajax_url(array(
+                'action'=>'wshop_checkout_v2',
+                'tab'=>'pay',
+                'order_id'=>$order->id
+            ),true,true));
+        },$order,$request);
+	             
+        $error = call_user_func_array($call, array($order,$request));
+        return $error;
+	}
+	
+	public static function checkout(){
+	    $action ='wshop_checkout_v2';
+	    $request = stripslashes_deep($_REQUEST);
+	    $tab = isset($request['tab'])?$request['tab']:null;
+	    
 	    switch ($tab){
-	        case 'update_shopping_cart':
-	            $request = shortcode_atts(array_merge(
-	                WShop::instance()->payment->pay_atts(),
-	                array(
-	                    'cart_id'=>0
-	                )
-	                ), stripslashes_deep($_REQUEST));
-	             
+	        case 'shopping_cart_change_qty':
 	            $datas=shortcode_atts(array(
 	                'notice_str'=>null,
 	                'action'=>$action,
 	                $action=>null,
 	                'tab'=>null,
-	                'subtab'=>null
-	            ), stripslashes_deep($_REQUEST));
-	             
-	            if(!WShop::instance()->WP->ajax_validate(array_merge($request,$datas), isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
+	                'modal'=>null,//支付模式：弹窗支付，扫描二维码或自定义支付模式等
+	                //section  这里section是shopping_cart
+	                'hash'=>null
+	            ), $request);
+	            
+	            if(!WShop::instance()->WP->ajax_validate($datas, $datas['hash'])){
 	                echo WShop_Error::err_code(701)->to_json();
 	                exit;
 	            }
-	            
-	            $cart = new WShop_Shopping_Cart($request['cart_id']);
-	            if(!$cart->is_load()){
-	                //购物车信息异常，要求用户刷新页面
-	                echo WShop_Error::err_code(201)->to_json();
-	                exit;
-	            }
-	            
-	            $post_id = isset($_REQUEST['post_id'])?$_REQUEST['post_id']:null;
-	            $product_id=null;
-	            foreach ($cart->items as $pid=>$att){
-	                if($post_id==$pid){
-	                    $product_id = $pid;
-	                    break;
-	                }
-	            }
-	            
-	            if(!$product_id){
-	                //购物车信息异常，要求用户刷新页面
-	                echo WShop_Error::err_code(201)->to_json();
-	                exit;
-	            }
-	           
-	            switch ($datas['subtab']){
-	                case 'change_qty':
-	                    $new_qty = isset($_REQUEST['qty'])? intval($_REQUEST['qty']):1;
-	                    $error = apply_filters('wshop_shopping_cart_change_qty', WShop_Error::success(),$new_qty,$product_id,$cart);
-	                    if(!WShop_Error::is_valid($error)){
-	                        echo $error->to_json();
-	                        exit;
-	                    }
-	                    if($new_qty<1){
-	                        $new_qty=1;
-	                    }
-	                    
-	                    $cart->items[$product_id]['qty']=$new_qty;
-	                   
-	                    echo $cart->update(array(
-	                        'items'=>$cart->items
-	                    ))->to_json();
-	                    exit;
-	                    
-	                case 'remove_item':
-	                    $error = apply_filters('wshop_shopping_cart_remove_item', WShop_Error::success(),$product_id,$cart);
-	                    if(!WShop_Error::is_valid($error)){
-	                        echo $error->to_json();
-	                        exit;
-	                    }
-	                    
-	                    unset($cart->items[$product_id]);
-	                    
-	                    echo $cart->update(array(
-	                        'items'=>maybe_serialize($cart->items)
-	                    ))->to_json();
-	                    exit;
-	            }
-	            
-	        case 'fast_shopping':
-	            $request = shortcode_atts(array_merge(WShop::instance()->payment->pay_atts(),array('post_id'=>0)), stripslashes_deep($_REQUEST));
-	            $datas=shortcode_atts(array(
-	                'notice_str'=>null,
-	                'action'=>$action,
-	                $action=>null,
-	                'tab'=>null
-	            ), stripslashes_deep($_REQUEST));
 	             
-	            if(!WShop::instance()->WP->ajax_validate(array_merge($request,$datas), isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
-	                echo WShop_Error::err_code(701)->to_json();
-	                exit;
-	            }
-	          
-	            if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase($request)){
-	               
+	            if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase()){
 	                echo WShop_Error::err_code(501)->to_json();
 	                exit;
 	            }
-	            
-	            $shopping_cart = WShop::instance()->payment->add_to_cart($request['post_id']);
-	            if($shopping_cart instanceof WShop_Error){
-	                echo $shopping_cart->to_json();
-	                exit;
+	             
+	            if(!isset($request['modal'])||empty($request['modal'])){
+	                $request['modal'] = 'shopping';
+	            }
+	             
+	            $cart = WShop_Shopping_Cart::get_cart();
+	            if($cart instanceof WShop_Error){
+	                return $cart;
 	            }
 	            
-	            $request['cart_id']=$shopping_cart->id;
-	            $order = WShop::instance()->payment->pay($request);
-	            if($order instanceof WShop_Error){
-	                echo $order->to_json();
-	                exit;
-	            }
-	            
-	            echo WShop_Error::success($order->get_pay_url())->to_json();
-	            exit;
-	            break;
-	        case 'add_to_cart':
-	            $request = shortcode_atts(array_merge(WShop::instance()->payment->pay_atts(),array('post_id'=>0)), stripslashes_deep($_REQUEST));
-	            $datas=shortcode_atts(array(
-	                'notice_str'=>null,
-	                'action'=>$action,
-	                $action=>null,
-	                'tab'=>null
-	            ), stripslashes_deep($_REQUEST));
-	          
-	            if(!WShop::instance()->WP->ajax_validate(array_merge($request,$datas), isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
-	                WShop::instance()->WP->wp_die(WShop_Error::err_code(701));
-	                exit;
-	            }
-	            
-	            if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase($request)){
-	                if(empty($request['location'])){$request['location']=home_url('/');}
-	                wp_redirect(wp_login_url($request['location']));
-	                exit;
-	            }
-	            
-	            $shopping_cart = WShop::instance()->payment->add_to_cart($request['post_id']);
-	            if($shopping_cart instanceof WShop_Error){
-	                WShop::instance()->WP->wp_die($shopping_cart);
-	                exit;
-	            }
-	            
-	            $request = shortcode_atts(WShop::instance()->payment->pay_atts(), stripslashes_deep($_REQUEST));
-	            $request['cart_id']=$shopping_cart->id;
-	            $request = WShop::instance()->generate_request_params($request,'action');
-	            
-	            $params = array();
-	            $checkout_uri = WShop_Helper_Uri::get_uri_without_params(WShop::instance()->payment->get_order_checkout_url(),$params);
-	            
-	            wp_redirect($checkout_uri."?".http_build_query(array_merge($request,$params)));
-	            exit;
-	        case 'create_order':
-	            $request = shortcode_atts(array_merge(
-    	            WShop::instance()->payment->pay_atts(),
-    	            array(
-    	               'cart_id'=>0
-    	            )
-	            ), stripslashes_deep($_REQUEST));
-	            
-	            $datas=shortcode_atts(array(
-	                'notice_str'=>null,
-	                'action'=>$action,
-	                $action=>null,
-	                'tab'=>null
-	            ), stripslashes_deep($_REQUEST));
-	          
-	            if(!WShop::instance()->WP->ajax_validate(array_merge($request,$datas), isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
-	                echo WShop_Error::err_code(701)->to_json();
-	                exit;
-	            }
-	            
-	            if(!is_user_logged_in()&&!apply_filters('wshop_enable_guest', $request['enable_guest'],$request)){
-	                echo WShop_Error::err_code(501)->to_json();
-	                exit;
-	            }
-	           
-	            $order = WShop::instance()->payment->pay($request);
-	            
-	            if($order instanceof WShop_Error){
-	                echo $order->to_json();
-	                exit;
-	            }
-	            
-	            echo WShop_Error::success($order->get_pay_url())->to_json();
-	            exit;
-	        case 'pay': 
-	            $params=shortcode_atts(array(
-	                'notice_str'=>null,
-	                'action'=>$action,
-	                $action=>null,
-	                'tab'=>null,
-	                'order_id'=>null
-	            ), stripslashes_deep($_REQUEST));
-	            
-	            if(!WShop::instance()->WP->ajax_validate($params, isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
-	                WShop::instance()->WP->wp_die(WShop_Error::err_code(701));
-	                exit;
-	            }
-	            
-	            $order =  WShop::instance()->payment->get_order('id', $params['order_id']);
-	            if(!$order){
-	                WShop::instance()->WP->wp_die(WShop_Error::err_code(404));
-	                exit;
-	            }
-	           
-	            $error = apply_filters('wshop_order_pre_process_payment', WShop_Error::success(),$order);
-	            if(!WShop_Error::is_valid($error)){
-	                WShop::instance()->WP->wp_die($error);
-	                exit;
-	            }
-	            if($order->get_total_amount(false)<=0){
-	                $order->sn = $order->generate_sn();
-	                $error = $order->complete_payment(null);
-	                if(!WShop_Error::is_valid($error)){
-	                    WShop::instance()->WP->wp_die($error);
-	                    exit;
+	            $calls = apply_filters("wshop_shopping_cart_change_qty_{$request['modal']}", array(function($cart,$request){
+	                $post_id = isset($request['post_id'])?$request['post_id']:null;
+	                 
+	                try {
+	                    $cart->__change_to_cart($post_id,isset($request['qty'])? absint($request['qty']):0);
+	                } catch (Exception $e) {
+	                    $code =$e->getCode();
+	                    return new WShop_Error($code==0?-1:$code,$e->getMessage());
 	                }
 	                
-	                wp_redirect($order->get_received_url());
+	                return $cart;
+	            }),$cart,$request);
+	            
+                foreach ($calls as $call){
+                    $cart = call_user_func_array($call,array( $cart,$request));
+                    if($cart instanceof WShop_Error){
+                        echo $cart->to_json();
+                        exit;
+                    }
+                }
+            
+                $call = apply_filters("wshop_shopping_cart_change_qty_{$request['modal']}_func", function($cart,$request){
+                    $cart = $cart->save_changes();
+                    return $cart instanceof WShop_Error?$cart:WShop_Error::success();
+                },$cart,$request);
+	            
+                $error = call_user_func_array($call, array($cart,$request));
+                echo $error->to_json();
+                exit;
+	        case 'add_to_cart':
+	            $datas=shortcode_atts(array(
+	                'notice_str'=>null,
+	                'action'=>$action,
+	                $action=>null,
+	                'tab'=>null,
+	                'modal'=>null,//支付模式：弹窗支付，扫描二维码或自定义支付模式等
+	                //section  这里section是shopping_cart
+	                'hash'=>null
+	            ), $request);
+	             
+	            if(!WShop::instance()->WP->ajax_validate($datas, $datas['hash'])){
+	                echo WShop_Error::err_code(701)->to_json();
+	                exit;
+	            }
+	            
+	            if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase()){
+	                echo WShop_Error::err_code(501)->to_json();
+	                exit;
+	            }
+	            
+	            if(!isset($request['modal'])||empty($request['modal'])){
+	                $request['modal'] = 'shopping';
+	            }
+	            
+	            $cart = WShop_Shopping_Cart::get_cart();
+	            if($cart instanceof WShop_Error){
+	                return $cart;
+	            }
+	             
+	            $calls = apply_filters("wshop_add_to_cart_{$request['modal']}", array(function($cart,$request){	                
+	                $post_id = isset($request['post_id'])?$request['post_id']:null;
+	                
+	                try {
+	                    $cart->__add_to_cart($post_id);
+	                } catch (Exception $e) {
+	                    $code =$e->getCode();
+	                    return new WShop_Error($code==0?-1:$code,$e->getMessage());
+	                }
+	                return $cart;
+	            }),$cart,$request);
+	                 
+                foreach ($calls as $call){
+                    $cart = call_user_func_array($call,array( $cart,$request));
+                    if($cart instanceof WShop_Error){
+                        echo $cart->to_json();
+                        exit;
+                    }
+                }
+            
+                $call = apply_filters("wshop_add_to_cart_{$request['modal']}_func", function($cart,$request){
+                    $cart = $cart->save_changes();
+                    return $cart instanceof WShop_Error?$cart:WShop_Error::success();
+                },$cart,$request);
+	                     
+                $error = call_user_func_array($call, array($cart,$request));
+                echo $error->to_json();
+                exit;
+	        case 'create_order':
+	            $datas=shortcode_atts(array(
+    	            'notice_str'=>null,
+    	            'action'=>$action,
+    	            $action=>null,
+    	            'tab'=>null,
+    	            'modal'=>null,//支付模式：弹窗支付，扫描二维码或自定义支付模式等
+    	            'section'=>null,//支付方式：付费下载 ， 快速支付等
+    	            'hash'=>null
+	            ), $request);
+	    
+	            if(!WShop::instance()->WP->ajax_validate($datas, $datas['hash'])){
+	                echo WShop_Error::err_code(701)->to_json();
+	                exit;
+	            }
+	             
+	            if(!is_user_logged_in()&&!WShop::instance()->WP->is_enable_guest_purchase()){
+	                echo WShop_Error::err_code(501)->to_json();
+	                exit;
+	            }
+	            
+	            if(!isset($request['modal'])||empty($request['modal'])){
+	                $request['modal'] = 'shopping';
+	            }
+	            
+	            $cart = WShop_Shopping_Cart::get_cart();
+	            if($cart instanceof WShop_Error){
+	                return $cart;
+	            }
+	           
+	            $calls = apply_filters("wshop_create_order_{$request['modal']}", array(function($cart,$request){
+	                $cart->__empty_cart();
+	                
+	                $payment_method = isset($request['payment_method'])?$request['payment_method']:null;
+	                $post_id = isset($request['post_id'])?$request['post_id']:null;
+	                $metas = array(
+	                    'location'=>isset($request['location'])?$request['location']:null
+	                );
+	                
+	                try {
+	                    $cart->__add_to_cart($post_id);
+	                } catch (Exception $e) {
+	                    $code =$e->getCode();
+	                    return new WShop_Error($code==0?-1:$code,$e->getMessage());
+	                }
+	                
+	                $cart->__set_payment_method($payment_method);
+	                $cart->__set_metas($metas);
+	                return $cart;  
+	            }),$cart,$request);
+	            
+	            foreach ($calls as $call){
+	                $cart = call_user_func_array($call,array( $cart,$request));
+	                if($cart instanceof WShop_Error){
+	                    echo $cart->to_json();
+	                    exit;
+	                }
+	            }
+	         
+	            $call = apply_filters("wshop_create_order_{$request['modal']}_func", function($cart,$request){
+	                $payment_method = $cart->get_payment_method();
+	                if($payment_method){
+	                    $order = $cart->create_order($request['section'],null,null,WShop_Order::Pending);
+	                    if($order instanceof WShop_Error){
+	                        return $order;
+	                    }
+	                    
+	                    return WShop_Error::success(array(
+	                        'redirect_url'=>$order->get_pay_url()
+	                    ));
+	                }else{
+	                    $order =$cart->create_order($request['section']);
+	                    if($order instanceof WShop_Error){
+	                        return $order;
+	                    }
+	                    
+	                    return WShop_Error::success(array(
+	                        //这个参数不能丢失，否则移动端支付 无支付回调
+	                        'url'=>WShop::instance()->ajax_url(array(
+	                            'action'=>'wshop_checkout_v2',
+	                            'tab'=>'confirm_order',
+	                            'order_id'=>$order->id,
+	                            'modal'=>isset($request['modal'])?$request['modal']:null,
+	                        ),true,true)
+	                    ));
+	                }
+	            },$cart,$request);
+	            
+	            $error = call_user_func_array($call, array($cart,$request));	
+	            if(!WShop_Error::is_valid($error)){
+	                echo $error->to_json();
+	                exit;
+	            }
+	           
+	            if($cart->has_changes()){
+    	            $_error = $cart->save_changes();
+    	            if($_error instanceof WShop_Error){
+    	                $error=$_error;
+    	            }
+	            }
+	            
+	            echo $error->to_json();
+	            exit;
+	            
+	        case 'confirm_order_v':
+	            $error = self::confirm_order($request);
+	            if(!WShop_Error::is_valid($error)){
+	                WShop::instance()->WP->wp_die($error);
+	                exit();
+	            }
+	            wp_redirect($error->data);
+	            exit;
+	        case 'confirm_order':
+                echo self::confirm_order($request)->to_json();
+                exit;
+	        case 'pay':
+	            $params=shortcode_atts(array(
+    	            'notice_str'=>null,
+    	            'action'=>$action,
+    	            $action=>null,
+    	            'tab'=>null,
+    	            'order_id'=>null,
+    	            'hash'=>null
+	            ), $request);
+	             
+	            if(!WShop::instance()->WP->ajax_validate($params,$params['hash'],true)){
+	                WShop::instance()->WP->wp_die(WShop_Error::err_code(701));
+	                exit;
+	            }
+	             
+	            $order = new WShop_Order($params['order_id']);
+	            if(!$order->is_load()){
+	                WShop::instance()->WP->wp_die(WShop_Error::err_code(404));
 	                exit;
 	            }
 	            
@@ -671,41 +814,65 @@ class WShop_Ajax {
 	                exit;
 	            }
 	            
+	            if($order->get_total_amount(false)<=0){
+	                $order->sn = $order->generate_sn();
+	                $error = $order->complete_payment(null);
+	                if(!WShop_Error::is_valid($error)){
+	                    WShop::instance()->WP->wp_die($error);
+	                    exit;
+	                }
+	                 
+	                wp_redirect($order->get_received_url());
+	                exit;
+	            }
+	            
 	            $error = $payment_gateway->process_payment($order);
 	            if(!WShop_Error::is_valid($error)){
 	                WShop::instance()->WP->wp_die($error);
 	                exit;
 	            }
-	            
+	             
 	            wp_redirect($error->data);
 	            exit;
 	        case 'is_paid':
 	            $params=shortcode_atts(array(
-	                'notice_str'=>null,
-	                'action'=>$action,
-	                $action=>null,
-	                'tab'=>null,
-	                'order_id'=>null
-	            ), stripslashes_deep($_REQUEST));
-	            if(!WShop::instance()->WP->ajax_validate($params, isset($_REQUEST['hash'])?$_REQUEST['hash']:null,true)){
+    	            'notice_str'=>null,
+    	            'action'=>$action,
+    	            $action=>null,
+    	            'tab'=>null,
+    	            'order_id'=>null,
+    	            'hash'=>null
+	            ), $request);
+	            if(!WShop::instance()->WP->ajax_validate($params, $params['hash'],true)){
 	                echo WShop_Error::err_code(701)->to_json();
 	                exit;
 	            }
-	            
+	             
 	            $order =  WShop::instance()->payment->get_order('id', $params['order_id']);
 	            if(!$order){
 	                echo WShop_Error::err_code(404)->to_json();
 	                exit;
 	            }
 	            
-	            if($order->is_paid()){
-	                echo WShop_Error::success($order->get_received_url())->to_json();
-	                exit;
+	            $payment_gateway = $order->get_payment_gateway();
+	            $payment_gateway_html = null;
+	            if($payment_gateway){
+	                switch ($payment_gateway->group){
+	                    case 'wechat':
+	                        $payment_gateway_html = '<i class="icon weixin"></i> 微信';
+	                        break;
+	                    case 'alipay':
+	                        $payment_gateway_html = '<i class="icon alipay"></i> 支付宝';
+	                        break;
+	                }
 	            }
-	            
-	            echo WShop_Error::error_custom(__('Unpaid!',WSHOP))->to_json();
+	             
+	            echo WShop_Error::success(array(
+	                'paid'=>$order->is_paid(),
+	                'received_url'=>$order->get_received_url(),
+	                'payment_method'=> $payment_gateway_html
+	            ))->to_json();
 	            exit;
-	            break;
 	    }
 	}
 	
@@ -841,7 +1008,7 @@ class WShop_Ajax {
 	 * 管理员对插件的操作
 	 */
 	public static function plugin(){
-	    error_reporting(E_ALL); ini_set('display_errors', '1');
+	    
 	    if(!WShop::instance()->WP->capability()){
 	        echo (WShop_Error::err_code(501)->to_json());
 	        exit;
@@ -929,13 +1096,14 @@ class WShop_Ajax {
     	                    }
 	                    }
 	                    
-	                    $add_on->on_load();
+	                    WShop::instance()->__load_plugin($add_on);	                
 	                    $add_on->on_install(); 
+	                    
 	                    ini_set('memory_limit','128M');
 	                    do_action('wshop_flush_rewrite_rules');
                         flush_rewrite_rules();
 	                } catch (Exception $e) {
-	                    echo (WShop_Error::error_custom($e)->to_json());
+	                    echo (WShop_Error::error_custom($e->getMessage())->to_json());
 	                    exit;
 	                }
 	               
@@ -1038,7 +1206,7 @@ class WShop_Ajax {
 	           
 	           if(!isset($info['_last_cache_time'])||$info['_last_cache_time']<time()){
 	               $api ='https://www.wpweixin.net/wp-content/plugins/xh-hash/api-add-ons.php';
-	               $params = array(
+	               $request_data = array(
 	                   'l'=>$add_on->id,
 	                   's'=>get_option('siteurl'),
 	                   'v'=>$add_on->version,
@@ -1061,11 +1229,11 @@ class WShop_Ajax {
 	                    exit;
 	                }
 	                
-	               $params['c']=$license;
+	               $request_data['c']=$license;
 	                
 	               $request =wp_remote_post($api,array(
 	                   'timeout'=>10,
-	                   'body'=>$params
+	                   'body'=>$request_data
 	               ));
 	              
 	               if(is_wp_error( $request )){

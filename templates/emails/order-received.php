@@ -2,7 +2,7 @@
 if (! defined ( 'ABSPATH' ))
 	exit (); // Exit if accessed directly
 
-$data = WShop_Temp_Helper::get('atts','templates');
+$data = WShop_Temp_Helper::clear('atts','templates');
 $order = isset($data['order'])&&$data['order'] instanceof WShop_Order?$data['order']:null;
 $user = $order->customer_id?get_user_by('id', $order->customer_id):null;
 if(!$order){
@@ -49,7 +49,7 @@ if(!$order){
 														<div id="body_content_inner" style='color: #636363; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-size: 14px; line-height: 150%; text-align: left;'>
 															<h2
 																style='color: #96588a; display: block; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; font-size: 18px; font-weight: bold; line-height: 130%; margin: 16px 0 8px; text-align: left;'>
-																<a class="link" href="<?php echo $order->get_edit_link();?>" style="color: #96588a; font-weight: normal; text-decoration: underline;"><?php echo sprintf(__('Order #%s',WSHOP),$order->id)?></a> 
+																<a class="link" style="color: #96588a; font-weight: normal; text-decoration: underline;"><?php echo sprintf(__('Order #%s',WSHOP),$order->id)?></a> 
 																(<time><?php echo date('Y-m-d H:i',$order->paid_date)?></time>)
 															</h2>
 
@@ -111,6 +111,8 @@ if(!$order){
 															</table>
 															<?php 
 															do_action('wshop_order_email_sections',$order);
+															
+															do_action("wshop_order_{$order->obj_type}_email_sections",$order);
 															?>
 														</div>
 													</td>

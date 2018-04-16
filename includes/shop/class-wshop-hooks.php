@@ -11,47 +11,242 @@ require_once 'class-wshop-wp-api.php';
  */
 class WShop_Hooks{
     public static function init(){
-        //add_action( 'template_redirect', __CLASS__.'::init_global_post',10);
-        add_filter( 'http_headers_useragent',__CLASS__.'::http_build',99,1);
-        //add_action( 'admin_init', __CLASS__.'::check_add_ons_update',10);
-  
-        //add_filter( 'wshop_account_order-pay_endpoint', __CLASS__.'WShop_Hooks::account_order_pay',10,3);
-        //add_filter( 'wshop_account_order-received_endpoint', __CLASS__.'::account_order_received',10,3);
-        
+        if(!defined('xh_http_headers_useragent')){
+            define('xh_http_headers_useragent', 1);
+            add_filter( 'http_headers_useragent',__CLASS__.'::http_build',99,1);
+        }
         add_action( 'admin_print_footer_scripts', __CLASS__.'::post_edit_footer_secripts',10);
-        
         add_filter('wshop_order_order_ordered',  __CLASS__.'::wshop_order_order_ordered',999,2);
-        
         add_action( 'admin_print_footer_scripts',  __CLASS__."::wp_print_footer_scripts",999);
         add_action( 'wp_print_footer_scripts', __CLASS__."::wp_print_footer_scripts",999);
         
+        add_filter('wshop_create_order_shopping_one_step_func', __CLASS__.'::create_order_shopping_one_step_func',10,3);
+        add_filter('wshop_create_order_shopping_cart_func', __CLASS__.'::create_order_shopping_cart_func',10,3);
+        add_filter('wshop_create_order_checkout', __CLASS__.'::create_order_checkout',10,3);
+        add_filter('wshop_confirm_order_shopping_one_step', __CLASS__.'::confirm_order_shopping_one_step',10,3);
+        
+        
         WShop_Async::instance()->async('wshop_price',  __CLASS__."::wshop_price");
+        WShop_Async::instance()->async('wshop_btn_add_to_cart', 'wshop_btn_add_to_cart');       
         WShop_Async::instance()->async('wshop_account_my_orders',  __CLASS__."::wshop_account_my_orders");
-
-        add_action('admin_init', function(){
-            if(defined('DOING_AJAX')&&DOING_AJAX){
-                header("Access-Control-Allow-Origin:*");
+    
+        //让所有产品图片有默认值
+        add_action('save_post', __CLASS__.'::autoset_featured',10,3);       
+        add_action('wp_print_footer_scripts',  __CLASS__.'::wechat_shop_scripts',99);
+        
+        //兼容老版本按钮支付
+        WShop_Async::instance()->async('xhshop-btn-pay',  __CLASS__."::xhshop_btn_pay");
+        WShop_Async::instance()->async('xhshop-is-paid',  __CLASS__."::xhshop_is_paid");
+        WShop_Async::instance()->async('xhshop-is-not-paid',  __CLASS__."::xhshop_is_not_paid");
+    }
+  
+    public static function create_order_checkout($funcs,$cart,$request){
+        return array(
+            function($cart,$request){
+                $payment_method = isset($request['payment_method'])?$request['payment_method']:null;
+                
+                return $cart->__set_payment_method($payment_method);
+                //save_changes();
             }
+        );
+    }
+    
+    /**
+     * 
+     * @param unknown $funcs
+     * @param WShop_Shopping_Cart $cart
+     * @param unknown $request
+     */
+    public static function create_order_shopping_cart_func($funcs,$cart,$request){
+        return function($cart,$request){
+            /**
+             * 当前接口不创建订单
+            $order =$cart->create_order($request['section']);
+            if($order instanceof WShop_Error){
+                return $order;
+            }
+             */
+            return WShop_Error::success(WShop::instance()->payment->get_order_checkout_url());
+        };
+    }
+    
+    public static function create_order_shopping_one_step_func($func,$cart,$request){
+        return function($cart,$request){
+            $order =$cart->create_order($request['section']);
+            if($order instanceof WShop_Error){
+                return $order;
+            }
+            
+            $action ='wshop_checkout_v2';
+            $pay_url = WShop::instance()->ajax_url(array(
+                'action'=>$action,
+                'tab'=>'confirm_order_v',
+                'modal'=>'shopping_one_step',
+                'order_id'=>$order->id
+            ),true,true);
+             
+            if(!class_exists('QRcode')){
+                require_once WSHOP_DIR.'/includes/phpqrcode/phpqrcode.php';
+            }
+            
+            $errorCorrectionLevel = 'L'; // 容错级别
+            $matrixPointSize = 9; // 生成图片大小
+             
+            ob_start();
+            
+            QRcode::png($pay_url,false,$errorCorrectionLevel,$matrixPointSize);
+            $imageString = "data:image/png;base64,".base64_encode(ob_get_clean());
+            
+            return WShop_Error::success(array(
+                //这个参数不能去掉
+                'url'=>WShop::instance()->ajax_url(array(
+                    'action'=>'wshop_checkout_v2',
+                    'tab'=>'confirm_order',
+                    'order_id'=>$order->id,
+                    'modal'=>isset($request['modal'])?$request['modal']:null,
+                ),true,true),
+                'qrcode_url'=>$imageString,
+                'url_query'=> WShop::instance()->ajax_url(array(
+                    'action'=>$action,
+                    'tab'=>'is_paid',
+                    'order_id'=>$order->id
+                ),true,true),
+                'price_html'=>$order->get_total_amount(true)
+            ));
+        };
+    }
+    
+    public static function confirm_order_shopping_one_step($func,$order,$request){
+        return array(function($order,$request){
+            //适配移动端
+            if(isset($request['payment_method'])){
+                $order->set_change('payment_method',$request['payment_method']);
+                return $order;
+            }
+            
+            $payment_gateways=WShop::instance()->payment->get_payment_gateways();
+            if(WShop_Helper_Uri::is_wechat_app()){
+                $payment_gateway =WShop_Helper_Array::first_or_default($payment_gateways,function($m){return $m->group=='wechat';});
+                if(!$payment_gateway){
+                    return WShop_Error::error_custom('Sorry,Current order do not support wechat payment!',WSHOP);
+                }
+                $order->set_change('payment_method',$payment_gateway->id);
+            }else{
+                $payment_gateway =WShop_Helper_Array::first_or_default($payment_gateways,function($m){return $m->group=='alipay';});
+                if(!$payment_gateway){
+                    return  WShop_Error::error_custom('Sorry,Current order do not support alipay payment!',WSHOP);
+                }
+                $order->set_change('payment_method',$payment_gateway->id);
+            }
+          
+            return $order;//->save_changes();
         });
     }
     
-    public static function wshop_account_my_orders($atts = array(),$content =null){
-        return WShop_Async::instance()->async_call('wshop_account_my_orders', function(&$atts,&$content){
-            if(!isset( $atts['location'])||empty( $atts['location'])){
-                 $atts['location'] = WShop_Helper_Uri::get_location_uri();
+    public static function xhshop_is_paid($atts=array(),$content = null){
+        if(!is_array($atts)){$atts=array();}
+        $post_ID = isset( $atts['post_id'])?$atts['post_id']:null;
+        if(!$post_ID){
+            $post_ID = isset( $atts['post_ID'])?$atts['post_ID']:null;
+        }
+        
+        $atts['post_id'] = $post_ID;
+      
+        return WShop_Async::instance()->async_call('xhshop-is-paid', function(&$atts,&$content){
+            if(!isset( $atts['post_id'])||empty( $atts['post_id'])){
+                global $wp_query;
+                $default_post=$wp_query->post;
+                $atts['post_id']=$default_post?$default_post->ID:0;
             }
-            if(!isset( $atts['pageSize'])||empty( $atts['pageSize'])){
-                $atts['pageSize'] = 20;
-            }
+             
         },function(&$atts,&$content){
-            return WShop::instance()->WP->requires(WSHOP_DIR, 'page/account-my-orders.php',$atts);
+            if(WShop::instance()->payment->is_validate_get_pay_per_view($atts['post_id'],array())){
+                return $content;
+            }
+            
+            return null;
         },
-        apply_filters('wshop_account_my_orders_atts',array(
-	        'pageSize'=>20,//post ID
-	        'location'=>null //0|1 是否带货币符号
-	    )),
+        array(
+            'post_id'=>0
+        ),
         $atts,
         $content);
+    }
+    
+    public static function xhshop_is_not_paid($atts=array(),$content = null){
+        if(!is_array($atts)){$atts=array();}
+        $post_ID = isset( $atts['post_id'])?$atts['post_id']:null;
+        if(!$post_ID){
+            $post_ID = isset( $atts['post_ID'])?$atts['post_ID']:null;
+        }
+    
+        $atts['post_id'] = $post_ID;
+    
+        return WShop_Async::instance()->async_call('xhshop-is-paid', function(&$atts,&$content){
+            if(!isset( $atts['post_id'])||empty( $atts['post_id'])){
+                global $wp_query;
+                $default_post=$wp_query->post;
+                $atts['post_id']=$default_post?$default_post->ID:0;
+            }
+             
+        },function(&$atts,&$content){
+            if(!WShop::instance()->payment->is_validate_get_pay_per_view($atts['post_id'],array())){
+                return $content;
+            }
+    
+            return null;
+        },
+        array(
+            'post_id'=>0
+        ),
+        $atts,
+        $content);
+    }
+    
+    public static function xhshop_btn_pay($atts = array(),$content =null){
+        if(!is_array($atts)){$atts=array();}
+        $post_ID = isset( $atts['post_id'])?$atts['post_id']:null;
+        if(!$post_ID){
+            $post_ID = isset( $atts['post_ID'])?$atts['post_ID']:null;
+        }
+        $atts['post_id'] = $post_ID;
+        return WShop_Modal_Fast_Shopping::instance()->wshop_btn($atts,$content);        
+    }
+    
+    public static function wechat_shop_scripts(){
+        echo WShop::instance()->WP->requires(WSHOP_DIR, '__scripts.php');
+    }
+    
+    public static function autoset_featured($post_ID, $post,$updated) {
+        if(!did_action('wshop_init')){
+            return;
+        }
+        $online_post = WShop::instance()->payment->get_online_post_types();
+        if($online_post&&isset($online_post[$post->post_type])){
+            if (!has_post_thumbnail($post_ID))  {
+                $attachment_id =WShop_Settings_Default_Basic_Default::instance()->get_option('product_img_default',0);
+                if ($attachment_id) {
+                    set_post_thumbnail($post->ID, $attachment_id);
+                }
+            }
+        }
+    }
+    
+    public static function wshop_account_my_orders($atts = array(),$content =null){
+        $atts = shortcode_atts(apply_filters('wshop_account_my_orders_atts',array(
+	        'pageSize'=>20,//post ID
+	        'location'=>null //0|1 是否带货币符号
+	    )), $atts);
+        
+        if(!isset( $atts['location'])||empty( $atts['location'])){
+            $atts['location'] = WShop_Helper_Uri::get_location_uri();
+        }
+        
+        if(!isset( $atts['pageSize'])||empty( $atts['pageSize'])){
+            $atts['pageSize'] = 20;
+        }
+        
+        return WShop::instance()->WP->requires(WSHOP_DIR, 'page/account-my-orders.php',$atts);
     }
     
     public static function wshop_price($atts = array(),$content =null){
@@ -63,7 +258,7 @@ class WShop_Hooks{
             }
         
         },function(&$atts,&$content){
-            return wshop_price($atts['post_id'],$atts['symbol'],false);
+            return wshop_price($atts,false);
         },
         apply_filters('wshop_price_atts',array(
 	        'post_id'=>0,//post ID
@@ -82,7 +277,8 @@ class WShop_Hooks{
     }
     
     public static function wshop_order_order_ordered($error,$order){
-        $call = apply_filters('wshop_email_new_order',function($order){
+        //wshop_email_new_order
+        $calls = apply_filters('wshop_order_email_new_order',array(function($order){
             $user_email = $order->get_email_receiver();
             
             $settings =  array(
@@ -96,14 +292,26 @@ class WShop_Hooks{
                 "emails/new-order.php",
                 array('order'=>$order)
             );
+            
             $email =new WShop_Email('new-order');
             return $email->send($settings,$content);
-        } ,$order);
+        }) ,$order);
         
-        call_user_func($call, $order);
+        $calls = apply_filters("wshop_order_{$order->obj_type}_email_new_order",$calls ,$order);
+        $calls = apply_filters("wshop_order_{$order->section}_email_new_order",$calls ,$order);
+        
+        try {
+            foreach ($calls as $call){
+                call_user_func($call, $order);
+            }
+        } catch (Exception $e) {
+            WShop_Log::error($e);
+        }
+       
         //ignore email error
         
-        $call = apply_filters('wshop_email_order_received',function($order){
+        //wshop_email_order_received
+        $calls = apply_filters('wshop_order_email_received',array(function($order){
             $user_email = $order->get_email_receiver();
             
             $settings =  array(
@@ -121,16 +329,26 @@ class WShop_Hooks{
             $email = new WShop_Email('order-received');
             return $email->send($settings,$content);
             
-        } ,$order);
+        }) ,$order);
         
-        call_user_func($call, $order);
+        $calls = apply_filters("wshop_order_{$order->obj_type}_email_received",$calls ,$order);
+        $calls = apply_filters("wshop_order_{$order->section}_email_received",$calls ,$order);
+        
+        try {
+            foreach ($calls as $call){
+                call_user_func($call, $order);
+            }
+        } catch (Exception $e) {
+            WShop_Log::error($e);
+        }
+        
         //ignore email error
        
         return $error;
     }
     
     public static function wp_print_footer_scripts(){
-        ?><script type="text/javascript">if(jQuery){jQuery(function($){$.ajax({url: '<?php echo WShop::instance()->ajax_url('wshop_cron',false,false)?>',type: 'post',timeout: 60 * 1000,async: true,cache: false});});}</script><?php 
+        ?><script type="text/javascript">if(jQuery){jQuery(function($){$.ajax({url: '<?php echo WShop::instance()->ajax_url('wshop_cron',false,false)?>',dataType: 'jsonp',type: 'post',timeout: 60 * 1000,async: true,cache: false});});}</script><?php 
     }
     
     public static function post_edit_footer_secripts(){

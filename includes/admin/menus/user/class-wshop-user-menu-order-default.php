@@ -352,7 +352,7 @@ class WShop_User_Order_List_Table extends WP_List_Table {
             $sort ='desc';
         }
 
-        $order_status =(empty($this->order_status)?" and o.removed=0 ":" and o.removed=0 and o.status='{$this->order_status}'");
+        $order_status ='trash'==$this->order_status?(" and o.removed=1 and o.status!='".WShop_Order::Unconfirmed."'"):  (empty($this->order_status)?(" and o.removed=0  and o.status!='".WShop_Order::Unconfirmed."'"):" and o.removed=0 and o.status='{$this->order_status}'");
         $user_id =get_current_user_id();
         $customer_id = " and o.customer_id={$user_id}";
         $order_date ="";
@@ -425,7 +425,7 @@ class WShop_User_Order_List_Table extends WP_List_Table {
         $items = $wpdb->get_results($wpdb->prepare($sql, $this->order_id,$this->order_id));   
         if($items){
             foreach ($items  as $item){
-                $this->items[]=WShop_Mixed_Object_Factory::to_entity($item);
+                $this->items[]=new WShop_Order($item);
             }
         }
     }
@@ -449,8 +449,8 @@ class WShop_User_Order_List_Table extends WP_List_Table {
               	});
            	})(jQuery);
 	   </script>
-     
-		 <select class="wshop-product-search" name="_pid" data-sortable="true" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', WSHOP); ?>" data-allow_clear="true">
+        <style type="text/css">.select2-container {width: 200px !important;}</style>
+		 <select class="wshop-search" data-type='product' name="_pid" data-sortable="true" data-placeholder="<?php echo __( 'Search for a product(ID/post_title)&hellip;', WSHOP); ?>" data-allow_clear="true">
 			<?php 
 			if($this->product_searched){
 			    ?>

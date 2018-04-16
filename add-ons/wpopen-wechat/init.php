@@ -56,9 +56,7 @@ class WShop_Add_On_Wpopen_Wechat extends Abstract_WShop_Add_Ons{
             )
         );
     }
-    public function on_load(){
-        add_action('wshop_after_init', array($this,'on_wechat_paid_callback'),999);
-    }
+ 
     /**
      * 
      * {@inheritDoc}
@@ -80,7 +78,7 @@ class WShop_Add_On_Wpopen_Wechat extends Abstract_WShop_Add_Ons{
      * 监听支付成功回调
      * @since 1.0.0
      */
-    public function on_wechat_paid_callback(){ 
+    public function on_after_init(){       
         $data = $_POST;
         if(!isset($data['hash'])||!isset($data['trade_order_id'])){
             return;
@@ -105,7 +103,7 @@ class WShop_Add_On_Wpopen_Wechat extends Abstract_WShop_Add_Ons{
                 exit;
             }
     
-            $error =$order->complete_payment($data['transacton_id']);
+            $error =$order->complete_payment($data['transaction_id']);
             if(!WShop_Error::is_valid($error)){
                 WShop_Log::error('complete_payment fail:'.$error->errmsg);
                 echo 'faild!';
@@ -119,7 +117,6 @@ class WShop_Add_On_Wpopen_Wechat extends Abstract_WShop_Add_Ons{
         );
         
         $params['hash']=$api->generate_xh_hash($params, $appkey);
-        ob_clean();
         print json_encode($params);
         exit;
     }

@@ -16,7 +16,8 @@ class WShop_Shortcodes {
 	 */
 	public static function init() {
 		$shortcodes = array(
-		    'wshop_page_checkout'=>__CLASS__ . '::wshop_page_checkout'
+		    'wshop_page_checkout'=>__CLASS__ . '::wshop_page_checkout',
+		    'wshop_account_my_orders'=> "WShop_Hooks::wshop_account_my_orders"
 		);
 		
 		$shortcodes =apply_filters('wshop_shortcodes', $shortcodes);
@@ -24,6 +25,7 @@ class WShop_Shortcodes {
 			add_shortcode( apply_filters( "wshop_shortcode_{$shortcode}", $shortcode ), $function );
 		}
 	}
+	
 	
 	/**
 	 *
@@ -37,7 +39,7 @@ class WShop_Shortcodes {
 	    $query_vars =WShop_Query::instance()->get_query_vars();	  
 	    foreach ( $wp->query_vars as $key => $value ) {
 	        if(isset($query_vars[$key])){
-	            return apply_filters( "wshop_endpoint_checkout_{$key}", null,$atts,$content);
+	            return apply_filters( "wshop_endpoint_checkout_{$key}",$atts,$content);
 	        }
 	    }
 	   

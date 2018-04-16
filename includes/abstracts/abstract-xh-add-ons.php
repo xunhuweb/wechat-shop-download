@@ -47,10 +47,10 @@ abstract class Abstract_WShop_Add_Ons extends Abstract_WShop_Settings {
     public $setting_uris=array();
     
     /**
-     * 插件是否已授权
+     * 激活的
      * @var bool
      */
-    public $is_authoirzed=false;
+    public $ia=false;
     
     /**
      * 第三方插件依赖
@@ -104,6 +104,25 @@ abstract class Abstract_WShop_Add_Ons extends Abstract_WShop_Settings {
 	 * @since 1.0.0
 	 */
 	public function on_init(){}	
+	/**
+	 * 插件
+	 * do_action('wshop_after_init')
+	 * @since 1.0.0
+	 */
+	public function on_after_init(){}
+	
+	/**
+	 * 定时服务
+	 */
+	public function on_cron(){
+	    
+	}
+	
+	/**
+	 * 注册短码
+	 * @param array $codes
+	 */
+	public function add_shortcodes($shortcodes){ return $shortcodes;}
 	
 	/**
 	 * 版本更新
@@ -112,6 +131,19 @@ abstract class Abstract_WShop_Add_Ons extends Abstract_WShop_Settings {
 	 */
 	public function on_update($old_version){}
 	
+	/**
+	 * 注册自定义文章类型
+	 */
+	public function register_post_types(){}
+	
+	/**
+	 * 自定义编辑字段
+	 */
+	public function register_fields(){}
+	
+	/**
+	 * @since 1.0.0
+	 */
 	public function do_ajax(){}
 	
 	/**

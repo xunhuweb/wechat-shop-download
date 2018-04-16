@@ -3,12 +3,42 @@ if (! defined ( 'ABSPATH' ))
     exit (); // Exit if accessed directly
 
 class WShop_Order extends Abstract_WShop_Order{
- 
+    
+    
     /**
      * @param object $wp_order
      */
     public function __construct($wp_order=null){
         parent::__construct($wp_order);
+    }
+    
+    public static function free_orders($limit = 30){
+        global $wpdb;
+        $now = current_time( 'timestamp' );
+        $status_waitting_payment = self::Pending;
+        
+        $expired_orders = $wpdb->get_results(
+            "select *
+             from {$wpdb->prefix}wshop_order 
+             where expire_date is not null
+                   and expire_date<$now
+                   and status = '$status_waitting_payment'
+             limit $limit;");
+        
+        if($expired_orders){
+            foreach ($expired_orders as $order_entity){
+                $order = new WShop_Order($order_entity);
+                if($order->is_load()){
+                    $order->free_order();
+                }
+            }
+        }
+    }
+    
+    public function __set_metas($metas =array()){
+        if(!is_array($metas)){$metas=array();}
+        
+        return $this->set_change('metas', array_merge($this->metas,$metas));
     }
 }
 
@@ -93,6 +123,43 @@ class WShop_Order_Note extends WShop_Object{
 
 class WShop_Order_Helper{
      
+    /**
+     * 更新订单状态
+     * @param WShop_Order $order
+     * @param string $new_status
+     * @param array $other_propertys
+     * @return WShop_Error
+     * @since 1.0.0
+     */
+    private static function change_order_status($order,$new_status,$other_propertys=array()){
+        $old_status = $order->status;
+    
+        if($old_status==$new_status){
+            return WShop_Error::success();
+        }
+    
+        global $wpdb;
+        $request = array_merge(array('status'=>$new_status),$other_propertys);
+    
+        foreach ($request as $key=>$val){
+            $request[$key]= maybe_serialize($val);
+        }
+    
+        $wpdb->update("{$wpdb->prefix}wshop_order", $request, array(
+            'id'=>$order->id
+        ));
+         
+        if(!empty($wpdb->last_error)){
+            return WShop_Error::error_custom($wpdb->last_error);
+        }
+    
+        foreach ($request as $key=>$val){
+            $order->{$key} = maybe_unserialize($val);
+        }
+    
+        return $order->after_change_order_status($old_status,$new_status);
+    }
+    
     public static function update_order($order_id,$action){
         $order = WShop::instance()->payment->get_order('id',$order_id);
         if(!$order){
@@ -134,19 +201,25 @@ class WShop_Order_Helper{
                     }
                     break;
                 case 'mark_processing':
-                    $error =$order->change_order_status(Abstract_WShop_Order::Processing);
+                    $error =self::change_order_status($order,Abstract_WShop_Order::Processing);
+                    if(!empty($wpdb->last_error)){
+                        throw new Exception($wpdb->last_error);
+                    }
+                    break;
+                case 'mark_canceled':
+                    $error =self::change_order_status($order,Abstract_WShop_Order::Canceled);
                     if(!empty($wpdb->last_error)){
                         throw new Exception($wpdb->last_error);
                     }
                     break;
                 case 'mark_complete':
-                    $error =$order->change_order_status(Abstract_WShop_Order::Complete);
+                    $error =self::change_order_status($order,Abstract_WShop_Order::Complete);
                     if(!empty($wpdb->last_error)){
                         throw new Exception($wpdb->last_error);
                     }
                     break;
                 case 'mark_pending':
-                    $error =$order->change_order_status(Abstract_WShop_Order::Pending);
+                    $error =self::change_order_status($order,Abstract_WShop_Order::Pending);
                     if(!empty($wpdb->last_error)){
                         throw new Exception($wpdb->last_error);
                     }

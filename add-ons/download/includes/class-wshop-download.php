@@ -75,11 +75,11 @@ class WShop_Download_Field extends Abstract_XH_WShop_Fields{
     
     /**
      * {@inheritDoc}
-     * @see Abstract_XH_WShop_Fields::_init_form_fields()
+     * @see Abstract_XH_WShop_Fields::init_form_fields()
      */
-    public function _init_form_fields($post)
-    {
-        $this->form_fields =  apply_filters('wshop_download_fields', 
+     public function init_form_fields(){
+         global $post;
+         $this->form_fields =  apply_filters('wshop_download_fields', 
             array(
                 'downloads'=>array(
                     'title'=>__('Downloads details',WSHOP),
@@ -106,18 +106,8 @@ class WShop_Download_Field extends Abstract_XH_WShop_Fields{
                             			<textarea rows="6" cols="20" class="input-text wide-input " name="<?php echo $field;?>" style="min-width:600px;"><?php echo esc_textarea($downloads)?></textarea>
                             			<br/>
                     					<p class="description" style="float:right;">            
-                    						默认情况下“管理员”可见 隐藏内容 。  <a href="" target="_blank"><code>[wshop_downloads]</code></a><a class="wshop-btn-insert" href="javascript:void(0);" onclick="window.wshop_post_editor.on_purchase_before_insert();"><?php echo __('Insert into post content',WSHOP)?></a>
-                                            <script type="text/javascript">
-                                            jQuery(function($){
-                                            	if(!window.wshop_post_editor){window.wshop_post_editor={};}
-                                                	window.wshop_post_editor.on_purchase_before_insert=function(){
-                                                	var content = $.trim($('#<?php echo $field;?>').val());
-                                					var text ='[wshop_downloads]';
-                                					this.add_content(text);
-                                					$('#<?php echo $field;?>').val('');
-                                                };
-                                            });
-                                			</script>
+                    						  <a href="" target="_blank"><code>[wshop_downloads]</code></a><a class="wshop-btn-insert" href="javascript:void(0);" onclick="window.wshop_post_editor.add_content('[wshop_downloads]');"><?php echo __('Insert into post content',WSHOP)?></a>
+                                           
                                             </p>
                     				</fieldset>
                 				</td>
