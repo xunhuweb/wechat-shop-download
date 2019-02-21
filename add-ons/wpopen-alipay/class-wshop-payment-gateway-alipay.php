@@ -74,7 +74,7 @@ class WShop_Payment_Gateway_Wpopen_Alipay extends Abstract_WShop_Payment_Gateway
                 'type' => 'text',
                 'css' => 'width:400px',
                 'required' => true,
-                'default'=>'http://api.wordpressopen.com',
+                'default'=>'http://pay2.xunhupay.com/v2',
                 'desc_tip' => false,
                 'description'=>'个人支付宝/微信即时到账，支付网关：https://pay.xunhupay.com  <a href="https://mp.xunhupay.com" target="_blank">获取Appid</a> <br/>
                                                   微信支付宝代收款，需提现，支付网关：https://pay.wordpressopen.com <a href="http://mp.wordpressopen.com " target="_blank">获取Appid</a>'
